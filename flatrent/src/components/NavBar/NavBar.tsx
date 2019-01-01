@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import {
-  RouteComponentProps,
-  withRouter,
-} from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Routes } from "../../Routes";
+import UserService from "../../services/UserService";
 import LinkWithHighlight from "./LinkWithHighlight";
 import "./NavBar.css";
 
-class NavBar extends Component<{} & RouteComponentProps> {
-  constructor(props: Readonly<RouteComponentProps & {}>) {
+class NavBar extends Component<RouteComponentProps> {
+  constructor(props: Readonly<RouteComponentProps>) {
     super(props);
   }
 
@@ -16,37 +15,27 @@ class NavBar extends Component<{} & RouteComponentProps> {
       <div className="top-navbar">
         <nav>
           <ul>
-            <li className="top-navbar__item top-navbar__name">
-              Flat Rent Systems
-            </li>
-            <LinkWithHighlight
-              link="/"
-              currentUrl={this.props.location.pathname}
-            >
-              Pradžia
-            </LinkWithHighlight>
-            <LinkWithHighlight
-              link="/flats"
-              currentUrl={this.props.location.pathname}
-            >
-              Butai
-            </LinkWithHighlight>
-            <LinkWithHighlight
-              link="/profile"
-              currentUrl={this.props.location.pathname}
-            >
-              Paskyra
-            </LinkWithHighlight>
-            <LinkWithHighlight
-              link="/logout"
-              currentUrl={this.props.location.pathname}
-            >
-              Atsijungti
-            </LinkWithHighlight>
+            <li className="top-navbar__item top-navbar__name">Flat Rent Systems</li>
+            {this.getLinks()}
           </ul>
         </nav>
       </div>
     );
+  }
+
+  private getLinks() {
+    const isLoggedIn = UserService.isLoggedIn();
+    const filteredLinks = Routes.filter(
+      (link) =>
+        link.addToNav &&
+        (link.authenticated === isLoggedIn || link.authenticated === undefined) &&
+        UserService.satisfiesRoles(link.roles)
+    );
+    return filteredLinks.map((link, index) => (
+      <LinkWithHighlight link={link.link} currentUrl={this.props.location.pathname} key={index}>
+        {link.text}
+      </LinkWithHighlight>
+    ));
   }
 }
 

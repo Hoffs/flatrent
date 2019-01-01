@@ -11,3 +11,9 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}

@@ -1,51 +1,56 @@
 .top-navbar {
-    min-width: 100vw;
-    background-color: rgba(255, 255, 255, 0.5);
-    border-bottom: 1px solid #dadce0;
-    box-shadow: 0px 2px 6px 0px rgba(0,0,0,.12);
+  min-width: 100vw;
+  background-color: var(--main-bg-color);
+  border-bottom: 1px solid #dadce0;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.12);
+  margin-bottom: 20px;
 }
 
 .top-navbar nav ul {
-    display: flex;
-    align-items: center;
-    list-style-type: none;
-    /* padding: 0; */
-    margin: 0;
+  display: flex;
+  align-items: flex-end;
+  list-style-type: none;
+  padding-top: 12px;
+  margin: 0;
 }
 
 .top-navbar__item {
-    /* background-color: rgba(0, 0, 0, 0.5); */
-    padding: 0 16px;
-    height: 100%;
-    /* margin-left: 0px;
-    margin-right: 0px;
-    border-left: 2px solid rgba(255, 255, 255, 0.2);
-    border-right: 2px solid rgba(255, 255, 255, 0.2); */
-    color: #f5f5f5;
-    display: inline-flex;
+  color: #f5f5f5;
+  display: inline-flex;
+}
+
+.top-navbar__item:not(:last-of-type):not(:first-of-type) {
+  margin-right: 16px;
 }
 
 .top-navbar__name {
-    color: #b33939;
-    font: 500 32px 'Aleo', serif;
+  /* color: #b33939; */
+  color: var(--main-title-color);
+  font: 500 32px "Aleo", serif;
+  padding-bottom: 12px;
+  margin-right: 24px;
+  pointer-events: none;
 }
 
-/* .top-navbar__item:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-} */
-
 .top-navbar__item a {
-    /* padding: 8px 16px; */
-    padding: 20px 0;
-    height: 100%;
-    border-bottom: 2px solid transparent;
-    background-color: rgba(0, 0, 0, 0.4);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: #f5f5f5;
+  font-size: 20px;
+  padding-bottom: 12px;
+  border-bottom: 4px solid transparent;
+  background-color: transparent;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.5);
+  transition: border-bottom-color 0.3s, color 0.3s;
+}
+
+.top-navbar__item a:hover {
+  color: var(--main-font-color);
+  border-bottom-color: var(--main-accent-alt-color);
 }
 
 .top-navbar__item--selected a {
-    border-bottom: 2px solid #b33939;
+  /* border-bottom-color: #b33939; */
+  border-bottom-color: var(--main-accent-alt-color);
+  color: rgba(0, 0, 0, 0.9);
 }

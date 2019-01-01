@@ -1,13 +1,23 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Route, Link } from 'react-router-dom';
-import AppRouter from './AppRouter'
-import './App.css';
+import React, { Component } from "react";
+import { Slide, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+// tslint:disable-next-line: no-submodule-imports
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
+import AppRouter from "./AppRouter";
 
 class App extends Component {
-  render() {
+  public render() {
     return (
       <div className="App">
         <AppRouter />
+        <ToastContainer
+          transition={Slide}
+          pauseOnHover={false}
+          draggable={false}
+          autoClose={5000}
+          position={toast.POSITION.BOTTOM_CENTER}
+        />
       </div>
     );
   }

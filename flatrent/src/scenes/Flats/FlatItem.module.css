@@ -1,0 +1,41 @@
+.flat {
+  font-size: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 5px;
+}
+
+.text {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  margin: 0 10px;
+}
+
+.title {
+  font-size: 1.2em;
+}
+
+.address {
+  font-size: 0.9em;
+}
+
+.openButton {
+  font-size: 1em;
+  padding: 8px 14px;
+  align-self: flex-end;
+  margin: 0 0 0 12px;
+  color: var(--main-accent-alt-color);
+  background-color: var(--main-bg-color);
+  /* border: 2px solid var(--main-accent-alt-color); */
+  transition: all 0.3s;
+
+  border-radius: 0;
+  border: 2px solid rgba(var(--main-accent-alt-color-rgb), 0.6);
+}
+
+.openButton:hover {
+  background-color: rgba(var(--main-accent-alt-color-rgb), 0.1);
+  box-shadow: none;
+}
