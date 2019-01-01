@@ -1,16 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using FlatRent.Constants;
 
 namespace FlatRent.Models
 {
     public class LoginForm
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = Errors.Required)]
+        [EmailAddress(ErrorMessage = Errors.EmailAddress)]
         [MaxLength(256)]
         public string Email { get; set; }
-        [Required]
-        [MaxLength(64)]
-        [MinLength(8)]
+        [Required(ErrorMessage = Errors.Required)]
+        [MaxLength(64, ErrorMessage = Errors.MaxLength)]
+        [MinLength(8, ErrorMessage = Errors.MinLength)]
         public string Password { get; set; }
     }
 }

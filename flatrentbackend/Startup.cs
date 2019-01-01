@@ -54,6 +54,14 @@ namespace FlatRent
                     policyOptions.AddRequirements(
                         new RolesAuthorizationRequirement(new[] {"Administrator", "Sales"}))
                 );
+                options.AddPolicy("Client", policyOptions =>
+                    policyOptions.AddRequirements(
+                        new RolesAuthorizationRequirement(new[] {"Administrator", "Client"}))
+                );
+                options.AddPolicy("Employee", policyOptions =>
+                    policyOptions.AddRequirements(
+                        new RolesAuthorizationRequirement(new[] {"Administrator", "Employee"}))
+                );
             });
 
             services.AddAuthentication(x =>
@@ -79,6 +87,7 @@ namespace FlatRent
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IFlatRepository, FlatRepository>();
+            services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<IUserService, UserService>();            
 
 
@@ -98,6 +107,7 @@ namespace FlatRent
                     {"Bearer", new string[] { }},
                 };
                 c.AddSecurityRequirement(security);
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
             });
 
             services.AddRouting(options => options.LowercaseUrls = true);
@@ -133,7 +143,7 @@ namespace FlatRent
             });
 
             app.UseCors(x => x
-                .WithOrigins("http://localhost:5000", "https://localhost:5001")
+                .WithOrigins("http://localhost:5000", "https://localhost:5001", "http://localhost:3000")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials());

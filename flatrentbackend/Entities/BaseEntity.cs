@@ -6,5 +6,6 @@ namespace FlatRent.Entities
     {
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
+        public bool Deleted { get; set; }
     }
 }

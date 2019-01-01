@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace FlatRent.Entities
 {
-    public class Owner
+    public class Owner : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

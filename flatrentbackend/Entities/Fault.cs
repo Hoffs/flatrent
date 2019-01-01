@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FlatRent.Entities
 {
-    public class Fault
+    public class Fault : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -16,8 +16,6 @@ namespace FlatRent.Entities
         public bool Repaired { get; set; }
         [Required]
         public float Price { get; set; }
-        [Required]
-        public DateTime CreationDate { get; set; }
 
         [Required]
         public virtual Flat Flat { get; set; }

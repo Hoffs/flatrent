@@ -87,8 +87,8 @@ namespace FlatRent.Repositories
         {
             var query = includeRented
                 ? _context.Flats
-                : _context.Flats.Where(x => !x.Agreements.Any(agreement => agreement.To > DateTime.UtcNow));
-            return query.Skip(offset).Take(count);
+                : _context.Flats.Where(x => !x.Agreements.Any(agreement => agreement.To > DateTime.UtcNow) && !x.Deleted);
+            return query.OrderByDescending(x => x.CreatedDate).Skip(offset).Take(count);
         }
 
         public Task<int> GetFlatCountAsync(bool includeRented = false)

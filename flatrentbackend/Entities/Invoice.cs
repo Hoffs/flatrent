@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FlatRent.Entities
 {
-    public class Invoice
+    public class Invoice : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -15,8 +15,6 @@ namespace FlatRent.Entities
         public float AmountPaid { get; set; }
         [Required]
         public DateTime PaidDate { get; set; }
-        [Required]
-        public DateTime CreationDate { get; set; }
 
         [Required]
         public virtual RentAgreement RentAgreement { get; set; }

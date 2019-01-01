@@ -24,5 +24,10 @@ namespace FlatRent.Validators
                 return new ValidationResult("Invalid entry");
             }
         }
+
+        public override string FormatErrorMessage(string name)
+        {
+            return string.Format(ErrorMessageString, name, string.Join(", ", ValidDepartments));
+        }
     }
 }

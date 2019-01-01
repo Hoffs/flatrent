@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace FlatRent.Entities
 {
-    public class Flat
+    public class Flat : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

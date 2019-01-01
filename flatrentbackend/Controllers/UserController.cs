@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FlatRent.Constants;
 using FlatRent.Extensions;
 using FlatRent.Interfaces;
 using FlatRent.Models;
-using FlatRent.Services;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -33,7 +31,7 @@ namespace FlatRent.Controllers
                 var token = await _userService.AuthenticateAsync(form.Email, form.Password).ConfigureAwait(false);
                 if (token == null)
                 {
-                    return BadRequest(new { Errors = new[] {new FormError("Invalid credentials.")}});
+                    return BadRequest(new[] {new FormError(Errors.BadCredentials)}.GetFormattedResponse());
                 }
                 return new OkObjectResult(new {Token = token});
             }
@@ -53,7 +51,7 @@ namespace FlatRent.Controllers
                 var newToken = await _userService.RefreshAsync(HttpContext.User).ConfigureAwait(false);
                 if (newToken == null)
                 {
-                    return BadRequest(new { Errors = new[] {new FormError("Invalid token.")}});
+                    return BadRequest(new[] {new FormError(Errors.BadToken)}.GetFormattedResponse());
                 }
                 return new OkObjectResult(new {Token = newToken});
             }
