@@ -6,7 +6,21 @@ export enum Roles {
   Administrator = "Administrator",
   Client = "Client",
   Employee = "Employee",
+  Supply = "Supply",
+  Accounting = "Accounting",
+  CustomerService = "CustomerService",
+  Sales = "Sales",
 }
+
+export const Policies = {
+  Accounting: ["Administrator", "Accounting"],
+  Administrator: ["Administrator"],
+  Client: ["Administrator", "Client"],
+  CustomerService: ["Administrator", "CustomerService"],
+  Employee: ["Administrator", "Employee"],
+  Sales: ["Administrator", "Sales"],
+  Supply: ["Administrator", "Supply"],
+};
 
 interface ILoginResponse {
   token?: string;
@@ -91,7 +105,7 @@ class UserService {
     this.clearToken();
   }
 
-  public static satisfiesRoles(roles: string[]): boolean {
+  public static satisfiesRoles(...roles: string[]): boolean {
     if (roles.length === 0) {
       return true;
     }
@@ -107,7 +121,7 @@ class UserService {
 
   public static readonly authorizationHeaders = (): { [key: string]: string } => ({
     Authorization: `Bearer ${UserService.token()}`,
-  });
+  })
 
   private static setToken(token: string): void {
     const decoded = jwtdecode(token) as ITokenPayload;

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Slide, ToastContainer } from "react-toastify";
-import { toast } from "react-toastify";
+import { Slide, toast, ToastContainer } from "react-toastify";
 // tslint:disable-next-line: no-submodule-imports
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";

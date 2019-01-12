@@ -1,8 +1,11 @@
 import React, { Component, ReactNode } from "react";
+import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import FlatService, { IFlatInfo, IFlatListResponse } from "../../services/FlatService";
+import CreateFlatBox from "./CreateFlatBox";
 import FlatItem from "./FlatItem";
-import { RouteComponentProps } from "react-router-dom";
+import Card from "../../components/Card";
+import FlatFilters from "./FlatFilters";
 
 class FlatList extends Component<
   RouteComponentProps,
@@ -17,20 +20,24 @@ class FlatList extends Component<
   public render() {
     return (
       <>
-        {this.getFlatItems()}
-        {this.getFlatItems()}
-        {this.getFlatItems()}
+        <FlatFilters onPageCountChange={console.log} onShowRentedChange={console.log} />
+        {/* <CreateFlatBox /> */}
         {this.getFlatItems()}
       </>
     );
   }
 
   private openFlat = (id: string) => {
-    this.props.history.push(`/flats/${id}`);
+    this.props.history.push(`/flat/${id}`);
   };
 
   private getFlatItems(): ReactNode[] {
-    return this.state.flats.map((flat) => <FlatItem onClick={this.openFlat} key={flat.id} flat={flat} />);
+    const flats = this.state.flats.map((flat) => <FlatItem onClick={this.openFlat} key={flat.id} flat={flat} />);
+    if (flats.length > 0) {
+      return flats;
+    } else {
+      return [(<Card key={1}>Nuomojamų butų nėra</Card>)]
+    }
   }
 
   private getFlats() {

@@ -6,13 +6,19 @@ const Button = ({
   onClick,
   children,
   disabled,
+  outline,
 }: {
   className?: string;
   onClick: () => void;
   children: ReactNode;
   disabled?: boolean;
+  outline?: boolean;
 }) => (
-  <button disabled={disabled} className={Styles.button.concat(" ", className)} onClick={onClick}>
+  <button
+    disabled={disabled}
+    className={outline === true ? Styles.buttonOutline.concat(" ", className) : Styles.button.concat(" ", className)}
+    onClick={onClick}
+  >
     {children}
   </button>
 );

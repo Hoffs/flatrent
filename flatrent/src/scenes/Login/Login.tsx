@@ -12,6 +12,7 @@ const fields = ["Email", "Password"];
 interface ILoginState {
   Values: { [key: string]: string };
   Errors: { [key: string]: string[] };
+  Requesting: boolean;
 }
 
 class Login extends Component<RouteComponentProps, ILoginState> {
@@ -19,6 +20,7 @@ class Login extends Component<RouteComponentProps, ILoginState> {
     super(props);
     this.state = {
       Errors: {},
+      Requesting: false,
       Values: { Email: "", Password: "" },
     };
   }
@@ -36,28 +38,33 @@ class Login extends Component<RouteComponentProps, ILoginState> {
           setValue={this.handleChange}
         />
         <InputForm errorsOnly={true} errors={this.state.Errors.General} name="" title="" setValue={this.handleChange} />
-        <Button onClick={this.authenticate}>Prisijungti</Button>
+        <Button disabled={this.state.Requesting} onClick={this.authenticate}>Prisijungti</Button>
       </Card>
     );
   }
 
   private handleChange = (name: string, value: string) =>
-    this.setState({ Values: { ...this.state.Values, [name]: value } });
+    this.setState({ Values: { ...this.state.Values, [name]: value } })
 
   private authenticate = async () => {
-    const errors = await UserService.authenticate(this.state.Values.Email, this.state.Values.Password);
-    console.log(errors);
-    if (Object.keys(errors).length === 0) {
-      toast.success("Sėkmingai prisijugėte!", {
-        position: toast.POSITION.BOTTOM_CENTER,
-      });
-      setTimeout(() => this.props.history.push("/"), 1000);
-      console.log("success");
-    } else {
-      this.setState({ Errors: errors });
-      console.log("error");
+    this.setState({ Requesting: true });
+    try {
+      const errors = await UserService.authenticate(this.state.Values.Email, this.state.Values.Password);
+      console.log(errors);
+      if (Object.keys(errors).length === 0) {
+        toast.success("Sėkmingai prisijugėte!", {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+        this.props.history.push("/");
+        console.log("success");
+      } else {
+        this.setState({ Errors: errors, Requesting: false });
+        console.log("error");
+      }
+    } catch {
+      this.setState({ Requesting: false });
     }
-  };
+  }
 }
 
 export default Login;

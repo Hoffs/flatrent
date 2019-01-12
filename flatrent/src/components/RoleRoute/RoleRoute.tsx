@@ -12,7 +12,7 @@ const RoleRoute = (props: IRoleRouteProps) => {
   const loggedIn = UserService.isLoggedIn();
   let satisfiesRoles = true;
   if (props.allowedRoles !== undefined && props.allowedRoles.length > 0) {
-    satisfiesRoles = UserService.satisfiesRoles(props.allowedRoles);
+    satisfiesRoles = UserService.satisfiesRoles(...props.allowedRoles);
   }
   const satisfiesAuth = loggedIn === props.authenticated;
 
