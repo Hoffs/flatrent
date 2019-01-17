@@ -20,5 +20,6 @@
 }
 
 .content-wrapper > div {
-  width: 100%;
+  /* width: 100%; */
+  /*makes all children even but breaks proper sizing*/
 }

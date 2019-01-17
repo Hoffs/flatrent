@@ -1,0 +1,13 @@
+.card {
+  min-width: 300px;
+  margin-top: 40px;
+}
+
+.title {
+  font-weight: 400;
+  font-size: 1.5em;
+  margin-bottom: 18px;
+  padding-bottom: 3px;
+  width: 100%;
+  border-bottom: 2px solid rgba(var(--main-accent-alt-color-rgb), 0.05);
+}

@@ -10,7 +10,7 @@
   max-width: 90vw;
   padding: 20px;
   text-align: center;
-  transition: width .4s, height .4s;
+  transition: all .3s;
   /* width: 400px; */
   width: fit-content;
 }

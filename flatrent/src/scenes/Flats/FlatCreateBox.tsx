@@ -3,9 +3,9 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
 import UserService, { Policies } from "../../services/UserService";
-import Styles from "./CreateFlatBox.module.css";
+import Styles from "./FlatCreateBox.module.css";
 
-const CreateFlatBox = (props: RouteComponentProps) => {
+const FlatCreateBox = (props: RouteComponentProps) => {
   const routeTo = () => props.history.push("/flats/create");
   if (!UserService.satisfiesRoles(...Policies.Supply)) {
     return (<></>);
@@ -21,4 +21,4 @@ const CreateFlatBox = (props: RouteComponentProps) => {
   );
 }
 
-export default withRouter(CreateFlatBox);
+export default withRouter(FlatCreateBox);

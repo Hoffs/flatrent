@@ -28,7 +28,7 @@ class Login extends Component<RouteComponentProps, ILoginState> {
   public render() {
     return (
       <Card className={Styles.customCard}>
-        <span className={Styles.title}>Prisijungti</span>
+        <span className={Styles.title}>Prisijungimas</span>
         <InputForm errors={this.state.Errors.Email} name="Email" title="El. Paštas" setValue={this.handleChange} />
         <InputForm
           errors={this.state.Errors.Password}

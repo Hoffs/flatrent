@@ -1,9 +1,11 @@
 import React, { ComponentClass, FunctionComponent } from "react";
 import RoleRoute from "./components/RoleRoute";
+import CreateFlat from "./scenes/FlatCreate";
 import FlatList from "./scenes/Flats";
 import Login from "./scenes/Login";
 import Logout from "./scenes/Logout";
-import { Roles } from "./services/UserService";
+import { Policies } from "./services/UserService";
+import Register from "./scenes/Register";
 
 interface IRouteInfo {
   addToNav: boolean;
@@ -29,7 +31,7 @@ export const Routes: IRouteInfo[] = [
   {
     addToNav: true,
     authenticated: false,
-    component: Login,
+    component: Register,
     link: "/register",
     redirect: "/",
     roles: [],
@@ -58,11 +60,11 @@ export const Routes: IRouteInfo[] = [
   {
     addToNav: true,
     authenticated: true,
-    component: FlatList,
+    component: CreateFlat,
     exact: true,
     link: "/flats/create",
-    redirect: "/login",
-    roles: [],
+    redirect: "/",
+    roles: Policies.Supply,
     text: "Naujas butas",
   },
   {
@@ -80,7 +82,7 @@ export const Routes: IRouteInfo[] = [
     component: Login,
     link: "/user",
     redirect: "/",
-    roles: [Roles.Client],
+    roles: Policies.Client,
     text: "Paskyra",
   },
   {

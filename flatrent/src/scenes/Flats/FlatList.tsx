@@ -2,7 +2,7 @@ import React, { Component, ReactNode } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import FlatService, { IFlatInfo, IFlatListResponse } from "../../services/FlatService";
-import CreateFlatBox from "./CreateFlatBox";
+import CreateFlatBox from "./FlatCreateBox";
 import FlatItem from "./FlatItem";
 import Card from "../../components/Card";
 import FlatFilters from "./FlatFilters";

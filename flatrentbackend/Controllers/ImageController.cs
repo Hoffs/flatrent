@@ -27,7 +27,7 @@ namespace FlatRent.Controllers
         }
 
         [Authorize]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         public async Task<HttpResponseMessage> GetImage([FromRoute] Guid id, int width = 0, int height = 0)
         {
             _logger.Debug("Requesting image with {Id} and {Width} {Height}", id, width, height);

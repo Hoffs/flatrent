@@ -33,6 +33,14 @@ interface ITokenPayload {
   exp: number;
 }
 
+export interface IRegistrationModel {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+}
+
 class UserService {
   public static async authenticate(email: string, password: string): Promise<{ [key: string]: string[] }> {
     try {
@@ -49,6 +57,24 @@ class UserService {
           console.log(response);
           return { General: ["Įvyko nežinoma klaida"] };
         }
+      } else {
+        const response = (await result.json()) as IErrorResponse;
+        return response;
+      }
+    } catch (e) {
+      console.log(e);
+      return { General: ["Įvyko nežinoma klaida"] };
+    }
+  }
+
+  public static async register(model: IRegistrationModel): Promise<{ [key: string]: string[] }> {
+    try {
+      const result = await apiFetch("/api/user/register", {
+        body: JSON.stringify(model),
+        method: "POST",
+      });
+      if (result.ok) {
+        return {};
       } else {
         const response = (await result.json()) as IErrorResponse;
         return response;
