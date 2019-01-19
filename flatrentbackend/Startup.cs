@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using AutoMapper;
+using FlatRent.Extensions;
 using FlatRent.Interfaces;
 using FlatRent.Repositories;
 using FlatRent.Services;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Serilog;
+using Serilog.Core;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace FlatRent
@@ -54,6 +56,10 @@ namespace FlatRent
                     policyOptions.AddRequirements(
                         new RolesAuthorizationRequirement(new[] {"Administrator", "Sales"}))
                 );
+                options.AddPolicy("SalesOrClient", policyOptions =>
+                    policyOptions.AddRequirements(
+                        new RolesAuthorizationRequirement(new[] {"Administrator", "Sales", "Client"}))
+                );
                 options.AddPolicy("Client", policyOptions =>
                     policyOptions.AddRequirements(
                         new RolesAuthorizationRequirement(new[] {"Administrator", "Client"}))
@@ -88,6 +94,7 @@ namespace FlatRent
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IFlatRepository, FlatRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IAgreementRepository, AgreementRepository>();
             services.AddScoped<IUserService, UserService>();            
 
 
@@ -135,7 +142,7 @@ namespace FlatRent
                 var data = scope.ServiceProvider.GetService<DataContext>();
                 data.Database.Migrate();
             }
-
+            app.ConfigureExceptionHandler(Log.Logger);
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

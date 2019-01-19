@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FlatRent.Constants;
 
-namespace FlatRent.Models
+namespace FlatRent.Models.Requests
 {
     public class RegistrationForm
     {

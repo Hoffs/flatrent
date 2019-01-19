@@ -24,6 +24,11 @@ namespace FlatRent.Repositories
             _logger = logger;
         }
 
+        public Task<User> GetUser(Guid id)
+        {
+            return _context.Users.FindAsync(id);
+        }
+
         /// <exception cref="Exception">Rethrows exception.</exception>
         public async Task<IEnumerable<FormError>> AddClientAsync(User client)
         {

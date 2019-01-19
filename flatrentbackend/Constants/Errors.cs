@@ -11,5 +11,23 @@
         public const string MaxLength = "Simbolių kiekis turi būti mažesnis už {1}.";
         public const string MinLength = "Simbolių kiekis turi būti didesnis už {1}.";
         public const string Range = "Reikšmė turi būti nuo {1} iki {2}.";
+        public const string DateAfter = "Data turi būti velesnė arba lygi {1}.";
+
+
+        public const string UserIsNotClient = "Naudotojas nėra klientas.";
+        
+        public const string FlatAlreadyRented = "Butas jau išnomuotas.";
+        public const string FlatRentPeriodGreater = "Nuomos periodas turi būti ilgesnis už {0} dienas.";
+        public const string FlatRentPeriodLess = "Nuomos periodas turi būti trumpesnis už {0} dienas.";
+        
+        public const string AgreementNotFound = "Nuomos periodas turi būti trumpesnis už {0} dienas.";
+        public const string AgreementCancelNotOwner = "Negalima nutraukti nepriklausančios sutarties.";
+        public const string AgreementPdfNotOwner = "Sutartį gali peržiūrėti tik jos sudarytojas.";
+
+        public const string OwnerNotFound = "Savininkas nerastas.";
+        public const string FlatNotFound = "Butas nerastas.";
+        
+        public const string Exception = "Įvyko nežinoma klaida.";
+        public const string Alphanumeric = "Leidžiami tik skaičiai ir raidės.";
     }
 }

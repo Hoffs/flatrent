@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FlatRent.Entities;
-using FlatRent.Models;
+using FlatRent.Models.Requests;
 
 namespace FlatRent.Globals
 {

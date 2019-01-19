@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace FlatRent.Entities
 {
@@ -17,9 +18,11 @@ namespace FlatRent.Entities
         [Required]
         public string Department { get; set; }
 
+        [JsonIgnore]
         [InverseProperty("EmployeeInformation")]
         public virtual User User { get; set; }
 
+        [JsonIgnore]
         [InverseProperty("EmployeeInformation")]
         public virtual List<Fault> Faults { get; set; }
     }

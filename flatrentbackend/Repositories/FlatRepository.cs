@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Interfaces;
 using FlatRent.Models;
+using FlatRent.Models.Requests;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -33,7 +35,7 @@ namespace FlatRent.Repositories
                 var owner = await _context.Owners.FindAsync(form.OwnerId).ConfigureAwait(false);
                 if (owner == null)
                 {
-                    return new[] {new FormError("OwnerId", "Owner not found")};
+                    return new[] {new FormError("OwnerId", Errors.OwnerNotFound)};
                 }
 
                 flat.Owner = owner;
@@ -52,8 +54,7 @@ namespace FlatRent.Repositories
             catch (DbUpdateException e)
             {
                 _logger.Error(e, "Exception thrown while creating flat with {CreatFlatForm}", form);
-                _context.Flats.Remove(flat);
-                return new[] {new FormError("Unexpected error occured when creating flat record.")};
+                return new[] {new FormError(Errors.Exception)};
             }
         }
 
@@ -62,7 +63,7 @@ namespace FlatRent.Repositories
             var flat = await _context.Flats.FindAsync(flatId).ConfigureAwait(false);
             if (flat == null)
             {
-                return new[] {new FormError("FlatId", "Flat was not found.")};
+                return new[] {new FormError("FlatId", Errors.FlatNotFound)};
             }
             _context.Flats.Remove(flat);
             try
@@ -73,8 +74,7 @@ namespace FlatRent.Repositories
             catch (DbUpdateException e)
             {
                 _logger.Error(e, "Exception thrown while removing flat with {Id}", flatId);
-                _context.Flats.Remove(flat);
-                return new[] {new FormError("Unexpected error occured when deleting flat record.")};
+                return new[] {new FormError(Errors.Exception)};
             }
         }
 
@@ -87,7 +87,7 @@ namespace FlatRent.Repositories
         {
             var query = includeRented
                 ? _context.Flats
-                : _context.Flats.Where(x => !x.Agreements.Any(agreement => agreement.To > DateTime.UtcNow) && !x.Deleted);
+                : _context.Flats.Where(x => !x.Agreements.Any(agreement => agreement.To > DateTime.UtcNow && !agreement.Deleted) && !x.Deleted);
             return query.OrderByDescending(x => x.CreatedDate).Skip(offset).Take(count);
         }
 
@@ -95,8 +95,41 @@ namespace FlatRent.Repositories
         {
             var query = includeRented
                 ? _context.Flats
-                : _context.Flats.Where(x => !x.Agreements.Any(agreement => agreement.To > DateTime.UtcNow));
+                : _context.Flats.Where(x => !x.Agreements.Any(agreement => agreement.To > DateTime.UtcNow && !agreement.Deleted) && !x.Deleted);
             return query.CountAsync();
+        }
+
+        public async Task<IEnumerable<FormError>> AddAgreemenTask(Guid flatId, Guid userId, RentAgreementForm form)
+        {
+            try
+            {
+                var flat = await GetFlatAsync(flatId).ConfigureAwait(false);
+                var isRented = flat.Agreements.Any(x => x.From.Date >= DateTime.Now.Date && x.To <= DateTime.Now.Date && !x.Deleted);
+                if (isRented)
+                {
+                    return new []{new FormError(Errors.FlatAlreadyRented)};
+                }
+
+                var user = await _context.Users.FindAsync(userId).ConfigureAwait(false);
+                if (user.ClientInformationId == null)
+                {
+                    return new []{new FormError(Errors.UserIsNotClient)};
+                }
+
+                var agreement = _mapper.Map<RentAgreement>(form);
+                agreement.ClientInformationId = (Guid) user.ClientInformationId;
+                agreement.FlatId = flatId;
+                agreement.Verified = true;
+                flat.Agreements.Add(agreement);
+
+                await _context.SaveChangesAsync().ConfigureAwait(false);
+                return new FormError[0];
+            }
+            catch (DbUpdateException e)
+            {
+                _logger.Error(e, "Exception thrown while creating flat agreement with {RentAgreementForm}", form);
+                return new[] {new FormError(Errors.Exception)};
+            }
         }
     }
 }

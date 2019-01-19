@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using FlatRent.Constants;
+using FlatRent.Dtos;
 using FlatRent.Extensions;
 using FlatRent.Interfaces;
 using FlatRent.Models;
+using FlatRent.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -15,11 +20,15 @@ namespace FlatRent.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IUserRepository _repository;
+        private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public UserController(IUserService userService, ILogger logger)
+        public UserController(IUserService userService, IUserRepository repository, IMapper mapper, ILogger logger)
         {
             _userService = userService;
+            _repository = repository;
+            _mapper = mapper;
             _logger = logger;
         }
 
@@ -93,6 +102,42 @@ namespace FlatRent.Controllers
                 _logger.Error(e, "Exception thrown while registering with {RegistrationEmployeeForm}", form);
                 return StatusCode(500);
             }
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetSelfData()
+        {
+            var userId = HttpContext.User.GetUserId();
+            if (userId == Guid.Empty)
+            {
+                return BadRequest(new []{new FormError(Errors.Exception)}.GetFormattedResponse());
+            }
+
+            var userData = await _repository.GetUser(userId).ConfigureAwait(false);
+            return Ok(userData);
+        }
+
+
+        [HttpGet("agreements")]
+        [Authorize(Policy = "Client")]
+        public async Task<IActionResult> GetAgreements(int count = 20, int offset = 0)
+        {
+            var userId = HttpContext.User.GetUserId();
+            var user = await _repository.GetUser(userId).ConfigureAwait(false);
+            if (user == null)
+            {
+                return BadRequest(new []{new FormError(Errors.Exception)}.GetFormattedResponse());
+            }
+
+            if (user.ClientInformationId == Guid.Empty)
+            {
+                return BadRequest(new []{new FormError(Errors.UserIsNotClient)}.GetFormattedResponse());
+            }
+            
+            var agreements = user.ClientInformation?.Agreements.Where(x =>
+                !x.Deleted && x.To >= DateTime.UtcNow.Date).AsQueryable().ProjectTo<RentAgreementListItem>(_mapper.ConfigurationProvider);
+            return Ok(agreements);
         }
 
         [HttpGet("test/client")]

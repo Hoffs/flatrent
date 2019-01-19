@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FlatRent.Dtos;
 using FlatRent.Entities;
-using FlatRent.Models;
+using FlatRent.Models.Requests;
 
 namespace FlatRent.Globals
 {
@@ -16,6 +16,8 @@ namespace FlatRent.Globals
 
             CreateMap<Address, FlatListItemAddress>();
             CreateMap<Flat, FlatListItem>();
+
+            CreateMap<RentAgreementForm, RentAgreement>();
         }
     }
 }

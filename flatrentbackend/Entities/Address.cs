@@ -30,5 +30,10 @@ namespace FlatRent.Entities
         [JsonIgnore]
         [InverseProperty("Address")] 
         public virtual Flat Flat { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Street} {HouseNumber}-{FlatNumber}, {City}, {Country} {PostCode}";
+        }
     }
 }

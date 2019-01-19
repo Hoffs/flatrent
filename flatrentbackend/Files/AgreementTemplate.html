@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>GYVENAMŲJŲ PATALPŲ NUOMOS SUTARTIS</title>
+    <style>
+        body {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        #title {
+            margin-top: 48px;
+            margin-bottom: 8px;
+            font-family: "Times New Roman";
+            font-weight: 700;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        #date {
+            text-align: center;
+            font-size: 14px;
+            font-family: "Times New Roman";
+        }
+
+        .text {
+            text-align: justify;
+            margin-bottom: 0.25cm;
+            margin-top: 0.25cm;
+            font-family: "Times New Roman";
+            font-size: 14px;
+        }
+
+        .indent {
+            text-indent: 1.5cm;
+        }
+
+        #paragraph {
+            text-align: justify;
+            font-family: "Times New Roman";
+            font-weight: 500;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div id="title">GYVENAMŲJŲ PATALPŲ NUOMOS SUTARTIS<br/>Nr. {{AgreementNo}}</div>
+    <div id="date">{{Year}} m. {{Month}} mėn. {{Day}} d.</div>
+    <br />
+    <br />
+    <div class="text indent">Aš, {{Owner}} (toliau Nuomotojas), iš vienos pusės, ir {{Client}}, (toliau sutartyje – Nuomininkas), sudarėme šią nuomos sutartį:</div>
+    <br />
+    <div id="paragraph">1. SUTARTIES OBJEKTAS</div>
+    <div class="text">1.1.	Šia sutartimi Nuomotojas perduoda Nuomininkui laikinai valdyti ir naudoti {{Area}} bendrojo ploto gyvenamąsias patalpas, esančias {{Address}} (toliau sutartyje - nuomojamos patalpos), o Nuomininkas įsipareigoja mokėti nuomos mokestį.</div>
+    <div class="text">1.2.	Nuomininkas moka Nuomotojui mėnesinį {{Price}} Eur nuomos mokestį.</div>
+</body>
+</html>

@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace FlatRent.Entities
 {
@@ -6,6 +7,7 @@ namespace FlatRent.Entities
     {
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
+        [JsonIgnore]
         public bool Deleted { get; set; }
     }
 }

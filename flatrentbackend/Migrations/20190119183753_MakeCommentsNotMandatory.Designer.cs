@@ -3,15 +3,17 @@ using System;
 using FlatRent.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace FlatRent.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190119183753_MakeCommentsNotMandatory")]
+    partial class MakeCommentsNotMandatory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,16 +111,6 @@ namespace FlatRent.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EmployeeInformations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11e88"),
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Deleted = false,
-                            Department = "Supply",
-                            Position = "Tiekimo Vadovas"
-                        });
                 });
 
             modelBuilder.Entity("FlatRent.Entities.Fault", b =>
@@ -383,19 +375,6 @@ namespace FlatRent.Migrations
                             Password = "UhYWUG3vDiTZZt04YTqkBxL/RUxhyEvqpzCXJlRDMas=",
                             PhoneNumber = "+37060286001",
                             TypeId = new Guid("ed42ea4b-9900-4477-af32-0336ca61eab1")
-                        },
-                        new
-                        {
-                            Id = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11e82"),
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Deleted = false,
-                            Email = "supply@supply.com",
-                            EmployeeInformationId = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11e88"),
-                            FirstName = "Test",
-                            LastName = "Test",
-                            Password = "UhYWUG3vDiTZZt04YTqkBxL/RUxhyEvqpzCXJlRDMas=",
-                            PhoneNumber = "+37060286009",
-                            TypeId = new Guid("268c6597-15cb-4ab1-9d39-8a7d7c85b3d1")
                         });
                 });
 

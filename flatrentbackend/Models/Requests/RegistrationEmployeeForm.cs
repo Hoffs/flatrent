@@ -2,7 +2,7 @@
 using FlatRent.Constants;
 using FlatRent.Validators;
 
-namespace FlatRent.Models
+namespace FlatRent.Models.Requests
 {
     public class RegistrationEmployeeForm
     {

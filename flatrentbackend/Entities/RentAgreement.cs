@@ -16,13 +16,14 @@ namespace FlatRent.Entities
         public DateTime From { get; set; }
         [Required]
         public DateTime To { get; set; }
-        [Required]
         public string Comments { get; set; }
 
         [Required]
+        public Guid ClientInformationId { get; set; }
         public virtual ClientInformation ClientInformation { get; set; }
 
-        [Required]
+        [Required] 
+        public Guid FlatId { get; set; }
         public virtual Flat Flat { get; set; }
 
         [InverseProperty("RentAgreement")]

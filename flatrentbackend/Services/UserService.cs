@@ -9,6 +9,7 @@ using AutoMapper;
 using FlatRent.Entities;
 using FlatRent.Interfaces;
 using FlatRent.Models;
+using FlatRent.Models.Requests;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;

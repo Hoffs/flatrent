@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using FlatRent.Models;
+using FlatRent.Models.Requests;
 
 namespace FlatRent.Interfaces
 {

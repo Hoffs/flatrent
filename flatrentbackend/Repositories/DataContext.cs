@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FlatRent.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,18 +36,18 @@ namespace FlatRent.Repositories
                 Users = new List<User>()
             };
             modelBuilder.Entity<UserType>().HasData(new UserType
-                {
-                    Id = new Guid("ed42ea4b-9900-4477-af32-0336ca61eab1"),
-                    Name = "Client",
-                    Users = new List<User>()
-                },
-                new UserType
-                {
-                    Id = new Guid("268c6597-15cb-4ab1-9d39-8a7d7c85b3d1"),
-                    Name = "Employee",
-                    Users = new List<User>()
-                },
-                adminUserType);
+            {
+                Id = new Guid("ed42ea4b-9900-4477-af32-0336ca61eab1"),
+                Name = "Client",
+                Users = new List<User>()
+            },
+            new UserType
+            {
+                Id = new Guid("268c6597-15cb-4ab1-9d39-8a7d7c85b3d1"),
+                Name = "Employee",
+                Users = new List<User>()
+            },
+            adminUserType);
 
             modelBuilder.Entity<User>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
             modelBuilder.Entity<Address>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
@@ -59,6 +61,19 @@ namespace FlatRent.Repositories
             modelBuilder.Entity<RentAgreement>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
             modelBuilder.Entity<UserType>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
 
+            modelBuilder.Entity<ClientInformation>().HasData(new ClientInformation()
+            {
+                Id = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11bc9"),
+                Description = "Cool client",
+            });
+
+            modelBuilder.Entity<EmployeeInformation>().HasData(new EmployeeInformation()
+            {
+                Id = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11e88"),
+                Department = "Supply",
+                Position = "Tiekimo Vadovas",
+            });
+
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11bb4"),
@@ -67,7 +82,29 @@ namespace FlatRent.Repositories
                 Email = "admin@admin.com",
                 Password = "UhYWUG3vDiTZZt04YTqkBxL/RUxhyEvqpzCXJlRDMas=",
                 TypeId = adminUserType.Id,
-                PhoneNumber = "+37060286000"
+                PhoneNumber = "+37060286000",
+            },
+            new User
+            {
+                Id = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11bc8"),
+                FirstName = "Test",
+                LastName = "Test",
+                Email = "client@client.com",
+                Password = "UhYWUG3vDiTZZt04YTqkBxL/RUxhyEvqpzCXJlRDMas=",
+                TypeId = new Guid("ed42ea4b-9900-4477-af32-0336ca61eab1"),
+                PhoneNumber = "+37060286001",
+                ClientInformationId = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11bc9"),
+            },
+            new User
+            {
+                Id = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11e82"),
+                FirstName = "Test",
+                LastName = "Test",
+                Email = "supply@supply.com",
+                Password = "UhYWUG3vDiTZZt04YTqkBxL/RUxhyEvqpzCXJlRDMas=",
+                TypeId = new Guid("268c6597-15cb-4ab1-9d39-8a7d7c85b3d1"),
+                PhoneNumber = "+37060286009",
+                EmployeeInformationId = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11e88"),
             });
             
 //            modelBuilder.Entity<Flat>().HasOne(x => x.Address).WithOne(x => x.Flat);
@@ -83,6 +120,17 @@ namespace FlatRent.Repositories
             changed.ForEach(e => e.Property("ModifiedDate").CurrentValue = DateTime.UtcNow);
             
             return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken token = default(CancellationToken))
+        {
+            var added = ChangeTracker.Entries().Where(e => e.State == EntityState.Added).ToList();
+            added.ForEach(e => e.Property("CreatedDate").CurrentValue = DateTime.UtcNow);
+
+            var changed = ChangeTracker.Entries().Where(e => e.State == EntityState.Modified).ToList();
+            changed.ForEach(e => e.Property("ModifiedDate").CurrentValue = DateTime.UtcNow);
+            
+            return base.SaveChangesAsync(token);
         }
     }
 }

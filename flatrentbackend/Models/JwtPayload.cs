@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using FlatRent.Entities;
@@ -45,7 +46,7 @@ namespace FlatRent.Models
             return claims;
         }
 
-        public static JwtPayload CreateFromClaims(Claim[] claims)
+        public static JwtPayload CreateFromClaims(IEnumerable<Claim> claims)
         {
             var payload = new JwtPayload();
             foreach (var claim in claims)

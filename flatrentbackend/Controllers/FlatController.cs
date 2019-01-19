@@ -10,6 +10,7 @@ using FlatRent.Entities;
 using FlatRent.Extensions;
 using FlatRent.Interfaces;
 using FlatRent.Models;
+using FlatRent.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -74,6 +75,40 @@ namespace FlatRent.Controllers
         }
 
         [Authorize(Policy = "Client")]
+        [HttpPost("{id}/rent")]
+        public async Task<IActionResult> RentFlat([FromRoute] Guid id, [FromBody] RentAgreementForm form)
+        {
+            var errors = new List<FormError>();
+
+            var rentPeriod = TimeSpan.FromTicks(form.To.Ticks - form.From.Ticks).Days;
+            if (rentPeriod < BusinessConstants.MinRentPeriodDays)
+            {
+                errors.Add(new FormError("To", string.Format(Errors.FlatRentPeriodGreater, BusinessConstants.MinRentPeriodDays)));
+                return BadRequest(errors.GetFormattedResponse());
+            }
+
+            if (rentPeriod > BusinessConstants.MaxRentPeriodDays)
+            {
+                errors.Add(new FormError("To", string.Format(Errors.FlatRentPeriodLess, BusinessConstants.MaxRentPeriodDays)));
+                return BadRequest(errors.GetFormattedResponse());
+            }
+
+            var clientId = HttpContext.User.IsInRole("Client") ? HttpContext.User.GetUserId() : form.ClientId;
+            if (clientId == Guid.Empty)
+            {
+                errors.Add(new FormError("General", Errors.Exception));
+                return BadRequest(errors.GetFormattedResponse());
+            }
+            var operationErrors = await _repository.AddAgreemenTask(id, clientId, form).ConfigureAwait(false);
+            if (operationErrors != null && operationErrors.Any())
+            {
+                return BadRequest(operationErrors.GetFormattedResponse());
+            }
+
+            return Ok();
+        }
+
+        [Authorize]
         [ExactQueryParam("count", "offset")]
         [HttpGet]
         public async Task<IActionResult> GetFlats([Range(1, 100, ErrorMessage = Errors.Range)] int count = 20, [Range(0, int.MaxValue, ErrorMessage = Errors.Range)] int offset = 0)
