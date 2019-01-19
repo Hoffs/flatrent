@@ -20,13 +20,14 @@ const makeid = (size: number) => {
 
 const Checkbox = (props: ICheckboxProps) => {
   const key = makeid(12);
-  const onChange = (event: ChangeEvent<HTMLInputElement>) =>
-    props.onChange(event.target.checked);
+  const onChange = (event: ChangeEvent<HTMLInputElement>) => props.onChange(event.target.checked);
 
   return (
     <div className={Styles.checkbox}>
-      <input id={key} className={Styles.input} onChange={onChange} type="checkbox" checked={props.checked} />
-      <label className={Styles.label} htmlFor={key}>{props.text}</label>
+      <input id={key} className={Styles.input} onChange={onChange} type="checkbox" defaultChecked={props.checked} />
+      <label className={Styles.label} htmlFor={key}>
+        {props.text}
+      </label>
     </div>
   );
 };

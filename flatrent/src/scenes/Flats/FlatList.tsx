@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
-import FlatService, { IFlatInfo, IFlatListResponse } from "../../services/FlatService";
+import FlatService, { IFlatListItem, IFlatListResponse } from "../../services/FlatService";
 import CreateFlatBox from "./FlatCreateBox";
 import FlatItem from "./FlatItem";
 import Card from "../../components/Card";
@@ -9,23 +9,28 @@ import FlatFilters from "./FlatFilters";
 
 class FlatList extends Component<
   RouteComponentProps,
-  { pageSize: number; page: number; rented: boolean; flats: IFlatInfo[] }
+  { pageSize: number; page: number; rented: boolean; flats: IFlatListItem[] }
 > {
   constructor(props: Readonly<RouteComponentProps>) {
     super(props);
     this.state = { pageSize: 20, page: 1, rented: false, flats: [] };
-    this.getFlats();
+    this.getFlats(this.state.pageSize, this.state.page, this.state.rented);
   }
 
   public render() {
     return (
       <>
-        <FlatFilters onPageCountChange={console.log} onShowRentedChange={console.log} />
+        <FlatFilters onPageCountChange={console.log} onShowRentedChange={this.handleShowRentedChange} />
         {/* <CreateFlatBox /> */}
         {this.getFlatItems()}
       </>
     );
   }
+
+  private handleShowRentedChange = (rented: boolean) => {
+    this.setState({ rented });
+    this.getFlats(this.state.pageSize, this.state.page, rented);
+  };
 
   private openFlat = (id: string) => {
     this.props.history.push(`/flat/${id}`);
@@ -36,12 +41,12 @@ class FlatList extends Component<
     if (flats.length > 0) {
       return flats;
     } else {
-      return [(<Card key={1}>Nuomojamų butų nėra</Card>)]
+      return [<Card key={1}>Nuomojamų butų nėra</Card>];
     }
   }
 
-  private getFlats() {
-    FlatService.getFlats(this.state.pageSize, this.state.pageSize * (this.state.page - 1), this.state.rented)
+  private getFlats(pageSize: number, page: number, rented: boolean) {
+    FlatService.getFlats(pageSize, pageSize * (page - 1), rented)
       .then(this.handleFlatResult)
       .catch(this.handleFail);
   }

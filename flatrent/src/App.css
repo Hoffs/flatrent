@@ -13,6 +13,7 @@
 }
 
 .content-wrapper {
+  width: 100%;
   align-items: stretch;
   display: inline-flex;
   flex-direction: column;

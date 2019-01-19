@@ -29,7 +29,7 @@ class NavBar extends Component<RouteComponentProps> {
       (link) =>
         link.addToNav &&
         (link.authenticated === isLoggedIn || link.authenticated === undefined) &&
-        UserService.satisfiesRoles(...link.roles)
+        UserService.hasRoles(...link.roles)
     );
     return filteredLinks.map((link, index) => (
       <LinkWithHighlight link={link.link} currentUrl={this.props.location.pathname} key={index}>

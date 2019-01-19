@@ -7,8 +7,8 @@ import Styles from "./FlatCreateBox.module.css";
 
 const FlatCreateBox = (props: RouteComponentProps) => {
   const routeTo = () => props.history.push("/flats/create");
-  if (!UserService.satisfiesRoles(...Policies.Supply)) {
-    return (<></>);
+  if (!UserService.hasRoles(...Policies.Supply)) {
+    return <></>;
   }
 
   return (
@@ -19,6 +19,6 @@ const FlatCreateBox = (props: RouteComponentProps) => {
       </Button>
     </Card>
   );
-}
+};
 
 export default withRouter(FlatCreateBox);

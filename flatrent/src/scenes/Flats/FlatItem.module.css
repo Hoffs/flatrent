@@ -4,6 +4,14 @@
   flex-direction: row;
   align-items: center;
   margin: 5px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.content {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
 }
 
 .text {
@@ -38,4 +46,22 @@
 .openButton:hover {
   background-color: rgba(var(--main-accent-alt-color-rgb), 0.1);
   box-shadow: none;
+}
+
+.image {
+  max-height: 150px;
+  object-fit: contain;
+  /* display: flex; */
+  /* flex-basis: auto;
+  flex-grow: 1;
+  flex-shrink: 1; */
+}
+
+.image img {
+  /* height: auto; */
+  max-height: 150px;
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  /* width: 100%; */
 }

@@ -1,0 +1,112 @@
+/* Title Card */
+
+.titleCard {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+}
+
+.image {
+  max-width: 500px;
+}
+.image img {
+  max-height: 240px;
+  width: 100%;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.titleCardContent {
+  padding: 20px;
+}
+
+.title {
+  font-size: 1.3em;
+}
+
+.year {
+  font-size: 0.9em;
+  align-self: flex-end;
+}
+
+.subTitle {
+  font-size: 0.9em;
+  text-align: left;
+}
+
+.topTitleRow {
+  justify-content: left;
+  margin-bottom: 5px;
+}
+
+/* Details Card */
+
+.detailsCard {
+  width: 460px;
+  text-align: left;
+}
+
+.detailsTitle {
+  font-size: 1.3em;
+  margin-bottom: 12px;
+}
+
+.detailsText {
+  /* text-indent: 1.2cm; */
+  white-space: pre-wrap;
+  border-top: 2px solid rgba(var(--main-accent-alt-color-rgb), 0.1);
+  padding-top: 12px;
+}
+
+.dataRow > div {
+  margin-bottom: 16px;
+}
+
+.shortRow {
+  justify-content: left;
+}
+
+.nameCol {
+  line-height: 1.1em;
+  font-size: 0.9em;
+  font-style: italic;
+}
+
+.name {
+  line-height: 1.1em;
+  font-size: 0.9em;
+  font-style: italic;
+  align-self: flex-end;
+}
+
+.value {
+  line-height: 1.1em;
+  font-size: 1.1em;
+}
+
+/* Rent Card */
+
+.rentCard {
+  width: 460px;
+  text-align: left;
+}
+
+.pickerRow {
+  margin-top: 16px;
+}
+
+.buttonRow {
+  font-size: 1.2em;
+  margin-top: 16px;
+  justify-content: flex-end;
+}
+
+.buttonCancel {
+  border-color: #e1755e;
+  color: #eb241e;
+}
+
+.textArea {
+  height: 80px;
+}

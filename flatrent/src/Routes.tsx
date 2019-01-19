@@ -6,8 +6,13 @@ import Login from "./scenes/Login";
 import Logout from "./scenes/Logout";
 import { Policies } from "./services/UserService";
 import Register from "./scenes/Register";
+import { number } from "prop-types";
+import FlatDetails from "./scenes/FlatDetails";
+import Profile from "./scenes/Profile";
+import { Redirect } from "react-router-dom";
 
 interface IRouteInfo {
+  order: number;
   addToNav: boolean;
   authenticated: boolean;
   exact?: boolean;
@@ -18,12 +23,14 @@ interface IRouteInfo {
   component: ComponentClass<any> | FunctionComponent<any>;
 }
 
-export const Routes: IRouteInfo[] = [
+// 10
+const AuthRoutes: IRouteInfo[] = [
   {
     addToNav: true,
     authenticated: false,
     component: Login,
     link: "/login",
+    order: 10,
     redirect: "/",
     roles: [],
     text: "Prisijungti",
@@ -33,6 +40,7 @@ export const Routes: IRouteInfo[] = [
     authenticated: false,
     component: Register,
     link: "/register",
+    order: 11,
     redirect: "/",
     roles: [],
     text: "Registruotis",
@@ -40,19 +48,24 @@ export const Routes: IRouteInfo[] = [
   {
     addToNav: true,
     authenticated: true,
-    component: Login,
-    exact: true,
-    link: "/",
+    component: Logout,
+    link: "/logout",
+    order: 200,
     redirect: "/login",
     roles: [],
-    text: "Pradžia",
+    text: "Atsijungti",
   },
+];
+
+// 50+
+const FlatRoutes: IRouteInfo[] = [
   {
     addToNav: true,
     authenticated: true,
     component: FlatList,
     exact: true,
     link: "/flats",
+    order: 50,
     redirect: "/login",
     roles: [],
     text: "Butai",
@@ -63,6 +76,7 @@ export const Routes: IRouteInfo[] = [
     component: CreateFlat,
     exact: true,
     link: "/flats/create",
+    order: 51,
     redirect: "/",
     roles: Policies.Supply,
     text: "Naujas butas",
@@ -70,34 +84,48 @@ export const Routes: IRouteInfo[] = [
   {
     addToNav: false,
     authenticated: true,
-    component: Login,
+    component: FlatDetails,
     link: "/flat/:id",
+    order: 100,
     redirect: "/login",
     roles: [],
     text: "Butas",
   },
+];
+
+// 90
+const UserRoutes: IRouteInfo[] = [
   {
     addToNav: true,
     authenticated: true,
-    component: Login,
+    component: Profile,
     link: "/user",
+    order: 90,
     redirect: "/",
     roles: Policies.Client,
     text: "Paskyra",
   },
+];
+
+export const Routes: IRouteInfo[] = [
+  ...AuthRoutes,
   {
     addToNav: true,
     authenticated: true,
-    component: Logout,
-    link: "/logout",
+    component: () => <Redirect to="/flats" />,
+    exact: true,
+    link: "/",
+    order: 1,
     redirect: "/login",
     roles: [],
-    text: "Atsijungti",
+    text: "Pradžia",
   },
+  ...FlatRoutes,
+  ...UserRoutes,
 ];
 
 export const getAsRoleRoutes = () => {
-  return Routes.map((link, index) => (
+  return Routes.sort(sortByOrder).map((link, index) => (
     <RoleRoute
       key={index}
       path={link.link}
@@ -109,3 +137,5 @@ export const getAsRoleRoutes = () => {
     />
   ));
 };
+
+const sortByOrder = (a: IRouteInfo, b: IRouteInfo): number => a.order - b.order;

@@ -1,6 +1,6 @@
 import jwtdecode from "jwt-decode";
 import { apiFetch } from "./Helpers";
-import { IErrorResponse } from "./Settings";
+import { IErrorResponse, IBasicResponse, IFlatAddress } from "./Settings";
 
 export enum Roles {
   Administrator = "Administrator",
@@ -41,7 +41,72 @@ export interface IRegistrationModel {
   phoneNumber: string;
 }
 
+export interface IUserData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  clientInformation?: IClientData;
+}
+
+export interface IClientData {
+  id: string;
+  description: string;
+}
+
+export interface IAgreementData {
+  id: string;
+  from: string;
+  to: string;
+  flatName: string;
+  flatAddress: IFlatAddress;
+}
+
 class UserService {
+  public static async getUserData(): Promise<IUserData | IErrorResponse> {
+    try {
+      const result = await apiFetch("/api/user", {
+        headers: this.authorizationHeaders(),
+        method: "GET",
+      });
+
+      if (result.ok) {
+        const response = (await result.json()) as IUserData;
+        return response;
+      } else {
+        const response = (await result.json()) as IErrorResponse;
+        return response;
+      }
+    } catch (e) {
+      console.log(e);
+      return { General: ["Įvyko nežinoma klaida"] };
+    }
+  }
+
+  public static async getUserAgreements(): Promise<IAgreementData[] | IErrorResponse> {
+    try {
+      const result = await apiFetch("/api/user/agreements", {
+        headers: this.authorizationHeaders(),
+        method: "GET",
+      });
+
+      if (result.ok) {
+        if (result.status === 204) {
+          return [];
+        }
+
+        const response = (await result.json()) as IAgreementData[];
+        return response;
+      } else {
+        const response = (await result.json()) as IErrorResponse;
+        return response;
+      }
+    } catch (e) {
+      console.log(e);
+      return { General: ["Įvyko nežinoma klaida"] };
+    }
+  }
+
   public static async authenticate(email: string, password: string): Promise<{ [key: string]: string[] }> {
     try {
       const result = await apiFetch("/api/user/login", {
@@ -131,7 +196,7 @@ class UserService {
     this.clearToken();
   }
 
-  public static satisfiesRoles(...roles: string[]): boolean {
+  public static hasRoles(...roles: string[]): boolean {
     if (roles.length === 0) {
       return true;
     }
@@ -147,7 +212,7 @@ class UserService {
 
   public static readonly authorizationHeaders = (): { [key: string]: string } => ({
     Authorization: `Bearer ${UserService.token()}`,
-  })
+  });
 
   private static setToken(token: string): void {
     const decoded = jwtdecode(token) as ITokenPayload;

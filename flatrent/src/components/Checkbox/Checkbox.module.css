@@ -2,11 +2,10 @@
   align-items: center;
   appearance: none;
   display: inline-block;
-  margin: 1em 0;
+  margin: 0.5em 0;
   position: relative;
   text-align: left;
 }
-
 
 .checkbox label {
   clear: both;
@@ -20,13 +19,12 @@
 /* color: var(--main-accent-alt-color); */
 
 .checkbox label:not(:empty) {
-  padding-left: .3em;
+  padding-left: 0.3em;
 }
 
 .checkbox input[type="checkbox"] {
   appearance: none;
 }
-
 
 .checkbox > input {
   cursor: pointer;
@@ -45,11 +43,12 @@
   content: "";
   height: 0.3em;
   left: 0.1em;
-  top: 0.1em;
+  top: 0.07em;
   position: absolute;
-  transition: all .2s ease-in;
-  width: .8em;
+  transition: all 0.2s ease-in;
+  width: 0.8em;
   margin: 0.05em;
+  transform: rotate(-25deg);
 }
 
 .checkbox > input:checked:before {
@@ -60,7 +59,7 @@
 
 .checkbox > input:after {
   background: transparent;
-  border: 2px solid rgba(0, 0, 0, .34);
+  border: 2px solid rgba(0, 0, 0, 0.34);
   content: "";
   cursor: pointer;
   height: 1.15em;

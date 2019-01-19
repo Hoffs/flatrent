@@ -1,7 +1,8 @@
 import React, { ChangeEvent, Component } from "react";
-import Styles from "./InputForm.module.css";
+import Styles from "./InputArea.module.css";
 
-interface InputFormProps {
+interface InputAreaProps {
+  className?: string;
   type?: string;
   default?: string;
   errors?: string[];
@@ -12,8 +13,8 @@ interface InputFormProps {
   extraProps?: { [key: string]: string };
 }
 
-class InputForm extends Component<InputFormProps, { value: string; focused: boolean }> {
-  constructor(props: Readonly<InputFormProps>) {
+class InputArea extends Component<InputAreaProps, { value: string; focused: boolean }> {
+  constructor(props: Readonly<InputAreaProps>) {
     super(props);
     this.state = { value: props.default !== undefined ? props.default : "", focused: false };
   }
@@ -29,12 +30,12 @@ class InputForm extends Component<InputFormProps, { value: string; focused: bool
 
   private getContent() {
     if (!this.props.errorsOnly) {
+      const style = this.props.className === undefined ? "" : this.props.className;
       return (
         <>
           <span className={this.getTitleStyle()}>{this.props.title}</span>
-          <input
-            className={Styles.input}
-            type={this.props.type === undefined ? "text" : this.props.type}
+          <textarea
+            className={Styles.input.concat(" ", style)}
             name={this.props.name}
             value={this.state.value}
             onChange={this.handleChange}
@@ -65,14 +66,14 @@ class InputForm extends Component<InputFormProps, { value: string; focused: bool
     ));
   }
 
-  private handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  private handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     this.setState({ value: event.target.value });
     this.props.setValue(event.target.name, event.target.value);
   };
 
-  private onFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+  private onFocus = (event: React.FocusEvent<HTMLTextAreaElement>) => {
     this.setState({ focused: event.type === "focus" ? true : false });
   };
 }
 
-export default InputForm;
+export default InputArea;

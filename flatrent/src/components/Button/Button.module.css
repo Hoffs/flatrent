@@ -1,4 +1,5 @@
 .button {
+  font-size: 1em;
   align-self: center;
   background-color: var(--main-accent-alt-color);
   border: none;
@@ -12,21 +13,22 @@
   padding: 12px 28px;
   text-align: center;
   text-transform: uppercase;
-  transition: all .3s;
+  transition: all 0.3s;
   width: fit-content;
 }
 
 .buttonOutline {
+  font-size: 1em;
   align-self: center;
   background-color: transparent;
-  border: 2px solid rgba(var(--main-accent-alt-color-rgb), .6);
+  border: 2px solid rgba(var(--main-accent-alt-color-rgb), 0.6);
   border-radius: 0;
   color: var(--main-accent-alt-color);
   display: flex;
   padding: 8px 14px;
   text-align: center;
   text-transform: uppercase;
-  transition: all .3s;
+  transition: all 0.3s;
   width: fit-content;
 }
 
@@ -39,21 +41,22 @@
 }
 
 .button:hover {
-  box-shadow: 0 1px 2px 0 rgba(var(--main-accent-alt-color-rgb), .5),
-  0 1px 3px 1px rgba(var(--main-accent-alt-color-rgb), .4);
+  box-shadow: 0 1px 2px 0 rgba(var(--main-accent-alt-color-rgb), 0.5),
+    0 1px 3px 1px rgba(var(--main-accent-alt-color-rgb), 0.4);
   cursor: pointer;
 }
 
 .buttonOutline:hover {
-  background-color: rgba(var(--main-accent-alt-color-rgb), .1);
+  background-color: rgba(var(--main-accent-alt-color-rgb), 0.1);
+  cursor: pointer;
 }
 
 .button:disabled {
-  background-color: rgba(0, 0, 0, .3);
+  background-color: rgba(0, 0, 0, 0.3);
   box-shadow: none;
   cursor: not-allowed;
 }
 
 .buttonOutline:disabled {
-  border-color: rgba(var(--main-accent-alt-color-rgb), .1);
+  border-color: rgba(var(--main-accent-alt-color-rgb), 0.1);
 }

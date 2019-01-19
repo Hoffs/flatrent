@@ -12,14 +12,14 @@ import Styles from "./Register.module.css";
 
 interface IRegisterState {
   values: {
-    [key: string]: string,
-    firstName: string,
-    lastName: string,
-    phone: string,
-    email: string,
-    emailConfirm: string,
-    password: string,
-    passwordConfirm: string,
+    [key: string]: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    email: string;
+    emailConfirm: string;
+    password: string;
+    passwordConfirm: string;
   };
   requesting: boolean;
   errors: { [key: string]: string[] };
@@ -48,37 +48,58 @@ class Register extends Component<RouteComponentProps, IRegisterState> {
       <Card className={Styles.card}>
         <span className={Styles.title}>Registracija</span>
         <FlexRow>
-            <InputForm errors={this.state.errors.FirstName} name="firstName" title="Vardas" setValue={this.handleUpdate} />
-            <InputForm errors={this.state.errors.LastName} name="lastName" title="Pavardė" setValue={this.handleUpdate} />
+          <InputForm
+            errors={this.state.errors.FirstName}
+            name="firstName"
+            title="Vardas"
+            setValue={this.handleUpdate}
+          />
+          <InputForm errors={this.state.errors.LastName} name="lastName" title="Pavardė" setValue={this.handleUpdate} />
         </FlexRow>
         <FlexRow>
-          <InputForm errors={this.state.errors.PhoneNumber} name="phone" title="Tel. Numeris" setValue={this.handleUpdate} />
+          <InputForm
+            errors={this.state.errors.PhoneNumber}
+            name="phone"
+            title="Tel. Numeris"
+            setValue={this.handleUpdate}
+          />
         </FlexRow>
         <FlexRow>
-          <InputForm errors={this.state.errors.EmailConfirm} name="email" title="El. paštas" setValue={this.handleUpdate} />
+          <InputForm
+            errors={this.state.errors.EmailConfirm}
+            name="email"
+            title="El. paštas"
+            setValue={this.handleUpdate}
+          />
           <InputForm name="emailConfirm" title="Pakartoti el. paštą" setValue={this.handleUpdate} />
         </FlexRow>
         <FlexRow>
-          <InputForm errors={this.state.errors.Password} name="password" title="Slaptažodis" type="password" setValue={this.handleUpdate} />
-          <InputForm errors={this.state.errors.PasswordConfirm} name="passwordConfirm" title="Pakartoti slaptažodį" type="password" setValue={this.handleUpdate} />
+          <InputForm
+            errors={this.state.errors.Password}
+            name="password"
+            title="Slaptažodis"
+            type="password"
+            setValue={this.handleUpdate}
+          />
+          <InputForm
+            errors={this.state.errors.PasswordConfirm}
+            name="passwordConfirm"
+            title="Pakartoti slaptažodį"
+            type="password"
+            setValue={this.handleUpdate}
+          />
         </FlexRow>
-        <Button disabled={this.state.requesting} onClick={this.register}>Registruotis</Button>
+        <Button disabled={this.state.requesting} onClick={this.register}>
+          Registruotis
+        </Button>
       </Card>
     );
   }
 
   private register = async () => {
-    const {
-      firstName,
-      lastName,
-      phone,
-      password,
-      passwordConfirm,
-      email,
-      emailConfirm,
-    } = this.state.values;
+    const { firstName, lastName, phone, password, passwordConfirm, email, emailConfirm } = this.state.values;
 
-    const errors: {[key: string]: string[]} = { };
+    const errors: { [key: string]: string[] } = {};
     if (password !== passwordConfirm) {
       errors.passwordConfirm = ["Slaptažodžiai turi būti vienodi."];
     }
@@ -105,11 +126,10 @@ class Register extends Component<RouteComponentProps, IRegisterState> {
       // General error
       this.setState({ requesting: false });
     }
-  }
+  };
 
   private handleUpdate = (name: string, value: string) =>
-    this.setState({ values: {...this.state.values, [name]: value }})
-
+    this.setState((state) => ({ values: { ...state.values, [name]: value } }));
 }
 
 export default Register;
