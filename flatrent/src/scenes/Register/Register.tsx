@@ -65,13 +65,13 @@ class Register extends Component<RouteComponentProps, IRegisterState> {
           />
         </FlexRow>
         <FlexRow>
+          <InputForm errors={this.state.errors.Email} name="email" title="El. paštas" setValue={this.handleUpdate} />
           <InputForm
-            errors={this.state.errors.EmailConfirm}
-            name="email"
-            title="El. paštas"
+            errors={this.state.errors.Email}
+            name="emailConfirm"
+            title="Pakartoti el. paštą"
             setValue={this.handleUpdate}
           />
-          <InputForm name="emailConfirm" title="Pakartoti el. paštą" setValue={this.handleUpdate} />
         </FlexRow>
         <FlexRow>
           <InputForm
@@ -82,7 +82,7 @@ class Register extends Component<RouteComponentProps, IRegisterState> {
             setValue={this.handleUpdate}
           />
           <InputForm
-            errors={this.state.errors.PasswordConfirm}
+            errors={this.state.errors.Password}
             name="passwordConfirm"
             title="Pakartoti slaptažodį"
             type="password"
@@ -101,10 +101,10 @@ class Register extends Component<RouteComponentProps, IRegisterState> {
 
     const errors: { [key: string]: string[] } = {};
     if (password !== passwordConfirm) {
-      errors.passwordConfirm = ["Slaptažodžiai turi būti vienodi."];
+      errors.Password = ["Slaptažodžiai turi būti vienodi."];
     }
     if (email !== emailConfirm) {
-      errors.emailConfirm = ["El. pašto adresai turi būti vienodi."];
+      errors.Email = ["El. pašto adresai turi būti vienodi."];
     }
     if (Object.keys(errors).length > 0) {
       this.setState({ errors });

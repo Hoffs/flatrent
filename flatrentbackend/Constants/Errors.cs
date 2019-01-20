@@ -29,5 +29,6 @@
         
         public const string Exception = "Įvyko nežinoma klaida.";
         public const string Alphanumeric = "Leidžiami tik skaičiai ir raidės.";
+        public const string EmailAlreadyExists = "Šis el. paštas jau yra naudojamas.";
     }
 }

@@ -60,7 +60,7 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
       flat: undefined,
       showRentCard: false,
       errors: {},
-      values: { from: getOffsetDate(0, 0, 7), to: getOffsetDate(0, 1, 7), comments: "" },
+      values: { from: getOffsetDate(0, 0, 0), to: getOffsetDate(0, 1, 7), comments: "" },
     };
     this.fetchFlat(props.match.params.id);
   }
@@ -120,7 +120,7 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
     const today = new Date();
     const fromExtraProps = {
       max: getOffsetDate(1, 0, 7),
-      min: getOffsetDate(0, 0, 7),
+      min: getOffsetDate(0, 0, 0),
     };
     const toExtraProps = {
       max: getOffsetDate(1, 0, 7),

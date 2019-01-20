@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
+using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Interfaces;
 using FlatRent.Models;
@@ -84,7 +85,7 @@ namespace FlatRent.Repositories
         {
             var existing = await _context.Users.FirstOrDefaultAsync(x =>
                 string.Equals(x.Email, email, StringComparison.InvariantCultureIgnoreCase)).ConfigureAwait(false);
-            return existing != null ? new FormError("Email", "User with this email already exists.") : null;
+            return existing != null ? new FormError("Email", Errors.EmailAlreadyExists) : null;
         }
 
         private static string HashPassword(string password, string fname, string lname)
