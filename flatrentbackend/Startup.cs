@@ -17,7 +17,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Serilog;
-using Serilog.Core;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace FlatRent
@@ -36,37 +35,18 @@ namespace FlatRent
         {
             services.AddAutoMapper();
             services.AddSingleton(Log.Logger);
-            services.AddDbContext<DataContext>(opts => opts.UseNpgsql(Configuration.GetConnectionString("DataContext")).UseLazyLoadingProxies());
+//            services.AddDbContext<DataContext>(opts => opts.UseNpgsql(Configuration.GetConnectionString("DataContext")).UseLazyLoadingProxies());
+            services.AddDbContext<DataContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("DataContext")).UseLazyLoadingProxies());
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("CustomerService", policyOptions =>
+                options.AddPolicy("Administrator", policyOptions =>
                     policyOptions.AddRequirements(
-                        new RolesAuthorizationRequirement(new[] {"Administrator", "CustomerService"}))
+                        new RolesAuthorizationRequirement(new[] {"Administrator"}))
                 );
-                options.AddPolicy("Accounting", policyOptions =>
+                options.AddPolicy("User", policyOptions =>
                     policyOptions.AddRequirements(
-                        new RolesAuthorizationRequirement(new[] {"Administrator", "Accounting"}))
-                );
-                options.AddPolicy("Supply", policyOptions =>
-                    policyOptions.AddRequirements(
-                        new RolesAuthorizationRequirement(new[] {"Administrator", "Supply"}))
-                );
-                options.AddPolicy("Sales", policyOptions =>
-                    policyOptions.AddRequirements(
-                        new RolesAuthorizationRequirement(new[] {"Administrator", "Sales"}))
-                );
-                options.AddPolicy("SalesOrClient", policyOptions =>
-                    policyOptions.AddRequirements(
-                        new RolesAuthorizationRequirement(new[] {"Administrator", "Sales", "Client"}))
-                );
-                options.AddPolicy("Client", policyOptions =>
-                    policyOptions.AddRequirements(
-                        new RolesAuthorizationRequirement(new[] {"Administrator", "Client"}))
-                );
-                options.AddPolicy("Employee", policyOptions =>
-                    policyOptions.AddRequirements(
-                        new RolesAuthorizationRequirement(new[] {"Administrator", "Employee"}))
+                        new RolesAuthorizationRequirement(new[] {"Administrator", "User"}))
                 );
             });
 

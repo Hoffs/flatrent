@@ -31,6 +31,5 @@ namespace FlatRent.Interfaces
         Task<ClaimsPrincipal> VerifyAsync(string token);
 
         Task<IEnumerable<FormError>> RegisterAsync(RegistrationForm data);
-        Task<IEnumerable<FormError>> RegisterEmployeeAsync(RegistrationEmployeeForm data);
     }
 }

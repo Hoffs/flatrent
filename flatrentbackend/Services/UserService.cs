@@ -72,12 +72,6 @@ namespace FlatRent.Services
             return _userRepository.AddClientAsync(user);
         }
 
-        public Task<IEnumerable<FormError>> RegisterEmployeeAsync(RegistrationEmployeeForm data)
-        {
-            var user = _mapper.Map<User>(data);
-            return _userRepository.AddEmployeeAsync(user);
-        }
-
         private string GenerateJwtToken(IEnumerable<Claim> claims)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

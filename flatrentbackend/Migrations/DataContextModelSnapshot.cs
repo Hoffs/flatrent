@@ -3,8 +3,8 @@ using System;
 using FlatRent.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace FlatRent.Migrations
 {
@@ -15,15 +15,14 @@ namespace FlatRent.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("FlatRent.Entities.Address", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -58,76 +57,86 @@ namespace FlatRent.Migrations
                     b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("FlatRent.Entities.ClientInformation", b =>
+            modelBuilder.Entity("FlatRent.Entities.Agreement", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comments")
+                        .HasMaxLength(65536);
 
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<bool>("Deleted");
 
-                    b.Property<string>("Description");
+                    b.Property<Guid>("FlatId");
+
+                    b.Property<DateTime>("From");
 
                     b.Property<DateTime?>("ModifiedDate");
 
+                    b.Property<Guid>("RenterId");
+
+                    b.Property<int>("StatusId");
+
+                    b.Property<DateTime>("To");
+
                     b.HasKey("Id");
 
-                    b.ToTable("ClientInformations");
+                    b.HasIndex("FlatId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11bc9"),
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Deleted = false,
-                            Description = "Cool client"
-                        });
+                    b.HasIndex("RenterId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("RentAgreements");
                 });
 
-            modelBuilder.Entity("FlatRent.Entities.EmployeeInformation", b =>
+            modelBuilder.Entity("FlatRent.Entities.AgreementStatus", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<bool>("Deleted");
-
-                    b.Property<string>("Department")
-                        .IsRequired()
-                        .HasMaxLength(64);
-
-                    b.Property<DateTime?>("ModifiedDate");
-
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasMaxLength(64);
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmployeeInformations");
+                    b.ToTable("AgreementStatuses");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11e88"),
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Deleted = false,
-                            Department = "Supply",
-                            Position = "Tiekimo Vadovas"
+                            Id = 1,
+                            Name = "Requested"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Accepted"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Rejected"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Expired"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Ended"
                         });
                 });
 
             modelBuilder.Entity("FlatRent.Entities.Fault", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("gen_random_uuid()");
-
-                    b.Property<Guid>("ClientInformationId");
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedDate");
 
@@ -135,8 +144,6 @@ namespace FlatRent.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired();
-
-                    b.Property<Guid>("EmployeeInformationId");
 
                     b.Property<Guid>("FlatId");
 
@@ -148,10 +155,6 @@ namespace FlatRent.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientInformationId");
-
-                    b.HasIndex("EmployeeInformationId");
-
                     b.HasIndex("FlatId");
 
                     b.ToTable("Faults");
@@ -160,8 +163,7 @@ namespace FlatRent.Migrations
             modelBuilder.Entity("FlatRent.Entities.Flat", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .ValueGeneratedOnAdd();
 
                     b.Property<Guid>("AddressId");
 
@@ -175,6 +177,10 @@ namespace FlatRent.Migrations
                         .IsRequired();
 
                     b.Property<int>("Floor");
+
+                    b.Property<bool>("IsPublic");
+
+                    b.Property<bool>("IsPublished");
 
                     b.Property<DateTime?>("ModifiedDate");
 
@@ -203,8 +209,9 @@ namespace FlatRent.Migrations
             modelBuilder.Entity("FlatRent.Entities.Invoice", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("AgreementId");
 
                     b.Property<float>("AmountPaid");
 
@@ -214,59 +221,29 @@ namespace FlatRent.Migrations
 
                     b.Property<bool>("Deleted");
 
+                    b.Property<DateTime>("DueDate");
+
                     b.Property<DateTime?>("ModifiedDate");
 
                     b.Property<DateTime>("PaidDate");
 
-                    b.Property<Guid>("RentAgreementId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("RentAgreementId");
+                    b.HasIndex("AgreementId");
 
                     b.ToTable("Invoices");
-                });
-
-            modelBuilder.Entity("FlatRent.Entities.Owner", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("gen_random_uuid()");
-
-                    b.Property<string>("Account")
-                        .IsRequired();
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<bool>("Deleted");
-
-                    b.Property<string>("Email")
-                        .IsRequired();
-
-                    b.Property<DateTime?>("ModifiedDate");
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Owners");
                 });
 
             modelBuilder.Entity("FlatRent.Entities.Photo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .ValueGeneratedOnAdd();
 
                     b.Property<Guid>("FlatId");
 
                     b.Property<byte[]>("PhotoBytes")
                         .IsRequired()
-                        .HasMaxLength(64000);
+                        .HasMaxLength(65536);
 
                     b.HasKey("Id");
 
@@ -275,46 +252,13 @@ namespace FlatRent.Migrations
                     b.ToTable("Photos");
                 });
 
-            modelBuilder.Entity("FlatRent.Entities.RentAgreement", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("gen_random_uuid()");
-
-                    b.Property<Guid>("ClientInformationId");
-
-                    b.Property<string>("Comments");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<bool>("Deleted");
-
-                    b.Property<Guid>("FlatId");
-
-                    b.Property<DateTime>("From");
-
-                    b.Property<DateTime?>("ModifiedDate");
-
-                    b.Property<DateTime>("To");
-
-                    b.Property<bool>("Verified");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientInformationId");
-
-                    b.HasIndex("FlatId");
-
-                    b.ToTable("RentAgreements");
-                });
-
             modelBuilder.Entity("FlatRent.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ClientInformationId");
+                    b.Property<string>("About")
+                        .HasMaxLength(64000);
 
                     b.Property<DateTime>("CreatedDate");
 
@@ -323,8 +267,6 @@ namespace FlatRent.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(256);
-
-                    b.Property<Guid?>("EmployeeInformationId");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -344,15 +286,9 @@ namespace FlatRent.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<Guid>("TypeId");
+                    b.Property<int>("TypeId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClientInformationId")
-                        .IsUnique();
-
-                    b.HasIndex("EmployeeInformationId")
-                        .IsUnique();
 
                     b.HasIndex("TypeId");
 
@@ -369,12 +305,11 @@ namespace FlatRent.Migrations
                             LastName = "Test",
                             Password = "UhYWUG3vDiTZZt04YTqkBxL/RUxhyEvqpzCXJlRDMas=",
                             PhoneNumber = "+37060286000",
-                            TypeId = new Guid("ee3d96b6-4243-4235-8231-9a9fced615fe")
+                            TypeId = 1
                         },
                         new
                         {
                             Id = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11bc8"),
-                            ClientInformationId = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11bc9"),
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Deleted = false,
                             Email = "client@client.com",
@@ -382,28 +317,15 @@ namespace FlatRent.Migrations
                             LastName = "Test",
                             Password = "UhYWUG3vDiTZZt04YTqkBxL/RUxhyEvqpzCXJlRDMas=",
                             PhoneNumber = "+37060286001",
-                            TypeId = new Guid("ed42ea4b-9900-4477-af32-0336ca61eab1")
-                        },
-                        new
-                        {
-                            Id = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11e82"),
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Deleted = false,
-                            Email = "supply@supply.com",
-                            EmployeeInformationId = new Guid("b2c9ecb2-eda6-4b0f-9236-ef0583f11e88"),
-                            FirstName = "Test",
-                            LastName = "Test",
-                            Password = "UhYWUG3vDiTZZt04YTqkBxL/RUxhyEvqpzCXJlRDMas=",
-                            PhoneNumber = "+37060286009",
-                            TypeId = new Guid("268c6597-15cb-4ab1-9d39-8a7d7c85b3d1")
+                            TypeId = 2
                         });
                 });
 
             modelBuilder.Entity("FlatRent.Entities.UserType", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name");
 
@@ -414,33 +336,36 @@ namespace FlatRent.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ed42ea4b-9900-4477-af32-0336ca61eab1"),
-                            Name = "Client"
-                        },
-                        new
-                        {
-                            Id = new Guid("268c6597-15cb-4ab1-9d39-8a7d7c85b3d1"),
-                            Name = "Employee"
-                        },
-                        new
-                        {
-                            Id = new Guid("ee3d96b6-4243-4235-8231-9a9fced615fe"),
+                            Id = 1,
                             Name = "Administrator"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "User"
                         });
+                });
+
+            modelBuilder.Entity("FlatRent.Entities.Agreement", b =>
+                {
+                    b.HasOne("FlatRent.Entities.Flat", "Flat")
+                        .WithMany("Agreements")
+                        .HasForeignKey("FlatId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("FlatRent.Entities.User", "Renter")
+                        .WithMany("RenterAgreements")
+                        .HasForeignKey("RenterId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("FlatRent.Entities.AgreementStatus", "Status")
+                        .WithMany("Invoices")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("FlatRent.Entities.Fault", b =>
                 {
-                    b.HasOne("FlatRent.Entities.ClientInformation", "ClientInformation")
-                        .WithMany("Faults")
-                        .HasForeignKey("ClientInformationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("FlatRent.Entities.EmployeeInformation", "EmployeeInformation")
-                        .WithMany("Faults")
-                        .HasForeignKey("EmployeeInformationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("FlatRent.Entities.Flat", "Flat")
                         .WithMany("Faults")
                         .HasForeignKey("FlatId")
@@ -452,19 +377,19 @@ namespace FlatRent.Migrations
                     b.HasOne("FlatRent.Entities.Address", "Address")
                         .WithOne("Flat")
                         .HasForeignKey("FlatRent.Entities.Flat", "AddressId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("FlatRent.Entities.Owner", "Owner")
+                    b.HasOne("FlatRent.Entities.User", "Owner")
                         .WithMany("Flats")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("FlatRent.Entities.Invoice", b =>
                 {
-                    b.HasOne("FlatRent.Entities.RentAgreement", "RentAgreement")
+                    b.HasOne("FlatRent.Entities.Agreement", "Agreement")
                         .WithMany("Invoices")
-                        .HasForeignKey("RentAgreementId")
+                        .HasForeignKey("AgreementId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -476,29 +401,8 @@ namespace FlatRent.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("FlatRent.Entities.RentAgreement", b =>
-                {
-                    b.HasOne("FlatRent.Entities.ClientInformation", "ClientInformation")
-                        .WithMany("Agreements")
-                        .HasForeignKey("ClientInformationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("FlatRent.Entities.Flat", "Flat")
-                        .WithMany("Agreements")
-                        .HasForeignKey("FlatId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("FlatRent.Entities.User", b =>
                 {
-                    b.HasOne("FlatRent.Entities.ClientInformation", "ClientInformation")
-                        .WithOne("User")
-                        .HasForeignKey("FlatRent.Entities.User", "ClientInformationId");
-
-                    b.HasOne("FlatRent.Entities.EmployeeInformation", "EmployeeInformation")
-                        .WithOne("User")
-                        .HasForeignKey("FlatRent.Entities.User", "EmployeeInformationId");
-
                     b.HasOne("FlatRent.Entities.UserType", "Type")
                         .WithMany("Users")
                         .HasForeignKey("TypeId")

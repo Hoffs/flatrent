@@ -45,7 +45,7 @@ namespace FlatRent.Repositories
             }
         }
 
-        public Task<RentAgreement> GetAgreement(Guid id)
+        public Task<Agreement> GetAgreement(Guid id)
         {
             return _context.RentAgreements.FindAsync(id);
         }

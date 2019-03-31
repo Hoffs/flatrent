@@ -26,34 +26,21 @@ namespace FlatRent.Repositories
             _logger = logger;
         }
 
-        public async Task<IEnumerable<FormError>> AddFlatAsync(FlatForm form)
+        public async Task<IEnumerable<FormError>> AddFlatAsync(FlatForm form, Guid ownerId)
         {
             var flat = _mapper.Map<Flat>(form);
             flat.Address = _mapper.Map<Address>(form);
-            if (form.OwnerId != null)
-            {
-                var owner = await _context.Owners.FindAsync(form.OwnerId).ConfigureAwait(false);
-                if (owner == null)
-                {
-                    return new[] {new FormError("OwnerId", Errors.OwnerNotFound)};
-                }
+            flat.OwnerId = ownerId;
 
-                flat.Owner = owner;
-            }
-            else
-            {
-                flat.Owner = _mapper.Map<Owner>(form);
-            }
-
-            await _context.Flats.AddAsync(flat).ConfigureAwait(false);
             try
             {
+                await _context.Flats.AddAsync(flat).ConfigureAwait(false);
                 await _context.SaveChangesAsync().ConfigureAwait(false);
                 return null;
             }
             catch (DbUpdateException e)
             {
-                _logger.Error(e, "Exception thrown while creating flat with {CreatFlatForm}", form);
+                _logger.Error(e, "Exception thrown while creating flat with {CreateFlatForm}", form);
                 return new[] {new FormError(Errors.Exception)};
             }
         }
@@ -99,27 +86,25 @@ namespace FlatRent.Repositories
             return query.CountAsync();
         }
 
-        public async Task<IEnumerable<FormError>> AddAgreemenTask(Guid flatId, Guid userId, RentAgreementForm form)
+        public async Task<IEnumerable<FormError>> AddAgreementTask(Guid flatId, Guid renterId, RentAgreementForm form)
         {
             try
             {
                 var flat = await GetFlatAsync(flatId).ConfigureAwait(false);
-                var isRented = flat.Agreements.Any(x => x.From.Date >= DateTime.Now.Date && x.To <= DateTime.Now.Date && !x.Deleted);
-                if (isRented)
+                if (flat.IsRented || !flat.IsPublished)
                 {
-                    return new []{new FormError(Errors.FlatAlreadyRented)};
+                    return new []{new FormError(Errors.FlatNotAvailableForRent)};
                 }
 
-                var user = await _context.Users.FindAsync(userId).ConfigureAwait(false);
-                if (user.ClientInformationId == null)
+                if (renterId == flat.OwnerId)
                 {
-                    return new []{new FormError(Errors.UserIsNotClient)};
+                    return new[] { new FormError(Errors.RenterCantBeOwner) };
                 }
 
-                var agreement = _mapper.Map<RentAgreement>(form);
-                agreement.ClientInformationId = (Guid) user.ClientInformationId;
+                var agreement = _mapper.Map<Agreement>(form);
+                agreement.RenterId = (Guid) renterId;
                 agreement.FlatId = flatId;
-                agreement.Verified = true;
+                agreement.StatusId = AgreementStatus.Statuses.Requested;
                 flat.Agreements.Add(agreement);
 
                 await _context.SaveChangesAsync().ConfigureAwait(false);

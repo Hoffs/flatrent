@@ -15,8 +15,9 @@
 
 
         public const string UserIsNotClient = "Naudotojas nėra klientas.";
+        public const string RenterCantBeOwner = "Savininkas negali būti nuomininkas.";
         
-        public const string FlatAlreadyRented = "Butas jau išnomuotas.";
+        public const string FlatNotAvailableForRent = "Butas šiuo metu nėra nuomojamas.";
         public const string FlatRentPeriodGreater = "Nuomos periodas turi būti ilgesnis už {0} dienas.";
         public const string FlatRentPeriodLess = "Nuomos periodas turi būti trumpesnis už {0} dienas.";
         

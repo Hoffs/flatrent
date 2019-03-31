@@ -32,14 +32,15 @@ namespace FlatRent.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Policy = "SalesOrClient")]
+        [Authorize(Policy = "User")]
         public async Task<IActionResult> Cancel([FromRoute] Guid id)
         {
+            // TODO: Overhaul, shouldn't be able to cancel this easily
             var payload = JwtPayload.CreateFromClaims(HttpContext.User.Claims);
-            if (payload.UserType == "Client")
+            if (payload.UserType == "User")
             {
                 var agreement = await _repository.GetAgreement(id).ConfigureAwait(false);
-                if (agreement.ClientInformation.Id != HttpContext.User.GetUserId())
+                if (agreement.RenterId != HttpContext.User.GetUserId())
                 {
                     return BadRequest(new []{new FormError(Errors.AgreementCancelNotOwner)});
                 }
@@ -57,7 +58,7 @@ namespace FlatRent.Controllers
 
         [HttpGet("{id}/pdf")]
         [ProducesResponseType(typeof(FileStreamResult), 200)]
-        [Authorize(Policy = "SalesOrClient")]
+        [Authorize(Policy = "User")]
         public async Task<IActionResult> GetPdf([FromRoute] Guid id)
         {
             var agreement = await _repository.GetAgreement(id).ConfigureAwait(false);
@@ -69,23 +70,23 @@ namespace FlatRent.Controllers
             var payload = JwtPayload.CreateFromClaims(HttpContext.User.Claims);
             if (payload.UserType == "Client")
             {
-                if (agreement.ClientInformation.Id != HttpContext.User.GetUserId())
+                if (agreement.RenterId != HttpContext.User.GetUserId())
                 {
                     return BadRequest(new []{new FormError(Errors.AgreementPdfNotOwner)});
                 }
             }
 
-            var agreementData = new AgreementPatchData()
+            var agreementData = new AgreementPatchData
             {
                 Year = agreement.CreatedDate.Year,
                 Month = agreement.CreatedDate.Month,
                 Day = agreement.CreatedDate.Day,
                 Address = agreement.Flat.Address.ToString(),
-                Owner = agreement.Flat.Owner.Name,
+                Owner = agreement.Flat.Owner.GetFullName(),
                 Area = agreement.Flat.Area,
                 Price = agreement.Flat.Price,
                 AgreementNo = agreement.Id,
-                Client = agreement.ClientInformation.User.GetFullName(),
+                Client = agreement.Renter.GetFullName(),
             };
 
             var agreementHtml = await HtmlGenerator.GetAgreementHtml(agreementData).ConfigureAwait(false);

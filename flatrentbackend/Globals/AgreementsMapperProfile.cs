@@ -8,7 +8,7 @@ namespace FlatRent.Globals
     {
         public AgreementsMapperProfile()
         {
-            CreateMap<RentAgreement, RentAgreementListItem>()
+            CreateMap<Agreement, RentAgreementListItem>()
                 .ForMember(x => x.FlatName, opt => opt.MapFrom(x => x.Flat.Name))
                 .ForMember(x => x.FlatAddress, opt => opt.MapFrom(x => x.Flat.Address));
         }

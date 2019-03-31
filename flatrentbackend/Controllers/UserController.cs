@@ -11,6 +11,7 @@ using FlatRent.Models;
 using FlatRent.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Serilog;
 
 namespace FlatRent.Controllers
@@ -87,23 +88,6 @@ namespace FlatRent.Controllers
             }
         }
 
-        [Authorize(Roles = "Administrator")]
-        [HttpPost("register/employee")]
-        public async Task<IActionResult> RegisterEmployee(RegistrationEmployeeForm form)
-        {
-            try
-            {
-                var errors = await _userService.RegisterEmployeeAsync(form).ConfigureAwait(false);
-                if (errors != null) return new BadRequestObjectResult(errors.GetFormattedResponse());
-                return StatusCode(201);
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, "Exception thrown while registering with {RegistrationEmployeeForm}", form);
-                return StatusCode(500);
-            }
-        }
-
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetSelfData()
@@ -120,7 +104,7 @@ namespace FlatRent.Controllers
 
 
         [HttpGet("agreements")]
-        [Authorize(Policy = "Client")]
+        [Authorize(Policy = "User")]
         public async Task<IActionResult> GetAgreements(int count = 20, int offset = 0)
         {
             var userId = HttpContext.User.GetUserId();
@@ -130,33 +114,38 @@ namespace FlatRent.Controllers
                 return BadRequest(new []{new FormError(Errors.Exception)}.GetFormattedResponse());
             }
 
-            if (user.ClientInformationId == Guid.Empty)
-            {
-                return BadRequest(new []{new FormError(Errors.UserIsNotClient)}.GetFormattedResponse());
-            }
+            var ownerAgreements = user.OwnerAgreements.AsQueryable().ProjectTo<RentAgreementListItem>(_mapper.ConfigurationProvider);
+            var renterAgreements = user.RenterAgreements.AsQueryable().ProjectTo<RentAgreementListItem>(_mapper.ConfigurationProvider);
             
-            var agreements = user.ClientInformation?.Agreements.Where(x =>
-                !x.Deleted && x.To >= DateTime.UtcNow.Date).AsQueryable().ProjectTo<RentAgreementListItem>(_mapper.ConfigurationProvider);
-            return Ok(agreements);
+            // TODO: Differentiate OWNER/RENTER agreements
+
+            return Ok(ownerAgreements.Concat(renterAgreements));
         }
 
-        [HttpGet("test/client")]
-        [Authorize(Roles = "Client")]
-        public async Task<IActionResult> TestClient()
+        [HttpGet("test/roleclient")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> TestUser()
         {
             return StatusCode(200);
         }
 
-        [HttpGet("test/admin")]
+        [HttpGet("test/roleadmin")]
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> TestAdmin()
         {
             return StatusCode(200);
         }
 
-        [HttpGet("test/employee")]
-        [Authorize(Roles = "Employee")]
-        public async Task<IActionResult> TestEmployee()
+        [HttpGet("test/policyuser")]
+        [Authorize(Policy = "User")]
+        public async Task<IActionResult> TestPolicyUser()
+        {
+            return StatusCode(200);
+        }
+
+        [HttpGet("test/policyadmin")]
+        [Authorize(Policy = "Administrator")]
+        public async Task<IActionResult> TestPolicyAdmin()
         {
             return StatusCode(200);
         }

@@ -10,12 +10,13 @@ namespace FlatRent.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        [MaxLength(64000)]
+
         [Required]
+        [MaxLength(65536)]
         public byte[] PhotoBytes { get; set; }
 
-        [JsonIgnore]
         [Required]
+        [JsonIgnore]
         public virtual Flat Flat { get; set; }
     }
 }

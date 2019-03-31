@@ -11,11 +11,7 @@ namespace FlatRent.Models
     public class JwtPayload
     {
         public string UserId { get; set; }
-        public string EmployeeId { get; set; }
-        public string ClientId { get; set; }
         public string UserType { get; set; }
-        public string Department { get; set; }
-        public string Position { get; set; }
 
         public static JwtPayload CreateFromUser(User user)
         {
@@ -23,10 +19,6 @@ namespace FlatRent.Models
             {
                 UserId = user.Id.ToString(),
                 UserType = user.Type?.Name,
-                ClientId = user.ClientInformation?.Id.ToString(),
-                EmployeeId = user.EmployeeInformation?.Id.ToString(),
-                Department = user.EmployeeInformation?.Department,
-                Position = user.EmployeeInformation?.Position,
             };
         }
 
@@ -39,10 +31,6 @@ namespace FlatRent.Models
                 {
                     new Claim(ClaimTypes.Role, UserType),
                 }).ToArray();
-            if (Department != null)
-            {
-                claims = claims.Concat(new[] {new Claim(ClaimTypes.Role, Department)}).ToArray();
-            }
             return claims;
         }
 

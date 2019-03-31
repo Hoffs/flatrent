@@ -19,11 +19,5 @@ namespace FlatRent.Entities
 
         [Required]
         public virtual Flat Flat { get; set; }
-
-        [Required]
-        public virtual ClientInformation ClientInformation { get; set; }
-
-        [Required]
-        public virtual EmployeeInformation EmployeeInformation { get; set; }
     }
 }

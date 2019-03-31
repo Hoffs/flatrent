@@ -33,13 +33,13 @@ namespace FlatRent.Controllers
             _logger = logger;
         }
 
-        [Authorize(Policy = "Supply")]
+        [Authorize(Policy = "User")]
         [HttpPost]
         public async Task<IActionResult> CreateFlat(FlatForm form)
         {
             try
             {
-                var errors = await _repository.AddFlatAsync(form).ConfigureAwait(false);
+                var errors = await _repository.AddFlatAsync(form, HttpContext.User.GetUserId()).ConfigureAwait(false);
                 if (errors != null) return new BadRequestObjectResult(errors.GetFormattedResponse());
                 return StatusCode(201);
             }
@@ -50,7 +50,7 @@ namespace FlatRent.Controllers
             }
         }
 
-        [Authorize(Policy = "Supply")]
+        [Authorize(Policy = "User")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFlat([FromRoute] Guid id)
         {
@@ -67,14 +67,14 @@ namespace FlatRent.Controllers
             }
         }
 
-        [Authorize(Policy = "Supply")]
+        [Authorize(Policy = "User")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateFlat([FromRoute] Guid id, FlatForm form)
         {
             throw new NotImplementedException();
         }
 
-        [Authorize(Policy = "Client")]
+        [Authorize(Policy = "User")]
         [HttpPost("{id}/rent")]
         public async Task<IActionResult> RentFlat([FromRoute] Guid id, [FromBody] RentAgreementForm form)
         {
@@ -99,7 +99,7 @@ namespace FlatRent.Controllers
                 errors.Add(new FormError("General", Errors.Exception));
                 return BadRequest(errors.GetFormattedResponse());
             }
-            var operationErrors = await _repository.AddAgreemenTask(id, clientId, form).ConfigureAwait(false);
+            var operationErrors = await _repository.AddAgreementTask(id, clientId, form).ConfigureAwait(false);
             if (operationErrors != null && operationErrors.Any())
             {
                 return BadRequest(operationErrors.GetFormattedResponse());
@@ -119,7 +119,7 @@ namespace FlatRent.Controllers
             return new OkObjectResult(mappedFlats);
         }
 
-        [Authorize(Policy = "Employee")]
+        [Authorize(Policy = "User")]
         [ExactQueryParam("rented", "count", "offset")]
         [HttpGet]
         public async Task<IActionResult> GetFlats(bool rented = false, [Range(1, 100)] int count = 20, [Range(0, int.MaxValue)] int offset = 0)

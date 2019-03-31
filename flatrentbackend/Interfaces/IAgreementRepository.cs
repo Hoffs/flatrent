@@ -9,6 +9,6 @@ namespace FlatRent.Interfaces
     public interface IAgreementRepository
     {
         Task<IEnumerable<FormError>> CancelAgreement(Guid id);
-        Task<RentAgreement> GetAgreement(Guid id);
+        Task<Agreement> GetAgreement(Guid id);
     }
 }

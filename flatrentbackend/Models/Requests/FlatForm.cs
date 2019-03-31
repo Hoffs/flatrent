@@ -27,22 +27,6 @@ namespace FlatRent.Models.Requests
         [Required(ErrorMessage = Errors.Required)]
         public string Description { get; set; }
 
-
-        public Guid? OwnerId { get; set; } 
-        [Required(ErrorMessage = Errors.Required)]
-        public string OwnerName { get; set; }
-        [Required(ErrorMessage = Errors.Required)]
-        [RegularExpression(@"^[a-zA-Z0-9]*$", ErrorMessage = Errors.Alphanumeric)]
-        [MinLength(4, ErrorMessage = Errors.MinLength)]
-        public string Account { get; set; }
-        [Required(ErrorMessage = Errors.Required)]
-        [EmailAddress(ErrorMessage = Errors.EmailAddress)]
-        public string Email { get; set; }
-        [Required(ErrorMessage = Errors.Required)]
-        [Phone(ErrorMessage = Errors.Phone)]
-        public string PhoneNumber { get; set; }
-
-
         [Required(ErrorMessage = Errors.Required)]
         [MaxLength(128, ErrorMessage = Errors.MaxLength)]
         public string Street { get; set; }

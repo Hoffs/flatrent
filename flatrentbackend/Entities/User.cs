@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace FlatRent.Entities
@@ -23,27 +25,37 @@ namespace FlatRent.Entities
         [MaxLength(64)]
         [Required]
         public string Password { get; set; }
+
         [MaxLength(50)]
         [Required]
         public string PhoneNumber { get; set; }
 
+        [MaxLength(64000)]
+        public string About { get; set; }
+
+
+        // TODO: Add payment information/bank account etc.
+
         [JsonIgnore]
         [Required]
-        public virtual Guid TypeId { get; set; }
+        public virtual int TypeId { get; set; }
         [JsonIgnore]
         public virtual UserType Type { get; set; }
-
-        [JsonIgnore]
-        public Guid? EmployeeInformationId { get; set; }
-        public virtual EmployeeInformation EmployeeInformation { get; set; }
-
-        [JsonIgnore]
-        public Guid? ClientInformationId { get; set; }
-        public virtual ClientInformation ClientInformation { get; set; }
 
         public string GetFullName()
         {
             return $"{FirstName} {LastName}";
         }
+
+        [JsonIgnore]
+        [InverseProperty("Renter")]
+        public virtual ICollection<Agreement> RenterAgreements { get; set; }
+
+        [JsonIgnore]
+        [InverseProperty("Owner")]
+        public virtual ICollection<Flat> Flats { get; set; }
+
+        [NotMapped]
+        public IEnumerable<Agreement> OwnerAgreements => Flats.SelectMany(x => x.Agreements);
     }
 }
