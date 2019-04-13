@@ -2,6 +2,7 @@
 {
     public static class Errors
     {
+        public const string ImageAlreadyUploaded = "Ši nuotrauka jau buvo įkelta.";
         public const string BadCredentials = "Neteisingi prisijungimo duomenys.";
         public const string BadToken = "Blogas autorizacijos raktas.";
         public const string Required = "Šis laukas yra privalomas.";
@@ -15,7 +16,7 @@
 
 
         public const string UserIsNotClient = "Naudotojas nėra klientas.";
-        public const string RenterCantBeOwner = "Savininkas negali būti nuomininkas.";
+        public const string TenantCantBeOwner = "Savininkas negali būti nuomininkas.";
         
         public const string FlatNotAvailableForRent = "Butas šiuo metu nėra nuomojamas.";
         public const string FlatRentPeriodGreater = "Nuomos periodas turi būti ilgesnis už {0} dienas.";
@@ -31,5 +32,11 @@
         public const string Exception = "Įvyko nežinoma klaida.";
         public const string Alphanumeric = "Leidžiami tik skaičiai ir raidės.";
         public const string EmailAlreadyExists = "Šis el. paštas jau yra naudojamas.";
+        public const string NotFlatOwner = "Naudotojas nėra buto savininkas.";
+
+        public const string InvalidImage = "Netinkamo formato nuotrauka. Naudokite JPEG/PNG formatą.";
+        public const string MaxLengthImages = "Nuotraukų skaičius negali būti didesnis už {0}";
+
+        public const string NotAuthor = "Naudotojas nėra įrašo autorius.";
     }
 }

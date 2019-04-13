@@ -1,4 +1,6 @@
-﻿namespace FlatRent.Models
+﻿using System.Collections.Generic;
+
+namespace FlatRent.Models
 {
     public class FormError
     {
@@ -15,6 +17,11 @@
         {
             Name = "General";
             Message = message;
+        }
+
+        public static IEnumerable<FormError> CreateList(params FormError[] errors)
+        {
+            return errors;
         }
     }
 }

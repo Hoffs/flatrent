@@ -1,8 +1,9 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using FlatRent.Constants;
+using Microsoft.AspNetCore.Http;
 
-namespace FlatRent.Models.Requests
+namespace FlatRent.Models.Requests.Flat
 {
     public class FlatForm
     {
@@ -43,5 +44,8 @@ namespace FlatRent.Models.Requests
         [Required(ErrorMessage = Errors.Required)]
         [MaxLength(24, ErrorMessage = Errors.MaxLength)]
         public string PostCode { get; set; }
+
+        [MaxLength(32, ErrorMessage = Errors.MaxLengthImages)]
+        public IEnumerable<FileMetadata> Images { get; set; }
     }
 }

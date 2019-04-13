@@ -9,9 +9,6 @@ namespace FlatRent.Entities
 {
     public class User : BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
         [MaxLength(50)]
         [Required]
         public string FirstName { get; set; }
@@ -48,14 +45,26 @@ namespace FlatRent.Entities
         }
 
         [JsonIgnore]
-        [InverseProperty("Renter")]
-        public virtual ICollection<Agreement> RenterAgreements { get; set; }
+        [InverseProperty("Tenant")]
+        public virtual ICollection<Agreement> TenantAgreements { get; set; }
 
         [JsonIgnore]
-        [InverseProperty("Owner")]
+        [InverseProperty("Author")]
         public virtual ICollection<Flat> Flats { get; set; }
 
         [NotMapped]
         public IEnumerable<Agreement> OwnerAgreements => Flats.SelectMany(x => x.Agreements);
+
+        [JsonIgnore]
+        [InverseProperty("Author")]
+        public virtual ICollection<Conversation> StartedConversations { get; set; }
+
+        [JsonIgnore]
+        [InverseProperty("Recipient")]
+        public virtual ICollection<Conversation> RecipientConversations { get; set; }
+
+        [JsonIgnore]
+        [InverseProperty("Author")]
+        public virtual ICollection<Fault> RegisteredFaults { get; set; }
     }
 }

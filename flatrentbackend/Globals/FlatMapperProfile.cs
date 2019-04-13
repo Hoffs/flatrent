@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using FlatRent.Dtos;
 using FlatRent.Entities;
+using FlatRent.Extensions;
 using FlatRent.Models.Requests;
+using FlatRent.Models.Requests.Flat;
+using Microsoft.AspNetCore.Http;
 
 namespace FlatRent.Globals
 {
@@ -10,6 +13,7 @@ namespace FlatRent.Globals
         public FlatMapperProfile()
         {
             CreateMap<FlatForm, Flat>();
+            
             CreateMap<FlatForm, Address>();
 
             CreateMap<Address, FlatListItemAddress>();

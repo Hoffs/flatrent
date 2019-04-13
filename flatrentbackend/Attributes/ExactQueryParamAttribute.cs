@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 
-namespace FlatRent.Entities
+namespace FlatRent.Attributes
 {
     public class ExactQueryParamAttribute: Attribute, IActionConstraint
     {

@@ -6,10 +6,6 @@ namespace FlatRent.Entities
 {
     public class Invoice : BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
-
         [Required]
         public float AmountToPay { get; set; }
         [Required]
@@ -26,6 +22,8 @@ namespace FlatRent.Entities
         public bool IsOverdue => PaidDate == default(DateTime) && DateTime.UtcNow.Date > DueDate.Date;
 
         [Required]
+        [ForeignKey("Agreement")]
+        public Guid AgreementId { get; set; }
         public virtual Agreement Agreement { get; set; }
     }
 }

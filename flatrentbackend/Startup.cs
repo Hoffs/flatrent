@@ -1,15 +1,22 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using AutoMapper;
+using FlatRent.Constants;
 using FlatRent.Extensions;
-using FlatRent.Interfaces;
+using FlatRent.Models;
 using FlatRent.Repositories;
+using FlatRent.Repositories.Interfaces;
 using FlatRent.Services;
+using FlatRent.Services.Interfaces;
+using FlatRent.Utilities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -95,6 +102,7 @@ namespace FlatRent
                 };
                 c.AddSecurityRequirement(security);
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+                c.EnableAnnotations();
             });
 
             services.AddRouting(options => options.LowercaseUrls = true);
@@ -126,6 +134,7 @@ namespace FlatRent
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
+                c.DisplayOperationId();
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "FlatRent API V1");
             });
 
@@ -138,6 +147,8 @@ namespace FlatRent
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            app.UseExceptionHandler(CustomExceptionHandler.Configure);
         }
     }
 }

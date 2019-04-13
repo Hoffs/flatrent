@@ -5,11 +5,8 @@ using Newtonsoft.Json;
 
 namespace FlatRent.Entities
 {
-    public class Address : BaseEntity
+    public class Address : AuthoredBaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
         [Required]
         [MaxLength(128)]
         public string Street { get; set; }

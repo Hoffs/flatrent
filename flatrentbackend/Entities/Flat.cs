@@ -7,12 +7,8 @@ using Newtonsoft.Json;
 
 namespace FlatRent.Entities
 {
-    public class Flat : BaseEntity
+    public class Flat : AuthoredBaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
-
         [MaxLength(64)]
         [Required]
         public string Name { get; set; }
@@ -30,7 +26,7 @@ namespace FlatRent.Entities
         [Required]
         public string Description { get; set; }
 
-        // Is ready to be shown/rented
+        // Is ready to be shown/rented to public
         [Required]
         public bool IsPublished { get; set; }
 
@@ -40,18 +36,15 @@ namespace FlatRent.Entities
 
         [NotMapped]
         public bool IsRented =>
-            Agreements.Any(x => x.From.Date >= DateTime.Now.Date && x.To <= DateTime.Now.Date && !x.Deleted);
+            ActiveAgreement != null;
+
+        [NotMapped]
+        public bool IsAvailableForRent =>
+            !IsRented && IsPublished;
 
         [NotMapped]
         public Agreement ActiveAgreement =>
             Agreements.FirstOrDefault(x => x.From.Date >= DateTime.Now.Date && x.To <= DateTime.Now.Date && !x.Deleted);
-
-
-        [Required]
-        [JsonIgnore]
-        [ForeignKey("Owner")]
-        public Guid OwnerId { get; set; }
-        public virtual User Owner { get; set; }
 
         // required where?
         [JsonIgnore]
@@ -64,10 +57,14 @@ namespace FlatRent.Entities
         public virtual ICollection<Agreement> Agreements { get; set; }
 
         [InverseProperty("Flat")]
-        public virtual ICollection<Photo> Photos { get; set; }
+        public virtual ICollection<Image> Images { get; set; }
 
         [JsonIgnore]
         [InverseProperty("Flat")]
         public virtual ICollection<Fault> Faults { get; set; }
+
+        [JsonIgnore]
+        [InverseProperty("AssociatedFlat")]
+        public virtual ICollection<Conversation> Conversations { get; set; }
     }
 }

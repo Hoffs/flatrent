@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using FlatRent.Models;
 using FlatRent.Models.Requests;
 
-namespace FlatRent.Interfaces
+namespace FlatRent.Services.Interfaces
 {
     public interface IUserService
     {

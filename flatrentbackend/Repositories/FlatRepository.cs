@@ -5,72 +5,61 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FlatRent.Constants;
 using FlatRent.Entities;
-using FlatRent.Interfaces;
+using FlatRent.Extensions;
 using FlatRent.Models;
 using FlatRent.Models.Requests;
+using FlatRent.Models.Requests.Flat;
+using FlatRent.Repositories.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace FlatRent.Repositories
 {
-    public class FlatRepository : IFlatRepository
+    public class FlatRepository : BaseRepository<Flat>, IFlatRepository
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        private readonly ILogger _logger;
 
-        public FlatRepository(DataContext context, IMapper mapper, ILogger logger)
+        public FlatRepository(DataContext context, IMapper mapper, ILogger logger) : base(context, logger)
         {
             _context = context;
             _mapper = mapper;
-            _logger = logger;
         }
 
-        public async Task<IEnumerable<FormError>> AddFlatAsync(FlatForm form, Guid ownerId)
+        public async Task<(IEnumerable<FormError>, Guid)> AddFlatAsync(FlatForm form, Guid userId)
         {
             var flat = _mapper.Map<Flat>(form);
             flat.Address = _mapper.Map<Address>(form);
-            flat.OwnerId = ownerId;
+            flat.AuthorId = userId;
+            flat.Address.AuthorId = userId;
+            var images = _mapper.Map<IEnumerable<FileMetadata>, IEnumerable<Image>>(form.Images).ToArray();
+            images.SetProperty(i => i.AuthorId, userId);
+            images.SetProperty(i => i.Flat, flat);
 
-            try
-            {
-                await _context.Flats.AddAsync(flat).ConfigureAwait(false);
-                await _context.SaveChangesAsync().ConfigureAwait(false);
-                return null;
-            }
-            catch (DbUpdateException e)
-            {
-                _logger.Error(e, "Exception thrown while creating flat with {CreateFlatForm}", form);
-                return new[] {new FormError(Errors.Exception)};
-            }
+            flat.Images = new List<Image>(images);
+
+            return (await AddAsync(flat, userId), flat.Id);
         }
 
-        public async Task<IEnumerable<FormError>> DeleteFlatAsync(Guid flatId)
+        public async Task<IEnumerable<FormError>> DeleteAsync(Guid flatId)
         {
             var flat = await _context.Flats.FindAsync(flatId).ConfigureAwait(false);
             if (flat == null)
             {
                 return new[] {new FormError("FlatId", Errors.FlatNotFound)};
             }
-            _context.Flats.Remove(flat);
-            try
-            {
-                await _context.SaveChangesAsync().ConfigureAwait(false);
-                return null;
-            }
-            catch (DbUpdateException e)
-            {
-                _logger.Error(e, "Exception thrown while removing flat with {Id}", flatId);
-                return new[] {new FormError(Errors.Exception)};
-            }
+
+            return await DeleteAsync(flat);
         }
 
-        public Task<Flat> GetFlatAsync(Guid flatId)
+        public new async Task<IEnumerable<FormError>> UpdateAsync(Flat flat)
         {
-            return _context.Flats.FindAsync(flatId);
+
+            return await base.UpdateAsync(flat);
         }
 
-        public async Task<IEnumerable<Flat>> GetFlatsAsync(bool includeRented = false, int count = 20, int offset = 0)
+        public async Task<IEnumerable<Flat>> GetListAsync(bool includeRented = false, int count = 20, int offset = 0)
         {
             var query = includeRented
                 ? _context.Flats
@@ -78,7 +67,7 @@ namespace FlatRent.Repositories
             return query.OrderByDescending(x => x.CreatedDate).Skip(offset).Take(count);
         }
 
-        public Task<int> GetFlatCountAsync(bool includeRented = false)
+        public Task<int> GetCountAsync(bool includeRented = false)
         {
             var query = includeRented
                 ? _context.Flats
@@ -86,35 +75,26 @@ namespace FlatRent.Repositories
             return query.CountAsync();
         }
 
-        public async Task<IEnumerable<FormError>> AddAgreementTask(Guid flatId, Guid renterId, RentAgreementForm form)
+        public async Task<IEnumerable<FormError>> AddAgreementTask(Guid flatId, Guid clientId, RentAgreementForm form)
         {
-            try
+            var flat = await GetAsync(flatId).ConfigureAwait(false);
+            if (flat?.IsAvailableForRent != true)
             {
-                var flat = await GetFlatAsync(flatId).ConfigureAwait(false);
-                if (flat.IsRented || !flat.IsPublished)
-                {
-                    return new []{new FormError(Errors.FlatNotAvailableForRent)};
-                }
-
-                if (renterId == flat.OwnerId)
-                {
-                    return new[] { new FormError(Errors.RenterCantBeOwner) };
-                }
-
-                var agreement = _mapper.Map<Agreement>(form);
-                agreement.RenterId = (Guid) renterId;
-                agreement.FlatId = flatId;
-                agreement.StatusId = AgreementStatus.Statuses.Requested;
-                flat.Agreements.Add(agreement);
-
-                await _context.SaveChangesAsync().ConfigureAwait(false);
-                return new FormError[0];
+                return new []{new FormError(Errors.FlatNotAvailableForRent)};
             }
-            catch (DbUpdateException e)
+
+            if (clientId == flat.AuthorId)
             {
-                _logger.Error(e, "Exception thrown while creating flat agreement with {RentAgreementForm}", form);
-                return new[] {new FormError(Errors.Exception)};
+                return new[] { new FormError(Errors.TenantCantBeOwner) };
             }
+
+            var agreement = _mapper.Map<Agreement>(form);
+            agreement.TenantId = clientId;
+            agreement.FlatId = flatId;
+            agreement.StatusId = AgreementStatus.Statuses.Requested;
+            flat.Agreements.Add(agreement);
+
+            return await UpdateAsync(flat);
         }
     }
 }

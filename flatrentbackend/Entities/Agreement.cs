@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace FlatRent.Entities
 {
-    public class Agreement : BaseEntity
+    public class Agreement : AuthoredBaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
         [Required]
         public DateTime From { get; set; }
         [Required]
@@ -25,15 +23,24 @@ namespace FlatRent.Entities
         public virtual AgreementStatus Status { get; set; }
 
         [Required]
-        [ForeignKey("Renter")]
-        public Guid RenterId { get; set; }
-        public virtual User Renter { get; set; }
+        [ForeignKey("Tenant")]
+        public Guid TenantId { get; set; }
+        public virtual User Tenant { get; set; }
 
         [Required] 
         public Guid FlatId { get; set; }
         public virtual Flat Flat { get; set; }
 
+        [JsonIgnore]
         [InverseProperty("Agreement")]
         public virtual ICollection<Invoice> Invoices { get; set; }
+
+        [JsonIgnore]
+        [InverseProperty("Agreement")]
+        public virtual ICollection<Fault> Faults { get; set; }
+
+        [JsonIgnore]
+        [InverseProperty("AssociatedAgreement")]
+        public virtual ICollection<Conversation> Conversations { get; set; }
     }
 }

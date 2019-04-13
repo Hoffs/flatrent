@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FlatRent.Entities;
 using FlatRent.Models;
 
-namespace FlatRent.Interfaces
+namespace FlatRent.Repositories.Interfaces
 {
     public interface IUserRepository
     {
         Task<User> GetUser(Guid id);
         Task<IEnumerable<FormError>> AddClientAsync(User client);
-        Task<IEnumerable<FormError>> AddEmployeeAsync(User employee);
         Task<User> GetUserForCredentialsAsync(string email, string password);
     }
 }

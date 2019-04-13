@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using FlatRent.Attributes;
 using FlatRent.Constants;
-using FlatRent.Validators;
 
 namespace FlatRent.Models.Requests
 {

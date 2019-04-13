@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -6,19 +7,21 @@ using AutoMapper.QueryableExtensions;
 using FlatRent.Constants;
 using FlatRent.Dtos;
 using FlatRent.Extensions;
-using FlatRent.Interfaces;
 using FlatRent.Models;
 using FlatRent.Models.Requests;
+using FlatRent.Repositories.Interfaces;
+using FlatRent.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using Serilog;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace FlatRent.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : Controller
+    public class UserController : ErrorHandlingController
     {
         private readonly IUserService _userService;
         private readonly IUserRepository _repository;
@@ -34,58 +37,40 @@ namespace FlatRent.Controllers
         }
 
         [HttpPost("login")]
+        [SwaggerOperation(Summary = "Login with credentials")]
+        [Produces("application/json")]
         public async Task<IActionResult> LoginAsync(LoginForm form)
         {
-            try
+            var token = await _userService.AuthenticateAsync(form.Email, form.Password).ConfigureAwait(false);
+            if (token == null)
             {
-                var token = await _userService.AuthenticateAsync(form.Email, form.Password).ConfigureAwait(false);
-                if (token == null)
-                {
-                    return BadRequest(new[] {new FormError(Errors.BadCredentials)}.GetFormattedResponse());
-                }
-                return new OkObjectResult(new {Token = token});
+                return BadRequest(new FormError(Errors.BadCredentials));
             }
-            catch (Exception e)
-            {
-                _logger.Error(e, "Exception thrown while logging in");
-                return StatusCode(500);
-            }
+
+            return Ok(new { Token = token });
         }
 
         [Authorize]
+        [SwaggerOperation(Summary = "Refresh bearer token")]
         [HttpPost("refresh")]
         public async Task<IActionResult> RefreshAsync()
         {
-            try
+            var newToken = await _userService.RefreshAsync(HttpContext.User).ConfigureAwait(false);
+            if (newToken == null)
             {
-                var newToken = await _userService.RefreshAsync(HttpContext.User).ConfigureAwait(false);
-                if (newToken == null)
-                {
-                    return BadRequest(new[] {new FormError(Errors.BadToken)}.GetFormattedResponse());
-                }
-                return new OkObjectResult(new {Token = newToken});
+                return BadRequest(new FormError(Errors.BadToken));
             }
-            catch (Exception e)
-            {
-                _logger.Error(e, "Exception thrown while refreshing token");
-                return StatusCode(500);
-            }
+
+            return Ok(new { Token = newToken });
         }
 
         [HttpPost("register")]
+        [SwaggerOperation(Summary = "Register")]
         public async Task<IActionResult> Register(RegistrationForm form)
         {
-            try
-            {
-                var errors = await _userService.RegisterAsync(form).ConfigureAwait(false);
-                if (errors != null) return new BadRequestObjectResult(errors.GetFormattedResponse());
-                return StatusCode(201);
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, "Exception thrown while registering with {RegistrationForm}", form);
-                return StatusCode(500);
-            }
+            var errors = await _userService.RegisterAsync(form).ConfigureAwait(false);
+            if (errors != null) return BadRequest(errors);
+            return StatusCode(201);
         }
 
         [HttpGet]
@@ -95,7 +80,7 @@ namespace FlatRent.Controllers
             var userId = HttpContext.User.GetUserId();
             if (userId == Guid.Empty)
             {
-                return BadRequest(new []{new FormError(Errors.Exception)}.GetFormattedResponse());
+                return BadRequest(new FormError(Errors.Exception));
             }
 
             var userData = await _repository.GetUser(userId).ConfigureAwait(false);
@@ -111,15 +96,13 @@ namespace FlatRent.Controllers
             var user = await _repository.GetUser(userId).ConfigureAwait(false);
             if (user == null)
             {
-                return BadRequest(new []{new FormError(Errors.Exception)}.GetFormattedResponse());
+                return BadRequest(new FormError(Errors.Exception));
             }
 
             var ownerAgreements = user.OwnerAgreements.AsQueryable().ProjectTo<RentAgreementListItem>(_mapper.ConfigurationProvider);
-            var renterAgreements = user.RenterAgreements.AsQueryable().ProjectTo<RentAgreementListItem>(_mapper.ConfigurationProvider);
+            var renterAgreements = user.TenantAgreements.AsQueryable().ProjectTo<RentAgreementListItem>(_mapper.ConfigurationProvider);
             
-            // TODO: Differentiate OWNER/RENTER agreements
-
-            return Ok(ownerAgreements.Concat(renterAgreements));
+            return Ok(new { OwnerAgreements = ownerAgreements, RenterAgreements = renterAgreements });
         }
 
         [HttpGet("test/roleclient")]

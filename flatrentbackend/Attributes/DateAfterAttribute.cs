@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace FlatRent.Validators
+namespace FlatRent.Attributes
 {
     public class DateAfterAttribute : ValidationAttribute
     {
