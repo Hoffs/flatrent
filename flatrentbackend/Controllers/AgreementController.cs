@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FlatRent.Constants;
+using FlatRent.Controllers.Abstractions;
 using FlatRent.Controllers.Filters;
 using FlatRent.Entities;
 using FlatRent.Extensions;

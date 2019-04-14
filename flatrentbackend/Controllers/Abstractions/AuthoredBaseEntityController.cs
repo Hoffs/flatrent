@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using FlatRent.Constants;
 using FlatRent.Controllers.Interfaces;
 using FlatRent.Entities;
 using FlatRent.Extensions;
-using FlatRent.Globals;
 using FlatRent.Models;
 using FlatRent.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FlatRent.Controllers
+namespace FlatRent.Controllers.Abstractions
 {
     public abstract class AuthoredBaseEntityController<T> : ErrorHandlingController, IAuthoredEntityValidatingController where T : AuthoredBaseEntity
     {

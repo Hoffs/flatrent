@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FlatRent.Constants;
+using FlatRent.Controllers.Abstractions;
 using FlatRent.Controllers.Filters;
 using FlatRent.Entities;
 using FlatRent.Models;

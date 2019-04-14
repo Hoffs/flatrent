@@ -4,7 +4,7 @@ using FlatRent.Extensions;
 using FlatRent.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FlatRent.Controllers
+namespace FlatRent.Controllers.Abstractions
 {
     public abstract class ErrorHandlingController : Controller
     {

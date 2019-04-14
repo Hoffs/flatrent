@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FlatRent.Constants;
+using FlatRent.Controllers.Abstractions;
 using FlatRent.Dtos;
 using FlatRent.Extensions;
 using FlatRent.Models;

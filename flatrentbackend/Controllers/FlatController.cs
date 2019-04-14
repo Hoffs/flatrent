@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FlatRent.Attributes;
 using FlatRent.Constants;
+using FlatRent.Controllers.Abstractions;
+using FlatRent.Controllers.Filters;
 using FlatRent.Dtos;
 using FlatRent.Entities;
 using FlatRent.Extensions;
@@ -54,17 +56,16 @@ namespace FlatRent.Controllers
 
         [Authorize(Policy = "User")]
         [HttpDelete("{id}")]
+        [MustBeEntityAuthor]
         public async Task<IActionResult> DeleteFlat([FromRoute] Guid id)
         {
-            var actionResult = await IsAllowedToEditEntity(id, "FlatId");
-            if (actionResult != null) return actionResult;
-
             var errors = await _flatRepository.DeleteAsync(id).ConfigureAwait(false);
             return HandleFormErrors(errors, 201);
         }
 
         [Authorize(Policy = "User")]
         [HttpPut("{id}")]
+        [MustBeEntityAuthor]
         public async Task<IActionResult> UpdateFlat([FromRoute] Guid id, FlatForm form)
         {
             var actionResult = await IsAllowedToEditEntity(id, "FlatId");
@@ -75,13 +76,10 @@ namespace FlatRent.Controllers
 
         [Authorize(Policy = "User")]
         [HttpPost("{id}/rent")]
+        [EntityMustExist]
         public async Task<IActionResult> ApplyForRent([FromRoute] Guid id, [FromBody] RentAgreementForm form)
         {
-            var actionResult = await DoesEntityExistAsync(id, "FlatId");
-            if (actionResult != null) return actionResult;
-
             var errors = new List<FormError>();
-
 
             // TODO: Move to Business Rule
 
@@ -147,10 +145,11 @@ namespace FlatRent.Controllers
 
         [Authorize]
         [HttpGet("{id}")]
+        [EntityMustExist]
         public async Task<IActionResult> GetFlat([FromRoute] Guid id)
         {
             var flat = await _flatRepository.GetAsync(id).ConfigureAwait(false);
-            if (flat == null || (!flat.IsPublished && flat.AuthorId != HttpContext.User.GetUserId())) return NotFound(id); // Not published can be seen only by author
+            if (!flat.IsPublished && flat.AuthorId != HttpContext.User.GetUserId()) return NotFound(id); // Not published can be seen only by author
             return new OkObjectResult(flat);
         }
     }
