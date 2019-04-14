@@ -5,6 +5,7 @@ using System.Text;
 using AutoMapper;
 using FlatRent.Constants;
 using FlatRent.Extensions;
+using FlatRent.Globals;
 using FlatRent.Models;
 using FlatRent.Repositories;
 using FlatRent.Repositories.Interfaces;
@@ -47,13 +48,13 @@ namespace FlatRent
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Administrator", policyOptions =>
+                options.AddPolicy(Roles.Administrator, policyOptions =>
                     policyOptions.AddRequirements(
-                        new RolesAuthorizationRequirement(new[] {"Administrator"}))
+                        new RolesAuthorizationRequirement(new[] { Roles.Administrator }))
                 );
-                options.AddPolicy("User", policyOptions =>
+                options.AddPolicy(Roles.User, policyOptions =>
                     policyOptions.AddRequirements(
-                        new RolesAuthorizationRequirement(new[] {"Administrator", "User"}))
+                        new RolesAuthorizationRequirement(new[] { Roles.Administrator, Roles.User }))
                 );
             });
 

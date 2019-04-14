@@ -34,7 +34,7 @@ namespace FlatRent.Repositories
 
         public async Task<bool> IsAuthorAsync(Guid id, Guid createdBy)
         {
-            return (await Context.Set<TEntity>().FirstOrDefaultAsync(e => e.Id == id).ConfigureAwait(false))?.AuthorId == createdBy;
+            return (await Context.Set<TEntity>().FirstOrDefaultAsync(e => e.Id == id && e.AuthorId == createdBy).ConfigureAwait(false)) != null;
         }
 
         protected async Task<IEnumerable<FormError>> AddAsync(TEntity entity, Guid authorId)

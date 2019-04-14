@@ -64,7 +64,7 @@ namespace FlatRent.Repositories
                 LastName = "Test",
                 Email = "admin@admin.com",
                 Password = "UhYWUG3vDiTZZt04YTqkBxL/RUxhyEvqpzCXJlRDMas=",
-                TypeId = UserType.Types.Administrator,
+                TypeId = UserType.Administrator.Id,
                 PhoneNumber = "+37060286000",
             },
             new User
@@ -74,7 +74,7 @@ namespace FlatRent.Repositories
                 LastName = "Test",
                 Email = "client@client.com",
                 Password = "UhYWUG3vDiTZZt04YTqkBxL/RUxhyEvqpzCXJlRDMas=",
-                TypeId = UserType.Types.User,
+                TypeId = UserType.User.Id,
                 PhoneNumber = "+37060286001",
             });
 

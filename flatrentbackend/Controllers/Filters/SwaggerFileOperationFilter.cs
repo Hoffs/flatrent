@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace FlatRent.Filters
+namespace FlatRent.Controllers.Filters
 {
     public class SwaggerFileOperationFilter : IOperationFilter
     {

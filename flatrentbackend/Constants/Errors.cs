@@ -2,6 +2,7 @@
 {
     public static class Errors
     {
+        public const string NotFound = "Įrašas nerastas.";
         public const string ImageAlreadyUploaded = "Ši nuotrauka jau buvo įkelta.";
         public const string BadCredentials = "Neteisingi prisijungimo duomenys.";
         public const string BadToken = "Blogas autorizacijos raktas.";
@@ -36,6 +37,7 @@
 
         public const string InvalidImage = "Netinkamo formato nuotrauka. Naudokite JPEG/PNG formatą.";
         public const string MaxLengthImages = "Nuotraukų skaičius negali būti didesnis už {0}";
+        public const string FileTooBig = "Failas per didelis.";
 
         public const string NotAuthor = "Naudotojas nėra įrašo autorius.";
     }

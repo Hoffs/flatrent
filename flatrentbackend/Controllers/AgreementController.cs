@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FlatRent.Constants;
+using FlatRent.Controllers.Filters;
+using FlatRent.Entities;
 using FlatRent.Extensions;
 using FlatRent.Files;
 using FlatRent.Models;
@@ -18,13 +20,13 @@ namespace FlatRent.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AgreementController : ErrorHandlingController
+    public class AgreementController : AuthoredBaseEntityController<Agreement>
     {
         private readonly IAgreementRepository _repository;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public AgreementController(IAgreementRepository repository, IMapper mapper, ILogger logger)
+        public AgreementController(IAgreementRepository repository, IMapper mapper, ILogger logger) : base(repository)
         {
             _repository = repository;
             _mapper = mapper;
@@ -33,12 +35,13 @@ namespace FlatRent.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Policy = "User")]
+        [EntityMustExist]
+//        [MustBeEntityAuthor] // Should be custom that allows for tenant and renter  to cancel
         public async Task<IActionResult> Cancel([FromRoute] Guid id)
         {
             // TODO: Overhaul, shouldn't be able to cancel this easily
-            var payload = JwtPayload.CreateFromClaims(HttpContext.User.Claims);
 
-            if (payload.UserType == "User")
+            if (HttpContext.User.IsInRole(UserType.User.Role))
             {
                 var agreement = await _repository.GetAsync(id).ConfigureAwait(false);
 
@@ -63,16 +66,12 @@ namespace FlatRent.Controllers
         [HttpGet("{id}/pdf")]
         [ProducesResponseType(typeof(FileStreamResult), 200)]
         [Authorize(Policy = "User")]
+        [EntityMustExist]
         public async Task<IActionResult> GetPdf([FromRoute] Guid id)
         {
             var agreement = await _repository.GetAsync(id).ConfigureAwait(false);
-            if (agreement == null)
-            {
-                return NotFound(new []{new FormError(Errors.AgreementNotFound)}.GetFormattedResponse());
-            }
 
-            var payload = JwtPayload.CreateFromClaims(HttpContext.User.Claims);
-            if (payload.UserType == "Client")
+            if (HttpContext.User.IsInRole(UserType.User.Role))
             {
                 if (agreement.TenantId != HttpContext.User.GetUserId())
                 {

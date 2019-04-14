@@ -16,15 +16,31 @@ namespace FlatRent.Entities
         [InverseProperty("Type")]
         public virtual ICollection<User> Users { get; set; }
 
-        [NotMapped]
-        public static IEnumerable<UserType> ExistingTypes =>
-            typeof(Types).GetFields().Select(field => new UserType { Id = (int)field.GetRawConstantValue(), Name = field.Name });
+        [NotMapped] public string Role => Id.ToString();
 
         [NotMapped]
-        public static class Types
+        public static IEnumerable<UserType> ExistingTypes => new [] { User, Administrator };
+
+        [NotMapped]
+        public static readonly UserType Administrator = new UserType
+            { Id = 1, Name = nameof(Administrator) };
+
+        [NotMapped]
+        public static readonly UserType User = new UserType
+            { Id = 2, Name = nameof(User) };
+
+        public override bool Equals(object obj)
         {
-            public const int Administrator = 1;
-            public const int User = 2;
+            if (obj is UserType userType)
+            {
+                return Id == userType.Id;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

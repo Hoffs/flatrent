@@ -8,27 +8,32 @@ namespace FlatRent.Controllers
 {
     public abstract class ErrorHandlingController : Controller
     {
-        protected BadRequestObjectResult BadRequest(FormError error)
+        [NonAction]
+        public BadRequestObjectResult BadRequest(FormError error)
         {
             return base.BadRequest(FormatError(error));
         }
 
-        protected BadRequestObjectResult BadRequest(IEnumerable<FormError> error)
+        [NonAction]
+        public BadRequestObjectResult BadRequest(IEnumerable<FormError> error)
         {
             return base.BadRequest(FormatError(error));
         }
 
-        protected NotFoundObjectResult NotFound(FormError value)
+        [NonAction]
+        public NotFoundObjectResult NotFound(FormError value)
         {
             return base.NotFound(FormatError(value));
         }
 
-        protected NotFoundObjectResult NotFound(IEnumerable<FormError> value)
+        [NonAction]
+        public NotFoundObjectResult NotFound(IEnumerable<FormError> value)
         {
             return base.NotFound(FormatError(value));
         }
 
-        protected IActionResult HandleFormErrors(IEnumerable<FormError> errors, int successCode)
+        [NonAction]
+        public IActionResult HandleFormErrors(IEnumerable<FormError> errors, int successCode)
         {
             var formErrors = errors as FormError[] ?? errors?.ToArray() ?? new FormError[0];
             if (formErrors.Length > 0) return BadRequest(formErrors);
