@@ -2,6 +2,7 @@
 using FlatRent.Dtos;
 using FlatRent.Entities;
 using FlatRent.Extensions;
+using FlatRent.Models.Dtos;
 using FlatRent.Models.Requests;
 using FlatRent.Models.Requests.Flat;
 using Microsoft.AspNetCore.Http;
@@ -20,6 +21,9 @@ namespace FlatRent.Globals
             CreateMap<Flat, FlatListItem>();
 
             CreateMap<RentAgreementForm, Agreement>();
+
+            CreateMap<Flat, FlatDetails>()
+                .ForMember(fd => fd.Owner, opt => opt.MapFrom(f => f.Author));
         }
     }
 }

@@ -5,7 +5,7 @@ import Card from "../../components/Card";
 import FlexRow from "../../components/FlexRow";
 import FlexColumn from "../../components/FlexColumn";
 import { IBasicResponse, IErrorResponse } from "../../services/Settings";
-import UserService, { IAgreementData, IUserData } from "../../services/UserService";
+import UserService, { IAgreementData, IUserData, IUserAgreements } from "../../services/UserService";
 import Styles from "./Profile.module.css";
 import { getAddressString } from "../../services/FlatService";
 import AgreementsService from "../../services/AgreementsService";
@@ -14,13 +14,14 @@ const doNothing = () => {};
 
 interface IProfileState {
   user?: IUserData;
-  agreements?: IAgreementData[];
+  ownerAgreements?: IAgreementData[];
+  tenantAgreements?: IAgreementData[];
 }
 
 class Profile extends Component<{}, IProfileState> {
   constructor(props: {}) {
     super(props);
-    this.state = { user: undefined, agreements: undefined };
+    this.state = { user: undefined, ownerAgreements: undefined, tenantAgreements: undefined };
     this.fetchData();
   }
 
@@ -68,8 +69,8 @@ class Profile extends Component<{}, IProfileState> {
   };
 
   private getAgreementsJsx = () => {
-    const { agreements } = this.state;
-    if (agreements === undefined) {
+    const { tenantAgreements } = this.state;
+    if (tenantAgreements === undefined) {
       return <></>;
     }
 
@@ -81,7 +82,7 @@ class Profile extends Component<{}, IProfileState> {
       return () => this.cancelAgreement(id);
     };
 
-    return agreements.map((x) => (
+    return tenantAgreements.map((x) => (
       <FlexRow key={x.id} className={Styles.agreementRow}>
         <FlexColumn className={Styles.rowText}>
           <span className={Styles.topLine}>
@@ -155,8 +156,8 @@ class Profile extends Component<{}, IProfileState> {
   private fetchUserAgreements = async () => {
     try {
       const response = await UserService.getUserAgreements();
-      if (isOfType<IAgreementData[]>(response)) {
-        this.setState({ agreements: response });
+      if (isOfType<IUserAgreements>(response)) {
+        this.setState({ ownerAgreements: response.owner, tenantAgreements: response.tenant });
       } else if (response !== undefined) {
         const errors = Object.keys(response).map((key) => response![key].join("\n"));
         errors.forEach((error) => toast.error(error));

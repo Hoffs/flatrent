@@ -103,7 +103,7 @@ namespace FlatRent.Controllers
             var ownerAgreements = user.OwnerAgreements.AsQueryable().ProjectTo<RentAgreementListItem>(_mapper.ConfigurationProvider);
             var renterAgreements = user.TenantAgreements.AsQueryable().ProjectTo<RentAgreementListItem>(_mapper.ConfigurationProvider);
             
-            return Ok(new { OwnerAgreements = ownerAgreements, RenterAgreements = renterAgreements });
+            return Ok(new { owner = ownerAgreements, tenant = renterAgreements });
         }
 
         [HttpGet("test/roleclient")]

@@ -14,6 +14,8 @@ using Serilog;
 namespace FlatRent.Controllers
 {
     [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
     public class AttachmentController : AuthoredBaseEntityController<Attachment>
     {
         private readonly IAttachmentRepository _repository;

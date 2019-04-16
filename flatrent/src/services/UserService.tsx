@@ -1,25 +1,16 @@
 import jwtdecode from "jwt-decode";
 import { apiFetch } from "./Helpers";
 import { IErrorResponse, IBasicResponse, IFlatAddress } from "./Settings";
+import { number } from "prop-types";
 
 export enum Roles {
-  Administrator = "Administrator",
-  Client = "Client",
-  Employee = "Employee",
-  Supply = "Supply",
-  Accounting = "Accounting",
-  CustomerService = "CustomerService",
-  Sales = "Sales",
+  Administrator = 1,
+  User = 2,
 }
 
 export const Policies = {
-  Accounting: ["Administrator", "Accounting"],
-  Administrator: ["Administrator"],
-  Client: ["Administrator", "Client"],
-  CustomerService: ["Administrator", "CustomerService"],
-  Employee: ["Administrator", "Employee"],
-  Sales: ["Administrator", "Sales"],
-  Supply: ["Administrator", "Supply"],
+  Administrator: [Roles.Administrator],
+  User: [Roles.Administrator, Roles.User],
 };
 
 interface ILoginResponse {
@@ -62,6 +53,11 @@ export interface IAgreementData {
   flatAddress: IFlatAddress;
 }
 
+export interface IUserAgreements {
+  owner: IAgreementData[];
+  tenant: IAgreementData[];
+}
+
 class UserService {
   public static async getUserData(): Promise<IUserData | IErrorResponse> {
     try {
@@ -83,7 +79,7 @@ class UserService {
     }
   }
 
-  public static async getUserAgreements(): Promise<IAgreementData[] | IErrorResponse> {
+  public static async getUserAgreements(): Promise<IUserAgreements | IErrorResponse> {
     try {
       const result = await apiFetch("/api/user/agreements", {
         headers: this.authorizationHeaders(),
@@ -92,10 +88,10 @@ class UserService {
 
       if (result.ok) {
         if (result.status === 204) {
-          return [];
+          return { owner: [], tenant: [] };
         }
 
-        const response = (await result.json()) as IAgreementData[];
+        const response = (await result.json()) as IUserAgreements;
         return response;
       } else {
         const response = (await result.json()) as IErrorResponse;
@@ -180,9 +176,9 @@ class UserService {
     return fResponse;
   }
 
-  public static getRoles(): string[] {
+  public static getRoles(): number[] {
     const item = localStorage.getItem("Roles");
-    return item ? (JSON.parse(item) as string[]) : [];
+    return item ? (JSON.parse(item) as string[]).map(i => Number.parseInt(i, 10)) : [];
   }
 
   public static isLoggedIn(): boolean {
@@ -196,7 +192,7 @@ class UserService {
     this.clearToken();
   }
 
-  public static hasRoles(...roles: string[]): boolean {
+  public static hasRoles(...roles: number[]): boolean {
     if (roles.length === 0) {
       return true;
     }

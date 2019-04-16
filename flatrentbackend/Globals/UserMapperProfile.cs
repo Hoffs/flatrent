@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FlatRent.Entities;
+using FlatRent.Models.Dtos;
 using FlatRent.Models.Requests;
 
 namespace FlatRent.Globals
@@ -9,6 +10,7 @@ namespace FlatRent.Globals
         public UserMapperProfile()
         {
             CreateMap<RegistrationForm, User>();
+            CreateMap<User, ShortUserInfo>();
         }
     }
 }

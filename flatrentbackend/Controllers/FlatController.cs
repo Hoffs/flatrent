@@ -12,6 +12,7 @@ using FlatRent.Dtos;
 using FlatRent.Entities;
 using FlatRent.Extensions;
 using FlatRent.Models;
+using FlatRent.Models.Dtos;
 using FlatRent.Models.Requests;
 using FlatRent.Models.Requests.Flat;
 using FlatRent.Models.Responses;
@@ -150,7 +151,7 @@ namespace FlatRent.Controllers
         {
             var flat = await _flatRepository.GetAsync(id).ConfigureAwait(false);
             if (!flat.IsPublished && flat.AuthorId != HttpContext.User.GetUserId()) return NotFound(id); // Not published can be seen only by author
-            return new OkObjectResult(flat);
+            return new OkObjectResult(_mapper.Map<FlatDetails>(flat));
         }
     }
 }

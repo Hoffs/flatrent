@@ -7,9 +7,6 @@ import Styles from "./FlatCreateBox.module.css";
 
 const FlatCreateBox = (props: RouteComponentProps) => {
   const routeTo = () => props.history.push("/flats/create");
-  if (!UserService.hasRoles(...Policies.Supply)) {
-    return <></>;
-  }
 
   return (
     <Card className={Styles.card}>

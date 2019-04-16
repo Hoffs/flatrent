@@ -10,18 +10,9 @@ interface IFlatFilterProps {
   onShowRentedChange: (showRented: boolean) => void;
 }
 
-const getCheckbox = (isEmployee: boolean, defaultValue: boolean, handler: (showRented: boolean) => void) => {
-  return isEmployee ? <Checkbox checked={defaultValue} onChange={handler} text="Rodyti išnuomotus" /> : <></>;
-};
-
 const FlatFilters = ({ onPageCountChange, defaultRented = false, onShowRentedChange }: IFlatFilterProps) => {
   const handleCountChange = (event: ChangeEvent<HTMLSelectElement>) => onPageCountChange(Number(event.target.value));
   const handleRentedChange = (state: boolean) => onShowRentedChange(state);
-
-  const isEmployee = UserService.hasRoles(...Policies.Employee);
-  if (!isEmployee) {
-    return <></>;
-  }
 
   return (
     <Card className={Styles.card}>
@@ -32,7 +23,7 @@ const FlatFilters = ({ onPageCountChange, defaultRented = false, onShowRentedCha
         <option value={80}>80</option>
       </select>
       */}
-      {getCheckbox(isEmployee, defaultRented, handleRentedChange)}
+      <Checkbox checked={defaultRented} onChange={handleRentedChange} text="Rodyti išnuomotus" />
     </Card>
   );
 };

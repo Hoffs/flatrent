@@ -19,7 +19,7 @@ interface IRouteInfo {
   link: string;
   redirect: string;
   text: string;
-  roles: string[];
+  roles: number[];
   component: ComponentClass<any> | FunctionComponent<any>;
 }
 
@@ -78,8 +78,8 @@ const FlatRoutes: IRouteInfo[] = [
     link: "/flats/create",
     order: 51,
     redirect: "/",
-    roles: Policies.Supply,
-    text: "Naujas butas",
+    roles: Policies.User,
+    text: "Išnuomoti butą",
   },
   {
     addToNav: false,
@@ -102,24 +102,24 @@ const UserRoutes: IRouteInfo[] = [
     link: "/user",
     order: 90,
     redirect: "/",
-    roles: Policies.Client,
+    roles: Policies.User,
     text: "Paskyra",
   },
 ];
 
 export const Routes: IRouteInfo[] = [
   ...AuthRoutes,
-  {
-    addToNav: true,
-    authenticated: true,
-    component: () => <Redirect to="/flats" />,
-    exact: true,
-    link: "/",
-    order: 1,
-    redirect: "/login",
-    roles: [],
-    text: "Pradžia",
-  },
+  // {
+  //   addToNav: true,
+  //   authenticated: true,
+  //   component: () => <Redirect to="/flats" />,
+  //   exact: true,
+  //   link: "/",
+  //   order: 1,
+  //   redirect: "/login",
+  //   roles: [],
+  //   text: "Pradžia",
+  // },
   ...FlatRoutes,
   ...UserRoutes,
 ];

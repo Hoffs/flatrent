@@ -1,5 +1,5 @@
 import { apiFetch } from "./Helpers";
-import { IErrorResponse, IBasicResponse, IFlatAddress, IFlatOwner } from "./Settings";
+import { IErrorResponse, IBasicResponse, IFlatAddress, IUserDetails } from "./Settings";
 import UserService from "./UserService";
 
 // FlatList interfaces
@@ -12,7 +12,7 @@ export interface IFlatListItem {
   price: number;
   yearOfConstruction: number;
   address: IFlatAddress;
-  owner: IFlatOwner;
+  owner: IUserDetails;
 }
 
 export interface IFlatListResponse {
@@ -31,7 +31,7 @@ export interface IFlatDetails {
   yearOfConstruction: number;
   description: string;
   address: IFlatAddress;
-  owner: IFlatOwner;
+  owner: IUserDetails;
 }
 
 export interface IFlatDetailsResponse {

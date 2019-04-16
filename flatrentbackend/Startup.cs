@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using AutoMapper;
 using FlatRent.Constants;
+using FlatRent.Entities;
 using FlatRent.Extensions;
 using FlatRent.Globals;
 using FlatRent.Models;
@@ -48,13 +49,13 @@ namespace FlatRent
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(Roles.Administrator, policyOptions =>
+                options.AddPolicy("Administrator", policyOptions =>
                     policyOptions.AddRequirements(
-                        new RolesAuthorizationRequirement(new[] { Roles.Administrator }))
+                        new RolesAuthorizationRequirement(new[] { UserType.Administrator.Role }))
                 );
-                options.AddPolicy(Roles.User, policyOptions =>
+                options.AddPolicy("User", policyOptions =>
                     policyOptions.AddRequirements(
-                        new RolesAuthorizationRequirement(new[] { Roles.Administrator, Roles.User }))
+                        new RolesAuthorizationRequirement(new[] { UserType.Administrator.Role, UserType.User.Role }))
                 );
             });
 

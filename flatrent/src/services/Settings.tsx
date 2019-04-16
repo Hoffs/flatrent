@@ -24,8 +24,9 @@ export interface IFlatAddress {
   postCode: string;
 }
 
-export interface IFlatOwner {
-  name: string;
+export interface IUserDetails {
+  firstName: string;
+  lastName: string;
   email: string;
   phoneNumber: string;
 }

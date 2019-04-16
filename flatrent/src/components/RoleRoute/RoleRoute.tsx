@@ -5,7 +5,7 @@ import UserService from "../../services/UserService";
 interface IRoleRouteProps extends RouteProps {
   redirect: string;
   authenticated: boolean;
-  allowedRoles?: string[];
+  allowedRoles?: number[];
 }
 
 const RoleRoute = (props: IRoleRouteProps) => {

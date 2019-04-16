@@ -4,13 +4,13 @@ import {
   Redirect,
   Switch,
 } from "react-router-dom";
-import Nav from "./components/NavBar";
+import Navigation from "./components/NavBar";
 import { getAsRoleRoutes } from "./Routes";
 
-const AppRouter = () => (
+const MainRouter = () => (
   <BrowserRouter>
     <>
-      <Nav />
+      <Navigation />
       <div className="content-wrapper">
         <Switch>
           {getAsRoleRoutes()}
@@ -21,4 +21,4 @@ const AppRouter = () => (
   </BrowserRouter>
 );
 
-export default AppRouter;
+export default MainRouter;

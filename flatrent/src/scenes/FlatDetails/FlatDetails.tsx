@@ -97,7 +97,7 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
   }
 
   private getTitleButton = () => {
-    return !UserService.hasRoles(...Policies.Client) ? (
+    return !UserService.hasRoles(...Policies.User) ? (
       <></>
     ) : (
       <Button onClick={this.handleTitleButton} outline={true}>
@@ -238,7 +238,7 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
         <FlexColumn className={Styles.dataRow}>
           <FlexColumn>
             <span className={Styles.value}>
-              {flat.owner.name}, {flat.owner.phoneNumber}, {flat.owner.email}
+              {flat.owner.firstName} {flat.owner.lastName}, {flat.owner.phoneNumber}, {flat.owner.email}
             </span>
             <span className={Styles.nameCol}>Savininkas</span>
           </FlexColumn>

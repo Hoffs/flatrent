@@ -5,31 +5,19 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Raleway", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+  font-family: -apple-system, BlinkMacSystemFont, "Arial", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
     "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f5f5;
+  background-color: #ffffff;
+  /* background-color: #f5f5f5; */
+  text-rendering: auto;
+  letter-spacing: normal;
+  word-spacing: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: antialiased;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
-:root {
-  --main-bg-color: #f9fbfc;
-  --main-bg-color-rgb: 249, 251, 252;
-  --main-title-color: #373f51;
-  /* --main-title-color: #75031E; */
-  /* --main-title-color: #F45B69; */
-  --main-title-alt-color: #e1755e;
-  --error-color: #eb241e;
-  --main-accent-color: #203961;
-  --main-accent-alt-color: #004c75;
-  --main-accent-alt-color-rgb: 0, 76, 117;
-  --main-accent-alt-muted-color: #5e8193;
-  /* --main-accent-alt-color: #456990; */
-  /* --main-font-color: rgba(0, 0, 0, 0.9); */
-  --main-font-color: #1b1b1e;
-  --main-font-blurred-color: rgba(27, 27, 30, 0.5);
 }
