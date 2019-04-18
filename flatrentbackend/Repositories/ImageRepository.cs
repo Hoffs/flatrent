@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FlatRent.Models;
+using FlatRent.Repositories.Abstractions;
 using FlatRent.Repositories.Interfaces;
 using Serilog;
 using Image = FlatRent.Entities.Image;
 
 namespace FlatRent.Repositories
 {
-    public class ImageRepository : BaseRepository<Image>, IImageRepository
+    public class ImageRepository : AuthoredBaseRepository<Image>, IImageRepository
     {
         private readonly DataContext _context;
         private readonly ILogger _logger;
@@ -21,7 +22,7 @@ namespace FlatRent.Repositories
 
         public new Task<IEnumerable<FormError>> AddAsync(Image image, Guid authorId)
         {
-            return base.AddAsync(image, authorId);
+            return base.AddAsync(image);
         }
 
         public new Task<IEnumerable<FormError>> UpdateAsync(Image image)

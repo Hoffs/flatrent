@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, ReactNode } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "../../components/Button";
@@ -15,9 +15,12 @@ import { MuiThemeProvider } from "@material-ui/core";
 import { format } from "date-fns";
 import locale from "date-fns/locale/lt";
 import { InlineDatePicker, MuiPickersUtilsProvider } from "material-ui-pickers";
+import ImageCarousel from "../../components/ImageCarousel";
 import InputArea from "../../components/InputArea";
 import { materialTheme } from "../../Mui/CustomMuiTheme.js";
 import UserService, { Policies } from "../../services/UserService";
+import { joinClasses as joined, dayOrDays } from "../../utilities/Utilities";
+import { getAvatarUrl } from "../../services/ApiUtilities";
 
 interface IFlatDetailsState {
   flat?: IFlatDetails;
@@ -52,6 +55,8 @@ const getOffsetDate = (years: number, months: number, days: number): string => {
 
 const doNothing = () => {};
 
+const roomOrRooms = (roomCount: number): string => roomCount > 1 ? "kambariai" : "kambarys";
+
 class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDetailsState> {
   constructor(props: RouteComponentProps<{ id: string }>) {
     super(props);
@@ -66,32 +71,74 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
   }
 
   public render() {
-    if (this.state.flat === undefined) {
+    const { flat } = this.state;
+    if (flat === undefined) {
       return <Card className={Styles.loadingCard}>Kraunasi...</Card>;
     }
 
-    const { flat } = this.state;
+    const featureNodes = this.getFeatures(flat);
 
     return (
       <>
-        <Card key="titleCard" className={Styles.titleCard}>
-          <div className={Styles.image}>
-            <img src={`${ApiHostname}api/image/${flat.id}`} />
-          </div>
-          <FlexRow className={Styles.titleCardContent}>
-            <FlexColumn>
-              <FlexRow className={Styles.topTitleRow}>
-                <span className={Styles.title}>{flat.name}</span>
-                <span className={Styles.year}>Statybos metai: {flat.yearOfConstruction}</span>
-              </FlexRow>
+        <ImageCarousel
+          wrapperClassName={Styles.imageWrapper}
+          imageIds={flat.images.map((fi) => fi.id)}
+        />
+        <div className={Styles.detailsContainer}>
+          <FlexRow className={Styles.sectionEnd}>
+            <FlexColumn className={Styles.titleInfo}>
+              <span className={Styles.flatTitle}>{flat.name}</span>
               <span className={Styles.subTitle}>{getAddressString(flat.address)}</span>
-            </FlexColumn>
-            {this.getTitleButton()}
-          </FlexRow>
-        </Card>
 
-        {this.getDetailsCard(flat)}
-        {this.getRentCard(flat)}
+              <span className={Styles.sectionTitle}>Nuomojamas butas</span>
+              <FlexRow className={Styles.flatCharacteristics}>
+                <span>{flat.isFurnished ? "Įrengtas" : "Neįrengtas"}</span>
+                <span>{flat.floor} aukštas</span>
+                <span>{flat.roomCount} {roomOrRooms(flat.roomCount)}</span>
+                <span>{flat.area} kv.m.</span>
+                <span>{flat.yearOfConstruction} metai</span>
+              </FlexRow>
+
+              <span className={Styles.sectionTitle}>Ypatybės</span>
+              <FlexRow className={Styles.features}>
+                {featureNodes}
+              </FlexRow>
+
+            </FlexColumn>
+            <FlexColumn className={Styles.userInfo}>
+              <span className={Styles.avatarName}>{flat.owner.firstName}</span>
+              <div className={Styles.avatarWrapper}><img className={Styles.avatar} src={getAvatarUrl(flat.owner.id)} /></div>
+              <span className={Styles.contactOwner}>Susisiekti</span>
+            </FlexColumn>
+          </FlexRow>
+
+          {/* <FlexColumn className={Styles.sectionEnd}> */}
+
+            {/* <span className={Styles.ownerInfoTitle}>Nuomotojas:</span>
+            <FlexRow className={Styles.ownerInfo}>
+              <span>tel.nr. {flat.owner.phoneNumber}</span>
+              <span>el. paštas <a href={`mailto:${flat.owner.email}`}>{flat.owner.email}</a></span>
+            </FlexRow> */}
+
+          {/* </FlexColumn> */}
+
+          <span className={Styles.sectionTitle}>Aprašymas</span>
+          <span className={joined(Styles.flatDescription, Styles.sectionEnd)}>
+            {flat.description}
+          </span>
+
+          <span className={Styles.sectionTitle}>Pageidavimai nuomininkui</span>
+          <span className={Styles.tenantRequirements}>
+            {flat.tenantRequirements}
+          </span>
+          <span className={joined(Styles.minimumRentDays, Styles.sectionEnd)}>
+            Trumpiausias nuomos laikotarpis {flat.minimumRentDays} {dayOrDays(flat.minimumRentDays)}.
+          </span>
+
+          <FlexRow className={Styles.titleCardContent}>
+            {/* {this.getTitleButton()} */}
+          </FlexRow>
+        </div>
       </>
     );
   }
@@ -114,94 +161,6 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
 
   private handleTitleButton = () => {
     this.setState((state) => ({ showRentCard: !state.showRentCard }));
-  };
-
-  private getRentCard = (flat: IFlatDetails) => {
-    const today = new Date();
-    const fromExtraProps = {
-      max: getOffsetDate(1, 0, 7),
-      min: getOffsetDate(0, 0, 0),
-    };
-    const toExtraProps = {
-      max: getOffsetDate(1, 0, 7),
-      min: getOffsetDate(0, 1, 7),
-    };
-
-    if (this.state.values.from !== undefined && this.state.values.from.length > 0) {
-      const split = this.state.values.from.split("-");
-      const date = new Date();
-      toExtraProps.min = getOffsetDate(
-        Number(split[0]) - date.getFullYear(),
-        Number(split[1]) - date.getMonth(),
-        Number(split[2]) - date.getDate()
-      );
-    }
-
-    return !this.state.showRentCard ? (
-      <></>
-    ) : (
-      <Card key="rentCard" className={Styles.rentCard}>
-        <span className={Styles.title}>Nuomos sutartis</span>
-        <FlexRow className={Styles.shortRow}>
-          <span className={Styles.name}>Kaina per mėnesį:</span>
-          <span className={Styles.value}>{flat.price} Eur</span>
-        </FlexRow>
-        <InputForm errors={this.state.errors.General} errorsOnly={true} name="" title="" setValue={doNothing} />
-        <FlexRow className={Styles.pickerRow}>
-          <MuiThemeProvider theme={materialTheme}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={locale}>
-              <FlexColumn>
-                <InlineDatePicker
-                  label="Nuo"
-                  disablePast={true}
-                  minDate={fromExtraProps.min}
-                  minDateMessage="Per trumpas laikotarpis"
-                  maxDate={fromExtraProps.max}
-                  maxDateMessage="Per ilgas laikotarpis"
-                  format="yyyy-MM-dd"
-                  value={this.state.values.from}
-                  onChange={this.handleDateFromChange}
-                  variant="outlined"
-                />
-                <InputForm errorsOnly={true} errors={this.state.errors.From} name="" title="" setValue={doNothing} />
-              </FlexColumn>
-              <FlexColumn>
-                <InlineDatePicker
-                  label="Iki"
-                  format="yyyy-MM-dd"
-                  disablePast={true}
-                  minDate={toExtraProps.min}
-                  minDateMessage="Per trumpas laikotarpis"
-                  maxDate={toExtraProps.max}
-                  maxDateMessage="Per ilgas laikotarpis"
-                  value={this.state.values.to}
-                  onChange={this.handleDateToChange}
-                  variant="outlined"
-                />
-                <InputForm errorsOnly={true} errors={this.state.errors.To} name="" title="" setValue={doNothing} />
-              </FlexColumn>
-            </MuiPickersUtilsProvider>
-          </MuiThemeProvider>
-        </FlexRow>
-        <FlexRow>
-          <InputArea
-            className={Styles.textArea}
-            errors={this.state.errors.from}
-            name="comments"
-            title="Komentarai"
-            setValue={this.handleDataUpdate}
-          />
-        </FlexRow>
-        <FlexRow className={Styles.buttonRow}>
-          <Button outline={true} onClick={this.handleTitleButton} className={Styles.buttonCancel}>
-            Atšaukti
-          </Button>
-          <Button disabled={this.state.requesting} outline={true} onClick={this.handleSubmit}>
-            Pateikti
-          </Button>
-        </FlexRow>
-      </Card>
-    );
   };
 
   private handleSubmit = async () => {
@@ -229,41 +188,13 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
     }
   };
 
-  private getDetailsCard = (flat: IFlatDetails) => {
-    return this.state.showRentCard ? (
-      <></>
-    ) : (
-      <Card key="detailsCard" className={Styles.detailsCard}>
-        <span className={Styles.detailsTitle}>Buto aprašymas</span>
-        <FlexColumn className={Styles.dataRow}>
-          <FlexColumn>
-            <span className={Styles.value}>
-              {flat.owner.firstName} {flat.owner.lastName}, {flat.owner.phoneNumber}, {flat.owner.email}
-            </span>
-            <span className={Styles.nameCol}>Savininkas</span>
-          </FlexColumn>
-          <FlexRow className={Styles.shortRow}>
-            <span className={Styles.name}>Aukštas:</span>
-            <span className={Styles.value}>{flat.floor}</span>
-          </FlexRow>
-          <FlexRow className={Styles.shortRow}>
-            <span className={Styles.name}>Kambarių skaičius:</span>
-            <span className={Styles.value}>{flat.roomCount}</span>
-          </FlexRow>
-          <FlexRow className={Styles.shortRow}>
-            <span className={Styles.name}>Plotas:</span>
-            <span className={Styles.value}>{flat.area} kv. m.</span>
-          </FlexRow>
-          <FlexRow className={Styles.shortRow}>
-            <span className={Styles.name}>Kaina:</span>
-            <span className={Styles.value}>{flat.price} Eur</span>
-          </FlexRow>
-        </FlexColumn>
-
-        <span className={Styles.detailsText}>{flat.description}</span>
-      </Card>
-    );
-  };
+  private getFeatures = (flat: IFlatDetails): ReactNode[] => {
+    const { features } = flat;
+    if (features.length === 0) { features.push("Nėra"); }
+    return flat.features.map((feature) => (
+      <span className={Styles.feature}>{feature}</span>
+    ));
+  }
 
   private handleDataUpdate = (key: string, value: string) =>
     this.setState((state) => ({ values: { ...state.values, [key]: value } }));

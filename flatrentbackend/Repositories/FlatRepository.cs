@@ -9,6 +9,7 @@ using FlatRent.Extensions;
 using FlatRent.Models;
 using FlatRent.Models.Requests;
 using FlatRent.Models.Requests.Flat;
+using FlatRent.Repositories.Abstractions;
 using FlatRent.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ using Serilog;
 
 namespace FlatRent.Repositories
 {
-    public class FlatRepository : BaseRepository<Flat>, IFlatRepository
+    public class FlatRepository : AuthoredBaseRepository<Flat>, IFlatRepository
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;

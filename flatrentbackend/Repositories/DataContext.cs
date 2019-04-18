@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FlatRent.Entities;
 using Microsoft.EntityFrameworkCore;
+using File = System.IO.File;
 
 namespace FlatRent.Repositories
 {
@@ -21,6 +23,7 @@ namespace FlatRent.Repositories
         public DbSet<Conversation> Conversations { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<Avatar> Avatars { get; set; }
 
         public DbSet<UserType> UserTypes { get; set; }
         public DbSet<AgreementStatus> AgreementStatuses { get; set; }
@@ -30,8 +33,13 @@ namespace FlatRent.Repositories
             
         }
 
+        private const string ArraySeparator = "///";
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Flat>().Property(f => f.Features).HasConversion(arr => string.Join(ArraySeparator, arr),
+                joined => joined.Split(ArraySeparator, StringSplitOptions.RemoveEmptyEntries));
+
             modelBuilder.Entity<Flat>().HasOne(e => e.Author).WithMany(e => e.Flats).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Flat>().HasOne(e => e.Address).WithOne(e => e.Flat).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Image>().HasOne(e => e.Flat).WithMany(e => e.Images).OnDelete(DeleteBehavior.Restrict);
@@ -45,6 +53,8 @@ namespace FlatRent.Repositories
             modelBuilder.Entity<Conversation>().HasOne(e => e.AssociatedAgreement).WithMany(e => e.Conversations).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Conversation>().HasOne(e => e.AssociatedFault).WithMany(e => e.Conversations).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Attachment>().HasOne(e => e.Message).WithMany(e => e.Attachments).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<User>().HasOne(e => e.Avatar).WithMany().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<User>().Property(e => e.AvatarId).HasDefaultValue(Guid.Parse("00000000-0000-0000-0000-000000000001"));
 
             modelBuilder.Entity<UserType>().HasData(UserType.ExistingTypes);
             modelBuilder.Entity<AgreementStatus>().HasData(AgreementStatus.ExistingAgreementStatuses);
@@ -76,6 +86,14 @@ namespace FlatRent.Repositories
                 Password = "UhYWUG3vDiTZZt04YTqkBxL/RUxhyEvqpzCXJlRDMas=",
                 TypeId = UserType.User.Id,
                 PhoneNumber = "+37060286001",
+            });
+
+            modelBuilder.Entity<Avatar>().HasData(new Avatar()
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                Name = "avatar.png",
+                Bytes = File.ReadAllBytes("Files/defaultuser.png"),
+                MimeType = "image/png",
             });
 
             base.OnModelCreating(modelBuilder);

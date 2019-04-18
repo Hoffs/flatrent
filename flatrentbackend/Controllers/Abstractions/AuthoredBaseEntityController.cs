@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FlatRent.Controllers.Abstractions
 {
-    public abstract class AuthoredBaseEntityController<T> : ErrorHandlingController, IAuthoredEntityValidatingController where T : AuthoredBaseEntity
+    public abstract class AuthoredBaseEntityController<T> : ErrorHandlingController, IIdentifiableEntityController, IAuthoredEntityController where T : AuthoredBaseEntity
     {
-        private readonly IBaseRepository<T> _repository;
+        private readonly IAuthoredBaseRepository<T> _repository;
 
-        protected AuthoredBaseEntityController(IBaseRepository<T> repository)
+        protected AuthoredBaseEntityController(IAuthoredBaseRepository<T> repository)
         {
             _repository = repository;
         }
@@ -38,7 +38,7 @@ namespace FlatRent.Controllers.Abstractions
         {
             return await _repository.ExistsAsync(id)
                 ? null
-                : NotFound(new FormError(fieldId, Errors.FlatNotFound));
+                : NotFound(new FormError(fieldId, Errors.NotFound));
         }
     }
 }

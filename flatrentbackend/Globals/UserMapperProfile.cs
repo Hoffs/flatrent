@@ -10,7 +10,9 @@ namespace FlatRent.Globals
         public UserMapperProfile()
         {
             CreateMap<RegistrationForm, User>();
-            CreateMap<User, ShortUserInfo>();
+            CreateMap<User, ShortUserInfo>()
+//                .ForMember(u => u.Avatar, opt => opt.MapFrom(u => u.AvatarId))
+                ;
         }
     }
 }

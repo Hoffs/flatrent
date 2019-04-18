@@ -12,8 +12,9 @@ namespace FlatRent.Entities
         public Guid Id { get; set; }
 
         [Required]
+        [JsonIgnore]
         public DateTime CreatedDate { get; set; }
-
+        [JsonIgnore]
         public DateTime? ModifiedDate { get; set; }
         [JsonIgnore]
         public bool Deleted { get; set; }

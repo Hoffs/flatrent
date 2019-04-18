@@ -29,9 +29,23 @@ export interface IFlatDetails {
   roomCount: number;
   price: number;
   yearOfConstruction: number;
+  isFurnished: boolean;
+  features: string[];
   description: string;
   address: IFlatAddress;
   owner: IUserDetails;
+  tenantRequirements: string;
+  minimumRentDays: number;
+  isPublished: boolean;
+  isPublic: boolean;
+  isRented: boolean;
+  isAvailableForRent: boolean;
+  images: IImageDetails[];
+}
+
+export interface IImageDetails {
+  name: string;
+  id: string;
 }
 
 export interface IFlatDetailsResponse {

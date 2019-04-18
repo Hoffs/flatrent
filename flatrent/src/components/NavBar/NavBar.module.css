@@ -4,9 +4,9 @@
   background-color: var(--main-bg-color);
   border-bottom: 1px solid #dadce0;
   /* box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.12); */
-  margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
+  font-family: var(--title-font-family);
 }
 
 .logoLink {

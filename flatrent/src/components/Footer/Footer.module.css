@@ -1,0 +1,19 @@
+.footer {
+  /* position: absolute; */
+  /* left: 0;
+  bottom: 0; */
+  /* margin-top: auto; */
+  width: 100%;
+  border-top: 1px solid var(--split-color);
+  padding: 24px 0 36px 0;
+}
+
+.footerText {
+  font-family: var(--title-font-family);
+  color: var(--navbar-border-color);
+  font-size: 0.8em;
+  font-weight: 500;
+  text-align: left;
+  padding-left: 64px;
+  padding-right: 64px;
+}

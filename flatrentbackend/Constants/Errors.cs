@@ -11,7 +11,7 @@
         public const string Phone = "Šis laukas turi būti teisingas telefono numeris.";
         public const string ValidDepartment = "Šio lauko reikšmė turi būti viena iš skyrių: {1}.";
         public const string MaxLength = "Simbolių kiekis turi būti mažesnis už {1}.";
-        public const string MinLength = "Simbolių kiekis turi būti didesnis už {1}.";
+        public const string MinLength = "Simbolių kiekis turi būti didesnis arba lygus {1}.";
         public const string Range = "Reikšmė turi būti nuo {1} iki {2}.";
         public const string DateAfter = "Data turi būti velesnė arba lygi {1}.";
 
@@ -36,9 +36,13 @@
         public const string NotFlatOwner = "Naudotojas nėra buto savininkas.";
 
         public const string InvalidImage = "Netinkamo formato nuotrauka. Naudokite JPEG/PNG formatą.";
-        public const string MaxLengthImages = "Nuotraukų skaičius negali būti didesnis už {0}";
+        public const string MaxLengthImages = "Nuotraukų skaičius negali būti didesnis už {1}.";
+        public const string MinLengthImages = "Nuotraukų skaičius turi būti didesnis arba lygus {1}.";
         public const string FileTooBig = "Failas per didelis.";
 
         public const string NotAuthor = "Naudotojas nėra įrašo autorius.";
+        public const string MaxLengthFeatures = "Ypatybių kiekis negali būti didesnis už {0}.";
+        public const string MaxLengthFeatureSymbols = "Ypatybės simbolių kiekis negali būti didesnis už {0}.";
+        public const string FloorCantBeHigherThanTotalFloors = "Buto aukštas negali būti didesnis už aukštų skaičių.";
     }
 }

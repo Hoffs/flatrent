@@ -17,14 +17,30 @@ namespace FlatRent.Entities
         [Required]
         public int Floor { get; set; }
         [Required]
+        public int TotalFloors { get; set; }
+        [Required]
         public int RoomCount { get; set; }
         [Required]
         public float Price { get; set; }
-        [Range(0, 999999)]
+
+        [Range(0, 2100)]
         [Required]
         public int YearOfConstruction { get; set; }
+
+        public IEnumerable<string> Features { get; set; }
+
         [Required]
         public string Description { get; set; }
+
+        [Required]
+        public bool IsFurnished { get; set; }
+
+        [Range(1, 3650)]
+        [Required]
+        public int MinimumRentDays { get; set; }
+
+        [Required]
+        public string TenantRequirements { get; set; }
 
         // Is ready to be shown/rented to public
         [Required]

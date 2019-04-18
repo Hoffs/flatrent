@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Models;
+using FlatRent.Repositories.Abstractions;
 using FlatRent.Repositories.Interfaces;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +15,12 @@ using Serilog;
 
 namespace FlatRent.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
         private readonly DataContext _context;
         private readonly ILogger _logger;
 
-        public UserRepository(DataContext context, ILogger logger)
+        public UserRepository(DataContext context, ILogger logger) : base(context, logger)
         {
             _context = context;
             _logger = logger;
@@ -43,18 +44,10 @@ namespace FlatRent.Repositories
                 throw;
             }
         }
-        /// <exception cref="Exception">Rethrows exception.</exception>
-        public async Task<IEnumerable<FormError>> AddEmployeeAsync(User employee)
+
+        public new async Task<IEnumerable<FormError>> UpdateAsync(User user)
         {
-            try
-            {
-                return await AddUserAsync(employee, "Employee").ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, "Exception thrown while adding {Employee}", employee);
-                throw;
-            }
+            return await base.UpdateAsync(user);
         }
 
         private async Task<IEnumerable<FormError>> AddUserAsync(User user, string type)

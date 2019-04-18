@@ -4,11 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FlatRent.Controllers.Interfaces
 {
-    public interface IAuthoredEntityValidatingController
+    public interface IIdentifiableEntityController
     {
-        [NonAction]
-        Task<IActionResult> IsAllowedToEditEntity(Guid id, string fieldId);
-
         [NonAction]
         Task<IActionResult> DoesEntityExistAsync(Guid id, string fieldId);
     }

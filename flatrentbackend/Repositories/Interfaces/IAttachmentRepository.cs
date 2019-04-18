@@ -5,7 +5,7 @@ using FlatRent.Models;
 
 namespace FlatRent.Repositories.Interfaces
 {
-    public interface IAttachmentRepository : IBaseRepository<Attachment>
+    public interface IAttachmentRepository : IAuthoredBaseRepository<Attachment>
     {
         Task<IEnumerable<FormError>> UpdateAsync(Attachment attachment);
     }

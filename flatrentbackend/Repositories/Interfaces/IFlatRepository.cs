@@ -8,7 +8,7 @@ using FlatRent.Models.Requests.Flat;
 
 namespace FlatRent.Repositories.Interfaces
 {
-    public interface IFlatRepository : IBaseRepository<Flat>
+    public interface IFlatRepository : IAuthoredBaseRepository<Flat>
     {
         Task<(IEnumerable<FormError>, Guid)> AddFlatAsync(FlatForm form, Guid userId);
         Task<IEnumerable<FormError>> DeleteAsync(Guid flatId);

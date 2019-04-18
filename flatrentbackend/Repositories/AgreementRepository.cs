@@ -6,13 +6,14 @@ using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Models;
 using FlatRent.Models.Requests;
+using FlatRent.Repositories.Abstractions;
 using FlatRent.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace FlatRent.Repositories
 {
-    public class AgreementRepository : BaseRepository<Agreement>, IAgreementRepository
+    public class AgreementRepository : AuthoredBaseRepository<Agreement>, IAgreementRepository
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;

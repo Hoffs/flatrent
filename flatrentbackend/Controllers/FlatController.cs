@@ -43,16 +43,18 @@ namespace FlatRent.Controllers
 
         [Authorize(Policy = "User")]
         [HttpPost]
-        [ProducesResponseType(typeof(CreatedFlat), 201)]
+        [ProducesResponseType(typeof(CreatedFlatResponse), 201)]
         public async Task<IActionResult> CreateFlat(FlatForm form)
         {
 //            if (form.Images.Any(i => !i.IsImage())) return BadRequest(new FormError("Images", Errors.InvalidImage));
+            if (form.TotalFloors < form.Floor)
+                return BadRequest(new FormError(nameof(form.TotalFloors), Errors.FloorCantBeHigherThanTotalFloors));
 
             var (errors, flatId) = await _flatRepository.AddFlatAsync(form, HttpContext.User.GetUserId()).ConfigureAwait(false);
             if (errors != null) return BadRequest(errors);
 
             var imageIds = (await _flatRepository.GetAsync(flatId)).Images.Select(i => new KeyValuePair<string,Guid>(i.Name, i.Id));
-            return StatusCode(201, new CreatedFlat(flatId, imageIds));
+            return StatusCode(201, new CreatedFlatResponse(flatId, imageIds));
         }
 
         [Authorize(Policy = "User")]

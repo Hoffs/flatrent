@@ -32,10 +32,15 @@ namespace FlatRent.Entities
 
 
         // TODO: Add payment information/bank account etc.
+        public string BankAccount { get; set; }
+
+        [ForeignKey("Avatar")]
+        public Guid AvatarId { get; set; } = Guid.Parse("00000000-0000-0000-0000-000000000001");
+        public virtual Avatar Avatar { get; set; }
 
         [JsonIgnore]
         [Required]
-        public virtual int TypeId { get; set; }
+        public int TypeId { get; set; }
         [JsonIgnore]
         public virtual UserType Type { get; set; }
 

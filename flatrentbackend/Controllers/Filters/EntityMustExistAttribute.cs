@@ -12,7 +12,7 @@ namespace FlatRent.Controllers.Filters
     {
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (context.Controller is IAuthoredEntityValidatingController validatingController && context.ActionArguments.ContainsKey("id"))
+            if (context.Controller is IIdentifiableEntityController validatingController && context.ActionArguments.ContainsKey("id"))
             {
                 var id = (Guid)context.ActionArguments["id"];
                 var actionResult = await validatingController.DoesEntityExistAsync(id, "id");
@@ -27,7 +27,7 @@ namespace FlatRent.Controllers.Filters
             }
             else
             {
-                Log.Logger.Error($"{nameof(EntityMustExistAttribute)} used in controller {context.Controller?.GetType().FullName} which does not implement {nameof(IAuthoredEntityValidatingController)}");
+                Log.Logger.Error($"{nameof(EntityMustExistAttribute)} used in controller {context.Controller?.GetType().FullName} which does not implement {nameof(IAuthoredEntityController)}");
                 context.Result = new StatusCodeResult(500);
             }
         }

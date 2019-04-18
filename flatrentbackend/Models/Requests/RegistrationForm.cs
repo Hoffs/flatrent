@@ -25,5 +25,8 @@ namespace FlatRent.Models.Requests
         public string PhoneNumber { get; set; }
 
         public string Description { get; set; }
+
+        [Required(ErrorMessage = Errors.Required)]
+        public bool Avatar { get; set; }
     }
 }

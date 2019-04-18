@@ -7,7 +7,7 @@ using FlatRent.Models.Requests;
 
 namespace FlatRent.Repositories.Interfaces
 {
-    public interface IAgreementRepository : IBaseRepository<Agreement>
+    public interface IAgreementRepository : IAuthoredBaseRepository<Agreement>
     {
         Task<IEnumerable<FormError>> CancelAgreement(Guid id);
         Task<IEnumerable<FormError>> CreateAgreementTask(Guid id, Guid userId, RentAgreementForm form);

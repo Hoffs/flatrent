@@ -9,9 +9,9 @@ using FlatRent.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
-namespace FlatRent.Repositories
+namespace FlatRent.Repositories.Abstractions
 {
-    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : AuthoredBaseEntity
+    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
     {
         protected readonly DataContext Context;
         protected readonly ILogger Logger;
@@ -32,16 +32,10 @@ namespace FlatRent.Repositories
             return Context.Set<TEntity>().FirstOrDefaultAsync(e => e.Deleted == false && e.Id == id);
         }
 
-        public async Task<bool> IsAuthorAsync(Guid id, Guid createdBy)
-        {
-            return (await Context.Set<TEntity>().FirstOrDefaultAsync(e => e.Id == id && e.AuthorId == createdBy).ConfigureAwait(false)) != null;
-        }
-
-        protected async Task<IEnumerable<FormError>> AddAsync(TEntity entity, Guid authorId)
+        protected async Task<IEnumerable<FormError>> AddAsync(TEntity entity)
         {
             try
             {
-                entity.AuthorId = authorId;
                 await Context.AddAsync(entity).ConfigureAwait(false);
                 await Context.SaveChangesAsync().ConfigureAwait(false);
                 return null;
