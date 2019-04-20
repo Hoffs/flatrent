@@ -1,0 +1,25 @@
+.dimmer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* min-width: 100vw;
+  min-height: 100vh; */
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  animation: appear 0.05s linear;
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

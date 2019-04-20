@@ -1,0 +1,51 @@
+
+/* User info */
+
+/* .avatarName {
+  margin-
+} */
+
+.userInfo {
+  text-align: center;
+  margin-top: 8px;
+  flex-grow: 0;
+  align-content: center;
+  font-family: var(--title-font-family);
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.avatar {
+  border: 1px solid var(--split-color);
+  border-radius: 50px;
+  min-width: 100%;
+  width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background-color: #e2e2e0;
+}
+
+.avatarName {
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.contactOwner > a {
+  font-size: 0.9em;
+  color: var(--main-accent-alt-color);
+  font-weight: 500;
+}
+
+.contactLink {
+  text-decoration: none;
+}

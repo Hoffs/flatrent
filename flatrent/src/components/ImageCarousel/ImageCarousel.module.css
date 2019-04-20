@@ -1,5 +1,11 @@
 .carousel {
   border: 1px solid rgb(27, 27, 27);
+  max-height: 50vh;
+  overflow: hidden;
+}
+
+.carousel li {
+  background: #f3f2f3 !important;
 }
 
 .image {

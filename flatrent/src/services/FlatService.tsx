@@ -39,7 +39,6 @@ export interface IFlatDetails {
   isPublished: boolean;
   isPublic: boolean;
   isRented: boolean;
-  isAvailableForRent: boolean;
   images: IImageDetails[];
 }
 

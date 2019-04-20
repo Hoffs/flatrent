@@ -153,6 +153,7 @@ namespace FlatRent.Controllers
         {
             var flat = await _flatRepository.GetAsync(id).ConfigureAwait(false);
             if (!flat.IsPublished && flat.AuthorId != HttpContext.User.GetUserId()) return NotFound(id); // Not published can be seen only by author
+            await Task.Delay(750);
             return new OkObjectResult(_mapper.Map<FlatDetails>(flat));
         }
     }

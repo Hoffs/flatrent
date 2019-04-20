@@ -1,110 +1,3 @@
-/* Title Card */
-
-.titleCard {
-  width: 500px;
-  display: flex;
-  flex-direction: column;
-  padding: 0 !important;
-}
-
-.image {
-  max-width: 500px;
-}
-.image img {
-  max-height: 240px;
-  width: 100%;
-  object-fit: cover;
-  overflow: hidden;
-}
-
-.titleCardContent {
-  padding: 20px;
-}
-
-.title {
-  font-size: 1.3em;
-}
-
-.year {
-  font-size: 0.9em;
-  align-self: flex-end;
-}
-
-.topTitleRow {
-  justify-content: left;
-  margin-bottom: 5px;
-}
-
-/* Details Card */
-
-.detailsCard {
-  width: 460px;
-  text-align: left;
-}
-
-.detailsTitle {
-  font-size: 1.3em;
-  margin-bottom: 12px;
-}
-
-.detailsText {
-  /* text-indent: 1.2cm; */
-  white-space: pre-wrap;
-  border-top: 2px solid rgba(var(--main-accent-alt-color-rgb), 0.1);
-  padding-top: 12px;
-}
-
-.dataRow > div {
-  margin-bottom: 16px;
-}
-
-.shortRow {
-  justify-content: left;
-}
-
-.nameCol {
-  line-height: 1.1em;
-  font-size: 0.9em;
-  font-style: italic;
-}
-
-.name {
-  line-height: 1.1em;
-  font-size: 0.9em;
-  font-style: italic;
-  align-self: flex-end;
-}
-
-.value {
-  line-height: 1.1em;
-  font-size: 1.1em;
-}
-
-/* Rent Card */
-
-.rentCard {
-  width: 460px;
-  text-align: left;
-}
-
-.pickerRow {
-  margin-top: 16px;
-}
-
-.buttonRow {
-  font-size: 1.2em;
-  margin-top: 16px;
-  justify-content: flex-end;
-}
-
-.buttonCancel {
-  border-color: #e1755e;
-  color: #eb241e;
-}
-
-.textArea {
-  height: 80px;
-}
 
 /* Carousel */
 
@@ -118,12 +11,13 @@
   max-width: 600px;
   width: calc(100% - 40px);
   margin: 20px;
+  margin-bottom: 0px;
   display: flex;
   flex-direction: column;
   align-self: center;
   align-content: flex-start;
   text-align: left;
-  padding-top: 24px;
+  flex-grow: 1;
 }
 
 /* Flat title section */
@@ -204,45 +98,81 @@
 }
 
 
-/* User info */
+/* Rent panel */
 
-/* .avatarName {
-  margin-
-} */
-
-.userInfo {
-  text-align: center;
-  margin-top: 8px;
+@media (max-width: 950px) {
+  .panel {
+    max-width: 560px;
+    width: calc(100% - 40px);
+    /* display: none !important; */
+  }
+  .contentWrapper {
+    flex-wrap: wrap;
+  }
 }
 
-.avatarWrapper {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  margin-top: 8px;
-  margin-bottom: 4px;
+@media (min-width: 950px) {
+  .panel {
+    margin-top: 24px;
+    width: 220px;
+    height: 300px;
+    margin-left: 16px;
+  }
+  .contentWrapper {
+    flex-wrap: wrap;
+  }
 }
 
-.avatarName {
-  font-family: var(--title-font-family);
+
+.panel {
+  margin-bottom: 24px;
+  flex-grow: 0;
+  text-align: left;
+  padding: 20px;
+  border: 1px solid #e4e4e4;
+  justify-content: space-around;
 }
 
-.avatar {
-  border: 1px solid var(--split-color);
-  border-radius: 50px;
-  min-width: 100%;
+.isRented {
+  font-size: 1em;
+}
+
+.rentPrice {
+}
+
+.leftHand {
+  font-size: 0.9em;
+}
+
+.rightHand {
+  white-space: nowrap;
+  font-size: 1em;
+}
+
+/*  */
+
+.contentWrapper {
+  padding-top: 24px;
+  justify-content: center;
+  margin: 12px;
+}
+
+/* modal */
+
+.modalWrapper {
   width: 100%;
-  min-height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  background-color: #e2e2e0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
 }
 
-.contactOwner {
-  font-size: 0.8em;
-  color: var(--text-color);
-  font-weight: 500;
+.modal {
+  pointer-events: all;
+  width: 350px;
+  height: 500px;
+  background: white;
+  align-self: center;
+  justify-self: center;
 }
