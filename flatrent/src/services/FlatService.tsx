@@ -181,7 +181,14 @@ class FlatService {
           const image = images.find((img) => img.name === key);
           return ImageService.putFlatImage(response.images[key], image!);
         });
-        await Promise.all(promises);
+        const results = await Promise.all(promises);
+        let errorsOb: IErrorResponse = { };
+        results.map(r => r.errors).forEach((err) => {
+          if (err === undefined) { return; }
+          errorsOb = {...errorsOb, ...err};
+        });
+
+        data.errors = errorsOb;
         console.log("created flat");
       } else {
         console.log("didnt create flat");
@@ -193,8 +200,6 @@ class FlatService {
       data.errors = { General: ["Įvyko nežinoma klaida"] };
     }
     console.log("end")
-
-    data.errors = { General: ["Įvyko nežinoma klaida"] };
     return data;
   }
 }

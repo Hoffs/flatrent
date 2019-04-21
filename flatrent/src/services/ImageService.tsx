@@ -3,7 +3,7 @@ import { IErrorResponse, IBasicResponse, IFlatAddress, IUserDetails } from "./Se
 import UserService from "./UserService";
 
 class ImageService {
-  public static async putFlatImage(imageId: string, file: File) {
+  public static async putFlatImage(imageId: string, file: File): Promise<IBasicResponse> {
     const data: IBasicResponse = {};
     try {
       const formData = new FormData();
