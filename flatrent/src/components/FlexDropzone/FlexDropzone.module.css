@@ -1,0 +1,61 @@
+.dropzoneContainer {
+  font-family: var(--text-font-family);
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--form-border-color);
+  border-radius: 4px;
+  /* border: 1px solid dotted var(--form-border-color); */
+}
+
+.dropzone {
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--form-border-color);
+  border-radius: 4px;
+  border-style: dashed;
+  padding: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.dropzone:hover {
+  border-color: var(--form-border-color-hover);
+}
+
+.thumbsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.thumb {
+  width: 21%;
+  padding-top: 21%;
+  margin: 2%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.thumbInner {
+  transition: opacity 0.2s;
+}
+
+.thumbInner:hover {
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100%;
+
+  object-fit: cover;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}

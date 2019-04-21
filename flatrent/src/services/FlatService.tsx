@@ -1,6 +1,7 @@
 import { apiFetch } from "./Helpers";
 import { IErrorResponse, IBasicResponse, IFlatAddress, IUserDetails } from "./Settings";
 import UserService from "./UserService";
+import ImageService from "./ImageService";
 
 // FlatList interfaces
 export interface IFlatListItem {
@@ -58,15 +59,14 @@ export interface IFlatCreateData {
   name: string;
   area: string;
   floor: string;
+  totalFloors: string;
   roomCount: string;
   price: string;
   yearOfConstruction: string;
+  minimumRentDays: number;
+  isFurnished: boolean;
   description: string;
-
-  ownerName: string;
-  account: string;
-  email: string;
-  phoneNumber: string;
+  tenantRequirements: string;
 
   street: string;
   houseNumber: string;
@@ -74,6 +74,14 @@ export interface IFlatCreateData {
   city: string;
   country: string;
   postCode: string;
+
+  features: string[];
+  images: Array<{ name: string }>;
+}
+
+export interface IFlatCreateResponse {
+  id: string;
+  images: { [key: string]: string };
 }
 
 export const getAddressString = (address: IFlatAddress) => {
@@ -153,8 +161,14 @@ class FlatService {
     return data;
   }
 
-  public static async createFlat(requestData: IFlatCreateData): Promise<IBasicResponse> {
+  public static async createFlat(requestData: { [key: string]: string | boolean }, images: File[]): Promise<IBasicResponse> {
     const data: IBasicResponse = {};
+    const request = requestData as unknown as IFlatCreateData;
+    const featuresString = requestData.features as string;
+    if (featuresString.split !== undefined) {
+      request.features = (requestData.features as string).split(",");
+    }
+    request.images = images.map((i) => ({ name: i.name }));
     try {
       const result = await apiFetch(`/api/flat/`, {
         body: JSON.stringify(requestData),
@@ -162,6 +176,12 @@ class FlatService {
         method: "POST",
       });
       if (result.ok) {
+        const response = (await result.json()) as IFlatCreateResponse;
+        const promises = Object.keys(response.images).map((key) => {
+          const image = images.find((img) => img.name === key);
+          return ImageService.putFlatImage(response.images[key], image!);
+        });
+        await Promise.all(promises);
         console.log("created flat");
       } else {
         console.log("didnt create flat");
@@ -172,7 +192,9 @@ class FlatService {
       console.log(e);
       data.errors = { General: ["Įvyko nežinoma klaida"] };
     }
+    console.log("end")
 
+    data.errors = { General: ["Įvyko nežinoma klaida"] };
     return data;
   }
 }

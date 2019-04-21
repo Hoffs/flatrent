@@ -3,7 +3,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
-import InputForm from "../../components/InputForm";
+import {InputForm} from "../../components/InputForm";
 import UserService from "../../services/UserService";
 import Styles from "./Login.module.css";
 
@@ -29,15 +29,16 @@ class Login extends Component<RouteComponentProps, ILoginState> {
     return (
       <Card className={Styles.customCard}>
         <span className={Styles.title}>Prisijungimas</span>
-        <InputForm errors={this.state.Errors.Email} name="Email" title="El. Paštas" setValue={this.handleChange} />
+        <InputForm value={this.state.Values.Email} errors={this.state.Errors.Email} name="Email" title="El. Paštas" setValue={this.handleChange} />
         <InputForm
+          value={this.state.Values.Password}
           errors={this.state.Errors.Password}
           name="Password"
           type="password"
           title="Slaptažodis"
           setValue={this.handleChange}
         />
-        <InputForm errorsOnly={true} errors={this.state.Errors.General} name="" title="" setValue={this.handleChange} />
+        <InputForm value={""} errorsOnly={true} errors={this.state.Errors.General} name="" title="" setValue={this.handleChange} />
         <Button disabled={this.state.Requesting} onClick={this.authenticate}>Prisijungti</Button>
       </Card>
     );

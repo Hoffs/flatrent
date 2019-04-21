@@ -1,28 +1,27 @@
 import React, { ChangeEvent, Component } from "react";
-import { joined } from "../../utilities/Utilities";
 import Styles from "./InputForm.module.css";
 
-interface IInputFormProps {
+interface InputAreaFormProps {
   className?: string;
   type?: string;
+  default?: string;
   errors?: string[];
-  name?: string;
-  title?: string;
-  value?: string;
+  name: string;
+  title: string;
   errorsOnly?: boolean;
-  setValue?: (name: string, newValue: string) => void;
+  setValue: (name: string, newValue: string) => void;
   extraProps?: { [key: string]: string };
 }
 
-class InputForm extends Component<IInputFormProps, { focused: boolean }> {
-  constructor(props: Readonly<IInputFormProps>) {
+class InputAreaForm extends Component<InputAreaFormProps, { value: string; focused: boolean }> {
+  constructor(props: Readonly<InputAreaFormProps>) {
     super(props);
-    this.state = { focused: false };
+    this.state = { value: props.default !== undefined ? props.default : "", focused: false };
   }
 
   public render() {
     return (
-      <div className={joined(Styles.form, this.props.className ? this.props.className : "")}>
+      <div className={Styles.form}>
         {this.getContent()}
         {this.getErrors()}
       </div>
@@ -31,14 +30,14 @@ class InputForm extends Component<IInputFormProps, { focused: boolean }> {
 
   private getContent() {
     if (!this.props.errorsOnly) {
+      const style = this.props.className === undefined ? "" : this.props.className;
       return (
         <>
           <span className={this.getTitleStyle()}>{this.props.title}</span>
-          <input
-            className={Styles.input}
-            type={this.props.type === undefined ? "text" : this.props.type}
+          <textarea
+            className={Styles.input.concat(" ", style)}
             name={this.props.name}
-            value={this.props.value}
+            value={this.state.value}
             onChange={this.handleChange}
             onFocus={this.onFocus}
             onBlur={this.onFocus}
@@ -51,8 +50,8 @@ class InputForm extends Component<IInputFormProps, { focused: boolean }> {
   }
 
   private getTitleStyle() {
-    return this.state.focused || (typeof this.props.value !== undefined && this.props.value)
-      ? joined(Styles.title, Styles.titleFocus)
+    return this.state.focused || (typeof this.state.value !== undefined && this.state.value)
+      ? Styles.title.concat(" ", Styles.titleFocus)
       : Styles.title;
   }
 
@@ -67,13 +66,14 @@ class InputForm extends Component<IInputFormProps, { focused: boolean }> {
     ));
   }
 
-  private handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (this.props.setValue !== undefined) { this.props.setValue(event.target.name, event.target.value); }
+  private handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    this.setState({ value: event.target.value });
+    this.props.setValue(event.target.name, event.target.value);
   };
 
-  private onFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+  private onFocus = (event: React.FocusEvent<HTMLTextAreaElement>) => {
     this.setState({ focused: event.type === "focus" ? true : false });
   };
 }
 
-export default InputForm;
+export default InputAreaForm;

@@ -5,7 +5,7 @@ import Button from "../../components/Button";
 import Card from "../../components/Card";
 import FlexColumn from "../../components/FlexColumn";
 import FlexRow from "../../components/FlexRow";
-import InputForm from "../../components/InputForm";
+import {InputForm} from "../../components/InputForm";
 import UserService from "../../services/UserService";
 import { register } from "../../serviceWorker";
 import Styles from "./Register.module.css";
@@ -49,15 +49,17 @@ class Register extends Component<RouteComponentProps, IRegisterState> {
         <span className={Styles.title}>Registracija</span>
         <FlexRow>
           <InputForm
+            value={this.state.values.firstName}
             errors={this.state.errors.FirstName}
             name="firstName"
             title="Vardas"
             setValue={this.handleUpdate}
           />
-          <InputForm errors={this.state.errors.LastName} name="lastName" title="Pavardė" setValue={this.handleUpdate} />
+          <InputForm value={this.state.values.lastName} errors={this.state.errors.LastName} name="lastName" title="Pavardė" setValue={this.handleUpdate} />
         </FlexRow>
         <FlexRow>
           <InputForm
+          value={this.state.values.phone}
             errors={this.state.errors.PhoneNumber}
             name="phone"
             title="Tel. Numeris"
@@ -65,8 +67,9 @@ class Register extends Component<RouteComponentProps, IRegisterState> {
           />
         </FlexRow>
         <FlexRow>
-          <InputForm errors={this.state.errors.Email} name="email" title="El. paštas" setValue={this.handleUpdate} />
+          <InputForm value={this.state.values.email} errors={this.state.errors.Email} name="email" title="El. paštas" setValue={this.handleUpdate} />
           <InputForm
+          value={this.state.values.emailConfirm}
             errors={this.state.errors.Email}
             name="emailConfirm"
             title="Pakartoti el. paštą"
@@ -75,6 +78,7 @@ class Register extends Component<RouteComponentProps, IRegisterState> {
         </FlexRow>
         <FlexRow>
           <InputForm
+          value={this.state.values.password}
             errors={this.state.errors.Password}
             name="password"
             title="Slaptažodis"
@@ -82,6 +86,7 @@ class Register extends Component<RouteComponentProps, IRegisterState> {
             setValue={this.handleUpdate}
           />
           <InputForm
+          value={this.state.values.passwordConfirm}
             errors={this.state.errors.Password}
             name="passwordConfirm"
             title="Pakartoti slaptažodį"

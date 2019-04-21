@@ -1,2 +1,5 @@
+import InputAreaForm from "./InputAreaForm";
 import InputForm from "./InputForm";
-export default InputForm;
+import NumberInputForm from "./NumberInputForm";
+
+export { InputForm, NumberInputForm, InputAreaForm };

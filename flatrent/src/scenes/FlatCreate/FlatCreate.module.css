@@ -1,18 +1,54 @@
-.card {
+.content {
   justify-content: space-between;
   max-width: 500px;
-  width: 100%;
+  width: var(--main-width);
+  padding: 20px;
+  align-self: center;
+
 }
 
 .title {
   font-size: 1.3em;
+  font-family: var(--title-font-family);
 }
 
 .section {
+  font-family: var(--title-font-family);
   margin-top: 12px;
   font-size: 1.1em;
 }
 
 .descriptionArea {
   height: 240px;
+  max-width: 470px;
+  min-height: 4em;
+}
+
+.requirementsArea {
+  height: 120px;
+  max-width: 470px;
+  min-height: 4em;
+}
+
+.flexZero {
+  flex-grow: 0;
+}
+
+.flexOne {
+  flex-grow: 1.5;
+}
+
+.flexTwo {
+  flex-grow: 1.5;
+}
+
+.furnishedCheckbox {
+  flex-grow: 0;
+  display: flex;
+  margin-top: 12px;
+  align-items: center;
+}
+
+.dropzone {
+  margin-top: 24px;
 }

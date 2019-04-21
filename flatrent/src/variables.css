@@ -23,7 +23,7 @@
 
 
   --title-font-family: "Roboto";
-  --text-font-family: "Lato";
+  --text-font-family: "Open Sans";
 
 
   --text-color: #484848;
@@ -35,4 +35,8 @@
 
   --main-max-width: 600px;
   --main-width: calc(100% - 40px);
+
+  --form-border-color: #dadce0;
+  --form-border-color-hover: #bcc0c7;
+  --form-border-color-active: #767676;
 }

@@ -1,5 +1,5 @@
-export const joined = (...classNames: string[]): string => {
-    return classNames.join(" ");
+export const joined = (...classNames: Array<string | undefined>): string => {
+    return classNames.filter((cn) => cn !== undefined).join(" ");
 };
 
 export const dayOrDays = (days: number): string => days.toString(10).slice(-1) === "1" ? "diena" : "dienos";

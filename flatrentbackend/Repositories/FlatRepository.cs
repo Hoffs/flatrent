@@ -34,6 +34,7 @@ namespace FlatRent.Repositories
             flat.Address = _mapper.Map<Address>(form);
             flat.AuthorId = userId;
             flat.Address.AuthorId = userId;
+            flat.Features = flat.Features.Select(f => f.Trim());
             var images = _mapper.Map<IEnumerable<FileMetadata>, IEnumerable<Image>>(form.Images).ToArray();
             images.SetProperty(i => i.AuthorId, userId);
             images.SetProperty(i => i.Flat, flat);

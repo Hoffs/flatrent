@@ -1,30 +1,35 @@
 import React, { Component } from "react";
-import Card from "../../components/Card";
+import { RouteComponentProps } from "react-router-dom";
+import { toast } from "react-toastify";
+import Button from "../../components/Button";
 import FlexColumn from "../../components/FlexColumn";
 import FlexRow from "../../components/FlexRow";
-import InputForm from "../../components/InputForm";
-import Styles from "./FlatCreate.module.css";
-import Button from "../../components/Button";
-import FlatService from "../../services/FlatService";
-import { toast } from "react-toastify";
-import { RouteComponentProps } from "react-router-dom";
 import InputArea from "../../components/InputArea";
+import { InputForm, NumberInputForm, InputAreaForm } from "../../components/InputForm";
+import SimpleCheckbox from "../../components/SimpleCheckbox";
+import FlatService from "../../services/FlatService";
+import Styles from "./FlatCreate.module.css";
+import { joined } from "../../utilities/Utilities";
+import FlexDropzone from "../../components/FlexDropzone";
+import { IPreviewFile } from "../../components/FlexDropzone/FlexDropzone";
 
-interface IRegisterState {
+interface ICreateFlatState {
   values: {
-    [key: string]: string;
+    [key: string]: string | boolean;
     name: string;
     area: string;
     floor: string;
     roomCount: string;
+    features: string;
     price: string;
     yearOfConstruction: string;
+
+    isFurnished: boolean;
+
     description: string;
 
-    ownerName: string;
-    account: string;
-    email: string;
-    phoneNumber: string;
+    tenantRequirements: string;
+    minimumRentDays: string;
 
     street: string;
     houseNumber: string;
@@ -33,11 +38,12 @@ interface IRegisterState {
     country: string;
     postCode: string;
   };
+  images: File[];
   requesting: boolean;
   errors: { [key: string]: string[] };
 }
 
-class CreateFlat extends Component<RouteComponentProps, IRegisterState> {
+class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
   constructor(props: RouteComponentProps) {
     super(props);
     this.state = {
@@ -45,15 +51,16 @@ class CreateFlat extends Component<RouteComponentProps, IRegisterState> {
         area: "",
         name: "",
         floor: "",
+        totalFloors: "",
         roomCount: "",
+        features: "",
         price: "",
         yearOfConstruction: "",
         description: "",
 
-        ownerName: "",
-        account: "",
-        email: "",
-        phoneNumber: "",
+        isFurnished: false,
+        minimumRentDays: "",
+        tenantRequirements: "",
 
         street: "",
         houseNumber: "",
@@ -62,6 +69,7 @@ class CreateFlat extends Component<RouteComponentProps, IRegisterState> {
         country: "",
         postCode: "",
       },
+      images: [],
       requesting: false,
       errors: {},
     };
@@ -70,84 +78,199 @@ class CreateFlat extends Component<RouteComponentProps, IRegisterState> {
   public render() {
     const { errors } = this.state;
     return (
-      <Card className={Styles.card}>
+      <FlexColumn className={Styles.content}>
         <span className={Styles.title}>Sukurti naują buto įrašą</span>
-        <InputForm errors={errors.General} errorsOnly={true} name="" title="" setValue={this.handleUpdate} />
-        <FlexRow>
-          <InputForm errors={errors.Name} name="name" title="Pavadinimas" setValue={this.handleUpdate} />
-        </FlexRow>
+        <InputForm value={""} errors={errors.General} errorsOnly={true} name="" title="" setValue={this.handleUpdate} />
         <FlexRow>
           <InputForm
+            value={this.state.values.name}
+            errors={errors.Name}
+            name="name"
+            title="Pavadinimas"
+            setValue={this.handleUpdate}
+          />
+        </FlexRow>
+        <FlexRow>
+          <NumberInputForm
+            minValue={0}
+            maxValue={2050}
+            value={this.state.values.yearOfConstruction}
             errors={errors.YearOfConstruction}
             name="yearOfConstruction"
-            type="number"
             title="Statybos metai"
             setValue={this.handleUpdate}
           />
-          <InputForm errors={errors.Floor} name="floor" type="number" title="Aukštas" setValue={this.handleUpdate} />
+          <NumberInputForm
+            minValue={0}
+            maxValue={100}
+            value={this.state.values.floor}
+            errors={errors.Floor}
+            name="floor"
+            title="Aukštas"
+            setValue={this.handleUpdate}
+          />
+          <NumberInputForm
+            minValue={0}
+            maxValue={100}
+            value={this.state.values.totalFloors.toString()}
+            errors={errors.TotalFloors}
+            name="totalFloors"
+            title="Aukštų skaičius"
+            setValue={this.handleUpdate}
+          />
         </FlexRow>
         <FlexRow>
-          <InputForm
+          <NumberInputForm
+            minValue={1}
+            maxValue={128}
+            value={this.state.values.roomCount}
             errors={errors.RoomCount}
             name="roomCount"
-            type="number"
             title="Kambarių skaičius"
             setValue={this.handleUpdate}
           />
-          <InputForm errors={errors.Area} name="area" type="number" title="Plotas" setValue={this.handleUpdate} />
-        </FlexRow>
-        <InputForm errors={errors.Price} name="price" type="number" title="Kaina" setValue={this.handleUpdate} />
-
-        <span className={Styles.section}>Adresas:</span>
-        <InputForm errors={errors.Street} name="street" title="Gatvė" setValue={this.handleUpdate} />
-        <FlexRow>
-          <InputForm errors={errors.HouseNumber} name="houseNumber" title="Namo numeris" setValue={this.handleUpdate} />
-          <InputForm errors={errors.FlatNumber} name="flatNumber" title="Buto numeris" setValue={this.handleUpdate} />
-        </FlexRow>
-        <FlexRow>
-          <InputForm errors={errors.City} name="city" title="Miestas" setValue={this.handleUpdate} />
-          <InputForm errors={errors.PostCode} name="postCode" title="Pašto kodas" setValue={this.handleUpdate} />
-        </FlexRow>
-        <InputForm errors={errors.Country} name="country" title="Šalis" setValue={this.handleUpdate} />
-
-        <span className={Styles.section}>Savininko informacija:</span>
-        <FlexRow>
-          <InputForm
-            errors={errors.OwnerName}
-            name="ownerName"
-            title="Vardas/Pavadinimas"
+          <NumberInputForm
+            minValue={1}
+            maxValue={512}
+            value={this.state.values.area}
+            errors={errors.Area}
+            name="area"
+            title="Plotas"
             setValue={this.handleUpdate}
           />
-          <InputForm errors={errors.Account} name="account" title="Sąskaita" setValue={this.handleUpdate} />
+          <SimpleCheckbox
+            className={Styles.furnishedCheckbox}
+            name="isFurnished"
+            size={28}
+            checked={this.state.values.isFurnished}
+            setValue={this.handleUpdate}
+          >
+            Įrengtas
+          </SimpleCheckbox>
         </FlexRow>
+        <InputForm
+          value={this.state.values.features.toString()}
+          errors={errors.Features}
+          name="features"
+          title="Ypatybės (atskirti kableliu)"
+          setValue={this.handleUpdate}
+        />
         <FlexRow>
-          <InputForm errors={errors.Email} name="email" type="email" title="El. Paštas" setValue={this.handleUpdate} />
+          <NumberInputForm
+            minValue={1}
+            maxValue={10000}
+            value={this.state.values.price}
+            errors={errors.Price}
+            name="price"
+            title="Kaina (Eurų per mėnesį)"
+            setValue={this.handleUpdate}
+          />
+          <NumberInputForm
+            minValue={1}
+            maxValue={3650}
+            value={this.state.values.minimumRentDays}
+            errors={errors.MinimumRentDays}
+            name="minimumRentDays"
+            title="Minimali nuoma dienomis"
+            setValue={this.handleUpdate}
+          />
+
+        </FlexRow>
+
+        <span className={Styles.section}>Buto adresas:</span>
+        <InputForm
+          value={this.state.values.country}
+          errors={errors.Country}
+          name="country"
+          title="Šalis"
+          setValue={this.handleUpdate}
+        />
+        <FlexRow>
           <InputForm
-            errors={errors.PhoneNumber}
-            name="phoneNumber"
-            type="phone"
-            title="Tel. Numeris"
+            value={this.state.values.city}
+            errors={errors.City}
+            name="city"
+            title="Miestas"
+            setValue={this.handleUpdate}
+          />
+          <InputForm
+            value={this.state.values.postCode}
+            errors={errors.PostCode}
+            name="postCode"
+            title="Pašto kodas"
             setValue={this.handleUpdate}
           />
         </FlexRow>
-        <InputArea
+
+        <InputForm
+          value={this.state.values.street}
+          errors={errors.Street}
+          name="street"
+          title="Gatvė"
+          setValue={this.handleUpdate}
+        />
+        <FlexRow>
+          <InputForm
+            value={this.state.values.houseNumber}
+            errors={errors.HouseNumber}
+            name="houseNumber"
+            title="Namo numeris"
+            setValue={this.handleUpdate}
+          />
+          <InputForm
+            value={this.state.values.flatNumber}
+            errors={errors.FlatNumber}
+            name="flatNumber"
+            title="Buto numeris"
+            setValue={this.handleUpdate}
+          />
+        </FlexRow>
+
+        <InputAreaForm
           className={Styles.descriptionArea}
           errors={errors.Description}
           name="description"
           title="Aprašymas"
           setValue={this.handleUpdate}
         />
-        <Button disabled={this.state.requesting} onClick={this.createFlat}>
-          Sukurti
-        </Button>
-      </Card>
+
+        <InputAreaForm
+          className={Styles.requirementsArea}
+          errors={errors.TenantRequirements}
+          name="tenantRequirements"
+          title="Reikalavimai nuomininkui"
+          setValue={this.handleUpdate}
+        />
+
+        <InputForm errorsOnly={true} errors={this.state.errors.images} />
+        <FlexDropzone
+          className={Styles.dropzone}
+          accept={["image/png", "image/jpg", "image/jpeg"]}
+          maxSize={5000000}
+          text="Norint pridėti nuotraukas nutempkitę jas į šį kvadratą arba jį paspauskite.
+          Leistini formatai: png, jpg, jpeg.
+          Maksimalus vienos nuotraukos dydis: 5 MB.
+          Leistinos 32 nuotraukos."
+          maxFiles={32}
+          onDrop={this.handleImageUpdate}
+        />
+
+        <FlexRow className={Styles.buttonRow}>
+          <Button disabled={this.state.requesting} onClick={this.createFlat}>
+            Sukurti
+          </Button>
+          <Button disabled={this.state.requesting} onClick={this.createFlat}>
+            Išsaugoti
+          </Button>
+        </FlexRow>
+      </FlexColumn>
     );
   }
 
   private createFlat = async () => {
     try {
       this.setState({ requesting: true });
-      const response = await FlatService.createFlat(this.state.values);
+      const response = await FlatService.createFlat(this.state.values, this.state.images);
       if (response.errors === undefined) {
         toast.success("Sėkmingai sukurtas įrašas!", {
           position: toast.POSITION.BOTTOM_CENTER,
@@ -157,15 +280,19 @@ class CreateFlat extends Component<RouteComponentProps, IRegisterState> {
         this.setState({ errors: response.errors, requesting: false });
       }
     } catch (error) {
+      console.log(error)
       toast.error("Įvyko nežinoma klaida!", {
         position: toast.POSITION.BOTTOM_CENTER,
       });
       this.setState({ requesting: false });
     }
-  };
+  }
 
-  private handleUpdate = (name: string, value: string) =>
-    this.setState((state) => ({ values: { ...state.values, [name]: value } }));
+  private handleUpdate = (name: string, value: string | boolean) =>
+    this.setState((state) => ({ values: { ...state.values, [name]: value } }))
+
+  private handleImageUpdate = (images: IPreviewFile[]) =>
+    this.setState({ images })
 }
 
 export default CreateFlat;

@@ -18,6 +18,7 @@ namespace FlatRent.Models.Attributes
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (value == default(object)) return ValidationResult.Success;
             if (!(value is IEnumerable<string> items))
                 throw new ArgumentException(
                     $"Validation value is not {typeof(IEnumerable<string>)}, but {value.GetType()}.");
