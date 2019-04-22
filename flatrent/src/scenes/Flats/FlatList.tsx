@@ -6,6 +6,9 @@ import CreateFlatBox from "./FlatCreateBox";
 import FlatItem from "./FlatItem";
 import Card from "../../components/Card";
 import FlatFilters from "./FlatFilters";
+import FlatBox from "./FlatBox";
+import FlexRow from "../../components/FlexRow";
+import Styles from "./FlatList.module.css";
 
 class FlatList extends Component<
   RouteComponentProps,
@@ -19,11 +22,11 @@ class FlatList extends Component<
 
   public render() {
     return (
-      <>
-        <FlatFilters onPageCountChange={console.log} onShowRentedChange={this.handleShowRentedChange} />
+      <FlexRow className={Styles.flatBoxes}>
+        {/* <FlatFilters onPageCountChange={console.log} onShowRentedChange={this.handleShowRentedChange} /> */}
         {/* <CreateFlatBox /> */}
         {this.getFlatItems()}
-      </>
+      </FlexRow>
     );
   }
 
@@ -37,7 +40,7 @@ class FlatList extends Component<
   };
 
   private getFlatItems(): ReactNode[] {
-    const flats = this.state.flats.map((flat) => <FlatItem onClick={this.openFlat} key={flat.id} flat={flat} />);
+    const flats = this.state.flats.map((flat) => <FlatBox onClick={this.openFlat} key={flat.id} flat={flat} />);
     if (flats.length > 0) {
       return flats;
     } else {

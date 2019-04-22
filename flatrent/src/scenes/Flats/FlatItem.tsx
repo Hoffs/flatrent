@@ -20,7 +20,7 @@ const FlatItem = ({ flat, onClick }: IFlatItemProps) => {
       <div className={Styles.content}>
         <div className={Styles.text}>
           <span className={Styles.title}>{flat.name}</span>
-          <span className={Styles.address}>{getAddressString(flat.address)}</span>
+          {/* <span className={Styles.address}>{getAddressString(flat.address)}</span> */}
         </div>
         <Button onClick={func} className={Styles.openButton}>
           Plačiau

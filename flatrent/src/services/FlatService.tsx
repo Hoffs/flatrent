@@ -1,19 +1,24 @@
 import { apiFetch } from "./Helpers";
-import { IErrorResponse, IBasicResponse, IFlatAddress, IUserDetails } from "./Settings";
+import { IErrorResponse, IBasicResponse, IAddress, IUserDetails } from "./Settings";
 import UserService from "./UserService";
 import ImageService from "./ImageService";
 
 // FlatList interfaces
 export interface IFlatListItem {
   id: string;
+  imageId: string;
   name: string;
   area: number;
   floor: number;
   roomCount: number;
   price: number;
-  yearOfConstruction: number;
-  address: IFlatAddress;
-  owner: IUserDetails;
+  address: IShortAddress;
+}
+
+export interface IShortAddress {
+  street: string;
+  city: string;
+  country: string;
 }
 
 export interface IFlatListResponse {
@@ -33,7 +38,7 @@ export interface IFlatDetails {
   isFurnished: boolean;
   features: string[];
   description: string;
-  address: IFlatAddress;
+  address: IAddress;
   owner: IUserDetails;
   tenantRequirements: string;
   minimumRentDays: number;
@@ -84,7 +89,7 @@ export interface IFlatCreateResponse {
   images: { [key: string]: string };
 }
 
-export const getAddressString = (address: IFlatAddress) => {
+export const getAddressString = (address: IAddress) => {
   console.log(address);
   return `${address.street} ${address.houseNumber}-${address.flatNumber}, ${address.city}, ${address.country}`;
 };

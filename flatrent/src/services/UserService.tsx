@@ -1,6 +1,6 @@
 import jwtdecode from "jwt-decode";
 import { apiFetch } from "./Helpers";
-import { IErrorResponse, IBasicResponse, IFlatAddress } from "./Settings";
+import { IErrorResponse, IBasicResponse, IAddress } from "./Settings";
 import { number } from "prop-types";
 import { Authentication } from "../Routes";
 
@@ -51,7 +51,7 @@ export interface IAgreementData {
   from: string;
   to: string;
   flatName: string;
-  flatAddress: IFlatAddress;
+  flatAddress: IAddress;
 }
 
 export interface IUserAgreements {

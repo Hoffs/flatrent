@@ -15,7 +15,7 @@ export interface IBasicResponse {
 
 // General Flat
 
-export interface IFlatAddress {
+export interface IAddress {
   street: string;
   houseNumber: string;
   flatNumber: string;

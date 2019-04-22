@@ -1,5 +1,5 @@
 import { apiFetch } from "./Helpers";
-import { IErrorResponse, IBasicResponse, IFlatAddress, IUserDetails } from "./Settings";
+import { IErrorResponse, IBasicResponse, IAddress, IUserDetails } from "./Settings";
 import UserService from "./UserService";
 
 class ImageService {
