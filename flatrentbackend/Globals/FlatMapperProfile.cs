@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using FlatRent.Dtos;
 using FlatRent.Entities;
-using FlatRent.Extensions;
 using FlatRent.Models.Dtos;
 using FlatRent.Models.Requests;
 using FlatRent.Models.Requests.Flat;
-using Microsoft.AspNetCore.Http;
 
 namespace FlatRent.Globals
 {
@@ -18,7 +16,9 @@ namespace FlatRent.Globals
             CreateMap<FlatForm, Address>();
 
             CreateMap<Address, FlatListItemAddress>();
-            CreateMap<Flat, FlatListItem>();
+
+            CreateMap<Flat, FlatListItem>()
+                .ForMember(fi => fi.ImageId, opt => opt.MapFrom(f => f.CoverImage.Id));
 
             CreateMap<RentAgreementForm, Agreement>();
 

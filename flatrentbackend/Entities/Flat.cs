@@ -62,6 +62,10 @@ namespace FlatRent.Entities
         public Agreement ActiveAgreement =>
             Agreements.FirstOrDefault(x => x.From.Date >= DateTime.Now.Date && x.To <= DateTime.Now.Date && !x.Deleted);
 
+        [NotMapped]
+        public Image CoverImage =>
+            Images.FirstOrDefault();
+
         // required where?
         [JsonIgnore]
         [ForeignKey("Address")]
