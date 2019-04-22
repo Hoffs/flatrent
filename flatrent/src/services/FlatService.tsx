@@ -90,7 +90,11 @@ export const getAddressString = (address: IFlatAddress) => {
 };
 
 class FlatService {
-  public static async getFlats(count: number, offset: number, rented: boolean = false): Promise<IFlatListResponse> {
+  public static async getFlats(
+    count: number,
+    offset: number,
+    rented: boolean = false
+  ): Promise<IFlatListResponse> {
     const data: IFlatListResponse = {};
     try {
       const rentedQuery = rented ? "&rented=true" : "";
@@ -161,9 +165,12 @@ class FlatService {
     return data;
   }
 
-  public static async createFlat(requestData: { [key: string]: string | boolean }, images: File[]): Promise<IBasicResponse> {
+  public static async createFlat(
+    requestData: { [key: string]: string | boolean },
+    images: File[]
+  ): Promise<IBasicResponse | IFlatCreateResponse> {
     const data: IBasicResponse = {};
-    const request = requestData as unknown as IFlatCreateData;
+    const request = (requestData as unknown) as IFlatCreateData;
     const featuresString = requestData.features as string;
     if (featuresString.split !== undefined) {
       request.features = (requestData.features as string).split(",");
@@ -182,12 +189,19 @@ class FlatService {
           return ImageService.putFlatImage(response.images[key], image!);
         });
         const results = await Promise.all(promises);
-        let errorsOb: IErrorResponse = { };
-        results.map(r => r.errors).forEach((err) => {
-          if (err === undefined) { return; }
-          errorsOb = {...errorsOb, ...err};
-        });
+        let errorsOb: IErrorResponse = {};
+        results
+          .map((r) => r.errors)
+          .forEach((err) => {
+            if (err === undefined) {
+              return;
+            }
+            errorsOb = { ...errorsOb, ...err };
+          });
 
+        if (Object.keys(errorsOb).length === 0) {
+          return response;
+        }
         data.errors = errorsOb;
         console.log("created flat");
       } else {
@@ -199,7 +213,7 @@ class FlatService {
       console.log(e);
       data.errors = { General: ["Įvyko nežinoma klaida"] };
     }
-    console.log("end")
+    console.log("end");
     return data;
   }
 }

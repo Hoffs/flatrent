@@ -5,6 +5,10 @@
   height: 50vh;
 }
 
+.imageWrapper[x-clicked="true"] {
+  height: calc(100vh - 80px);
+}
+
 /* Details */
 
 .detailsContainer {

@@ -7,11 +7,12 @@ import FlexRow from "../../components/FlexRow";
 import InputArea from "../../components/InputArea";
 import { InputForm, NumberInputForm, InputAreaForm } from "../../components/InputForm";
 import SimpleCheckbox from "../../components/SimpleCheckbox";
-import FlatService from "../../services/FlatService";
+import FlatService, { IFlatCreateResponse } from "../../services/FlatService";
 import Styles from "./FlatCreate.module.css";
-import { joined } from "../../utilities/Utilities";
+import { joined, flatUrl } from "../../utilities/Utilities";
 import FlexDropzone from "../../components/FlexDropzone";
 import { IPreviewFile } from "../../components/FlexDropzone/FlexDropzone";
+import { IBasicResponse } from "../../services/Settings";
 
 interface ICreateFlatState {
   values: {
@@ -271,13 +272,16 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
     try {
       this.setState({ requesting: true });
       const response = await FlatService.createFlat(this.state.values, this.state.images);
-      if (response.errors === undefined) {
+
+      if ((response as IFlatCreateResponse).id !== undefined) {
         toast.success("Sėkmingai sukurtas įrašas!", {
           position: toast.POSITION.BOTTOM_CENTER,
         });
-        this.props.history.push("/flats");
-      } else {
-        this.setState({ errors: response.errors, requesting: false });
+        const { id } = response as IFlatCreateResponse;
+        this.props.history.push(flatUrl(id));
+      } else if ((response as IBasicResponse).errors !== undefined) {
+        const { errors = {} } = response as IBasicResponse;
+        this.setState({ errors, requesting: false });
       }
     } catch (error) {
       console.log(error)
