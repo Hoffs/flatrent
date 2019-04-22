@@ -16,13 +16,22 @@ interface IImageCarousel {
 // tslint:disable: jsx-no-multiline-js
 const ImageCarousel = (props: IImageCarousel) => {
   const [clicked, setClicked] = useState(false);
+  const [clickedItem, setClickedItem] = useState(0);
 
-  const getStyle = () => clicked ? joined(Styles.carousel, Styles.expandedCarousel) : Styles.carousel;
+  const getStyle = () => (clicked ? joined(Styles.carousel, Styles.expandedCarousel) : Styles.carousel);
   const onClick = () => setClicked(!clicked);
+  const onItemClick = (idx: number) => setClickedItem(idx);
 
   const className = props.className ? props.className : "";
   return (
-    <Carousel className={joined(getStyle(), className)} showStatus={false} showThumbs={false}>
+    <Carousel
+      infiniteLoop={true}
+      onChange={onItemClick}
+      selectedItem={clickedItem}
+      className={joined(getStyle(), className)}
+      showStatus={false}
+      showThumbs={false}
+    >
       {props.imageIds === undefined ? (
         <ImageLoader className={props.wrapperClassName} />
       ) : (

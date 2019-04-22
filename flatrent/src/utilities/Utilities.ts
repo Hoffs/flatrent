@@ -7,6 +7,7 @@ export const roomOrRooms = (roomCount: number): string => roomCount > 1 ? "kamba
 
 export const userProfileUrl = (id: string): string => `/user/${id}`;
 export const conversationWithUserUrl = (id: string): string => `/conversation/new?recipientId=${id}`;
+export const flatEditUrl = (id: string): string => `/flat/${id}/edit`;
 export const flatRentUrl = (id: string): string => `/flat/${id}/rent`;
 export const flatUrl = (id: string): string => `/flat/${id}`;
 

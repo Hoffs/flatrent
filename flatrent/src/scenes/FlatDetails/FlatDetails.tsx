@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { RouteComponentProps, withRouter, Route } from "react-router-dom";
+import { RouteComponentProps, withRouter, Route, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import FlexRow from "../../components/FlexRow";
 import FlatService, { IFlatDetails, IFlatDetailsResponse } from "../../services/FlatService";
@@ -11,6 +11,9 @@ import FlatShortInfo from "./FlatShortInfo";
 import RentPanel from "./RentPanel";
 import UserDisplay from "./UserInfo";
 import RentModal from "./RentModal";
+import FlexColumn from "../../components/FlexColumn";
+import { flatEditUrl } from "../../utilities/Utilities";
+import UserService from "../../services/UserService";
 
 interface IFlatDetailsState {
   loading: boolean;
@@ -30,6 +33,12 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
   public render() {
     const { flat } = this.state;
 
+    const editNode = flat !== undefined && UserService.canEdit(flat.owner.id) ? (
+      <Link className={Styles.editLink} to={flatEditUrl(flat.id)}>Redaguoti</Link>
+    ) : (
+      <></>
+    );
+
     return (
       <>
         <ImageCarousel
@@ -38,13 +47,15 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
         />
         <FlexRow className={Styles.contentWrapper}>
           <FlexRow className={Styles.detailsContainer}>
+          {editNode}
             <FlexRow className={Styles.sectionEnd}>
               <FlatShortInfo flat={flat} />
-              <UserDisplay user={flat ? flat.owner : undefined} />
+              <FlexColumn>
+                <UserDisplay user={flat ? flat.owner : undefined} />
+              </FlexColumn>
             </FlexRow>
 
             <FlatDescription flat={flat} />
-
           </FlexRow>
           <RentPanel flat={flat} />
         </FlexRow>

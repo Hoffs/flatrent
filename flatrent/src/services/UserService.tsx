@@ -2,6 +2,7 @@ import jwtdecode from "jwt-decode";
 import { apiFetch } from "./Helpers";
 import { IErrorResponse, IBasicResponse, IFlatAddress } from "./Settings";
 import { number } from "prop-types";
+import { Authentication } from "../Routes";
 
 export enum Roles {
   Administrator = 1,
@@ -178,7 +179,7 @@ class UserService {
 
   public static getRoles(): number[] {
     const item = localStorage.getItem("Roles");
-    return item ? (JSON.parse(item) as string[]).map(i => Number.parseInt(i, 10)) : [];
+    return item ? (JSON.parse(item) as string[]).map((i) => Number.parseInt(i, 10)) : [];
   }
 
   public static isLoggedIn(): boolean {
@@ -204,7 +205,16 @@ class UserService {
     return userRoles.some((role) => roles.includes(role));
   }
 
+  public static readonly userId = (): string => {
+    const userId = localStorage.getItem("UserId");
+    return userId ? userId : "";
+  }
   public static readonly token = (): string | null => localStorage.getItem("Token");
+  public static readonly canEdit = (ownerId: string): boolean => ownerId === UserService.userId();
+  public static readonly satisfiesAuthentication = (authLevel: Authentication) =>
+    (UserService.isLoggedIn() && authLevel === Authentication.Authenticated)
+    || (!UserService.isLoggedIn() && authLevel === Authentication.Anonymous)
+    || authLevel === Authentication.Either;
 
   public static readonly authorizationHeaders = (): { [key: string]: string } => ({
     Authorization: `Bearer ${UserService.token()}`,
@@ -229,6 +239,7 @@ class UserService {
     localStorage.removeItem("UserType");
     localStorage.removeItem("TokenExpires");
   }
+
 }
 
 export default UserService;

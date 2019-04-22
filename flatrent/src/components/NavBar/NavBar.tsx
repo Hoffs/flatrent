@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import SVG from "react-inlinesvg";
 import { RouteComponentProps, withRouter, Link } from "react-router-dom";
 import logo from "../../logo.svg";
-import { Routes } from "../../Routes";
+import { ApplicableRoutes } from "../../Routes";
 import UserService from "../../services/UserService";
 import LinkWithHighlight from "./LinkWithHighlight";
 import NavigationButton from "./NavigationButton";
@@ -34,13 +34,7 @@ class NavBar extends Component<RouteComponentProps> {
   }
 
   private getLinks() {
-    const isLoggedIn = UserService.isLoggedIn();
-    const filteredLinks = Routes.filter(
-      (link) =>
-        link.addToNav &&
-        (link.authenticated === isLoggedIn || link.authenticated === undefined) &&
-        UserService.hasRoles(...link.roles)
-    );
+    const filteredLinks = ApplicableRoutes.filter((link) => link.addToNav);
     return filteredLinks.map((link, index) => (
       <LinkWithHighlight link={link.link} currentUrl={this.props.location.pathname} key={index}>
         {link.text}
@@ -49,13 +43,7 @@ class NavBar extends Component<RouteComponentProps> {
   }
 
   private getNavigationButtons() {
-    const isLoggedIn = UserService.isLoggedIn();
-    const filteredLinks = Routes.filter(
-      (link) =>
-        link.addToNav &&
-        (link.authenticated === isLoggedIn || link.authenticated === undefined) &&
-        UserService.hasRoles(...link.roles)
-    );
+    const filteredLinks = ApplicableRoutes.filter((link) => link.addToNav);
     return filteredLinks.map((link, index) => (
       <NavigationButton link={link.link} currentUrl={this.props.location.pathname} key={index}>
         {link.text}

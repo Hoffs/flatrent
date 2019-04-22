@@ -1,22 +1,21 @@
 import React from "react";
 import { Redirect, Route, RouteProps } from "react-router-dom";
 import UserService from "../../services/UserService";
+import { Authentication } from "../../Routes";
 
 interface IRoleRouteProps extends RouteProps {
   redirect: string;
-  authenticated: boolean;
+  authenticated: Authentication;
   allowedRoles?: number[];
 }
 
 const RoleRoute = (props: IRoleRouteProps) => {
-  const loggedIn = UserService.isLoggedIn();
   let satisfiesRoles = true;
   if (props.allowedRoles !== undefined && props.allowedRoles.length > 0) {
     satisfiesRoles = UserService.hasRoles(...props.allowedRoles);
   }
-  const satisfiesAuth = loggedIn === props.authenticated;
 
-  if (satisfiesRoles && satisfiesAuth) {
+  if (satisfiesRoles && UserService.satisfiesAuthentication(props.authenticated)) {
     return <Route {...props} />;
   } else {
     const renderComponent = () => <Redirect to={props.redirect} />;

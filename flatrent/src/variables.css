@@ -39,4 +39,6 @@
   --form-border-color: #dadce0;
   --form-border-color-hover: #bcc0c7;
   --form-border-color-active: #767676;
+
+  --maxvh-navless: calc(100vh - 82px);
 }

@@ -4,7 +4,7 @@
   width: var(--main-width);
   padding: 20px;
   align-self: center;
-
+  margin-top: 36px;
 }
 
 .title {

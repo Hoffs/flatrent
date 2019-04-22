@@ -180,3 +180,8 @@
   align-self: center;
   justify-self: center;
 }
+
+.editLink {
+  color: var(--text-color);
+  font-family: var(--title-font-family);
+}

@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import Button from "../../components/Button";
 import FlexColumn from "../../components/FlexColumn";
 import FlexRow from "../../components/FlexRow";
-import InputArea from "../../components/InputArea";
 import { InputForm, NumberInputForm, InputAreaForm } from "../../components/InputForm";
 import SimpleCheckbox from "../../components/SimpleCheckbox";
 import FlatService, { IFlatCreateResponse } from "../../services/FlatService";
