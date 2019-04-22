@@ -6,9 +6,10 @@ import CreateFlatBox from "./FlatCreateBox";
 import FlatItem from "./FlatItem";
 import Card from "../../components/Card";
 import FlatFilters from "./FlatFilters";
-import FlatBox from "./FlatBox";
+import FlatBox, { FlatBoxLoader } from "./FlatBox";
 import FlexRow from "../../components/FlexRow";
 import Styles from "./FlatList.module.css";
+import ContentLoader from "react-content-loader";
 
 class FlatList extends Component<
   RouteComponentProps,
@@ -44,7 +45,7 @@ class FlatList extends Component<
     if (flats.length > 0) {
       return flats;
     } else {
-      return [<Card key={1}>Nuomojamų butų nėra</Card>];
+      return Array(12).fill(<FlatBoxLoader />);
     }
   }
 
@@ -67,5 +68,8 @@ class FlatList extends Component<
     toast.error("Įvyko nežinoma klaida.");
   }
 }
+
+
+
 
 export default FlatList;

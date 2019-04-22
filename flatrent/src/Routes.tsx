@@ -66,6 +66,17 @@ const AuthRoutes: IRouteInfo[] = [
 // 50+
 const FlatRoutes: IRouteInfo[] = [
   {
+    addToNav: false,
+    authentication: Authentication.Either,
+    component: FlatList,
+    exact: true,
+    link: "/",
+    order: 50,
+    redirect: "/login",
+    roles: [],
+    text: "Butai",
+  },
+  {
     addToNav: true,
     authentication: Authentication.Either,
     component: FlatList,
