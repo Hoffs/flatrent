@@ -40,7 +40,7 @@ class FlatList extends Component<
   };
 
   private getFlatItems(): ReactNode[] {
-    const flats = this.state.flats.map((flat) => <FlatBox onClick={this.openFlat} key={flat.id} flat={flat} />);
+    const flats = this.state.flats.map((flat) => <FlatBox key={flat.id} flat={flat} />);
     if (flats.length > 0) {
       return flats;
     } else {

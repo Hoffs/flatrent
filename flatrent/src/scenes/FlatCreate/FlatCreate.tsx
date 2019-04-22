@@ -83,6 +83,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
         <InputForm value={""} errors={errors.General} errorsOnly={true} name="" title="" setValue={this.handleUpdate} />
         <FlexRow>
           <InputForm
+            className={Styles.input}
             value={this.state.values.name}
             errors={errors.Name}
             name="name"
@@ -92,6 +93,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
         </FlexRow>
         <FlexRow>
           <NumberInputForm
+            className={Styles.input}
             minValue={0}
             maxValue={2050}
             value={this.state.values.yearOfConstruction}
@@ -101,6 +103,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             setValue={this.handleUpdate}
           />
           <NumberInputForm
+            className={Styles.input}
             minValue={0}
             maxValue={100}
             value={this.state.values.floor}
@@ -110,6 +113,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             setValue={this.handleUpdate}
           />
           <NumberInputForm
+            className={Styles.input}
             minValue={0}
             maxValue={100}
             value={this.state.values.totalFloors.toString()}
@@ -121,6 +125,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
         </FlexRow>
         <FlexRow>
           <NumberInputForm
+            className={Styles.input}
             minValue={1}
             maxValue={128}
             value={this.state.values.roomCount}
@@ -130,6 +135,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             setValue={this.handleUpdate}
           />
           <NumberInputForm
+            className={Styles.input}
             minValue={1}
             maxValue={512}
             value={this.state.values.area}
@@ -139,7 +145,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             setValue={this.handleUpdate}
           />
           <SimpleCheckbox
-            className={Styles.furnishedCheckbox}
+            className={joined(Styles.furnishedCheckbox, Styles.input)}
             name="isFurnished"
             size={28}
             checked={this.state.values.isFurnished}
@@ -149,6 +155,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
           </SimpleCheckbox>
         </FlexRow>
         <InputForm
+          className={Styles.input}
           value={this.state.values.features.toString()}
           errors={errors.Features}
           name="features"
@@ -157,6 +164,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
         />
         <FlexRow>
           <NumberInputForm
+            className={Styles.input}
             minValue={1}
             maxValue={10000}
             value={this.state.values.price}
@@ -166,6 +174,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             setValue={this.handleUpdate}
           />
           <NumberInputForm
+            className={Styles.input}
             minValue={1}
             maxValue={3650}
             value={this.state.values.minimumRentDays}
@@ -179,6 +188,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
 
         <span className={Styles.section}>Buto adresas:</span>
         <InputForm
+          className={Styles.input}
           value={this.state.values.country}
           errors={errors.Country}
           name="country"
@@ -187,6 +197,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
         />
         <FlexRow>
           <InputForm
+            className={Styles.input}
             value={this.state.values.city}
             errors={errors.City}
             name="city"
@@ -194,6 +205,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             setValue={this.handleUpdate}
           />
           <InputForm
+            className={Styles.input}
             value={this.state.values.postCode}
             errors={errors.PostCode}
             name="postCode"
@@ -203,6 +215,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
         </FlexRow>
 
         <InputForm
+          className={Styles.input}
           value={this.state.values.street}
           errors={errors.Street}
           name="street"
@@ -211,6 +224,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
         />
         <FlexRow>
           <InputForm
+            className={Styles.input}
             value={this.state.values.houseNumber}
             errors={errors.HouseNumber}
             name="houseNumber"
@@ -218,6 +232,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             setValue={this.handleUpdate}
           />
           <InputForm
+            className={Styles.input}
             value={this.state.values.flatNumber}
             errors={errors.FlatNumber}
             name="flatNumber"

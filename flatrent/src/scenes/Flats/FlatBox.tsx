@@ -12,26 +12,26 @@ interface IFlatItemProps {
   flat: IFlatListItem;
 }
 
-const FlatBox = ({ flat, history }: IFlatItemProps & RouteComponentProps) => {
+const FlatBox = ({ flat }: IFlatItemProps) => {
   return (
     <FlexColumn className={Styles.flatBox}>
       <div className={Styles.imageWrapper}>
         <Link className={Styles.imageLink} to={flatUrl(flat.id)} />
         <SmartImg className={Styles.image} src={getImageUrl(flat.imageId)} />
       </div>
-      <FlexColumn className={Styles.content}>
-        <Link to={flatUrl(flat.id)}>
+      <Link className={Styles.link} to={flatUrl(flat.id)}>
+        <FlexColumn className={Styles.content}>
           <span className={Styles.address}>
             {`${flat.address.street} • ${flat.address.city} • ${flat.address.country}`}
           </span>
-          <span className={Styles.title}>{flat.name}</span>
           <span className={Styles.details}>
             {`${flat.floor} aukštas • ${flat.area} m² • ${flat.roomCount} ${roomOrRooms(flat.roomCount)}  • ${flat.price} Eur`}
           </span>
-        </Link>
-      </FlexColumn>
+          <span className={Styles.title}>{flat.name}</span>
+        </FlexColumn>
+      </Link>
     </FlexColumn>
   );
 };
 
-export default withRouter(FlatBox);
+export default FlatBox;

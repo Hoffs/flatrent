@@ -1,31 +1,40 @@
 .flatBox {
-  margin: 24px 0;
+  margin: 8px 0;
   padding: 0 8px;
   cursor: pointer;
 }
 
+@media (max-width: 599px) {
+  .flatBox {
+    width: calc((100% / 1) - 16px);
+  }
+}
+
 @media (min-width: 600px) and (max-width: 1059px) {
   .flatBox {
-    width: 48%;
-    /* margin: calc((50% - 47%) / 2); */
+    width: calc((100% / 2) - 16px);
   }
 }
 
 @media (max-width: 1359px) and (min-width: 1060px) {
   .flatBox {
-    width: 31%;
+    width: calc((100% / 3) - 16px);
   }
 }
 
 @media (max-width: 1659px) and (min-width: 1360px) {
   .flatBox {
-    width: 23%;
+    width: calc((100% / 4) - 16px);
   }
 }
 
 @media (min-width: 1660px) {
   .flatBox {
-    width: 18%;
+    /* 16px padding per item */
+    /* 32px margin on wrapper - doesnt influence width */
+    /* width: calc(((100% - 32px) / 5) - 16px); */
+    /* 100% and 16px per item */
+    width: calc((100% / 5) - 16px);
   }
 }
 
@@ -59,4 +68,29 @@
   border-radius: 4px;
 
   pointer-events: none;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.content {
+  text-align: left;
+  padding: 4px;
+  margin-top: 4px;
+}
+
+.address, .details {
+  font-size: 0.8em;
+  color: var(--text-faded-color);
+  font-weight: 500;
+  font-family: var(--title-font-family);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.title {
+  color: var(--main-font-color);
+  font-family: var(--text-font-family);
+  font-weight: 600;
 }
