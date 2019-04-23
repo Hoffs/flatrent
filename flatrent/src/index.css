@@ -1,6 +1,36 @@
 html {
   overflow-y: scroll;
+}
+
+/* Date Picker Custom Styles */
+
+.DateRangePicker *, .SingleDatePicker *, .DayPickerRangeController * {
   box-sizing: border-box;
+}
+
+.DateInput_input__focused {
+  border-bottom: 2px solid var(--main-accent-alt-color);
+}
+
+.CalendarDay__selected, .CalendarDay__selected:active, .CalendarDay__selected:hover {
+  background: var(--main-accent-alt-color);
+  border: 1px double var(--main-accent-alt-muted-color);
+}
+
+.CalendarDay__selected_span {
+  background: var(--main-accent-alt-muted-color);
+  border: 1px double var(--main-accent-alt-muted-color);
+}
+
+.CalendarDay__selected_span:active, .CalendarDay__selected_span:hover {
+  background: var(--main-accent-alt-color);
+  border: 1px double var(--main-accent-alt-muted-color);
+}
+
+.CalendarDay__hovered_span, .CalendarDay__hovered_span:hover {
+  background: var(--main-accent-alt-muted-color);
+  border: 1px double var(--main-accent-alt-muted-color);
+  color: white;
 }
 
 body {

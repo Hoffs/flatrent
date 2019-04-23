@@ -1,56 +1,56 @@
 import React, { Component, ReactNode } from "react";
+import InfiniteScroll from "react-infinite-scroller";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
-import FlatService, { IFlatListItem, IFlatListResponse } from "../../services/FlatService";
-import CreateFlatBox from "./FlatCreateBox";
-import FlatItem from "./FlatItem";
-import Card from "../../components/Card";
-import FlatFilters from "./FlatFilters";
-import FlatBox, { FlatBoxLoader } from "./FlatBox";
 import FlexRow from "../../components/FlexRow";
+import FlatService, { IFlatListItem, IFlatListResponse } from "../../services/FlatService";
+import FlatBox, { FlatBoxLoader } from "./FlatBox";
 import Styles from "./FlatList.module.css";
-import ContentLoader from "react-content-loader";
 
 class FlatList extends Component<
   RouteComponentProps,
-  { pageSize: number; page: number; rented: boolean; flats: IFlatListItem[] }
+  { pageSize: number; page: number; hasMore: boolean; flats: IFlatListItem[] }
 > {
   constructor(props: Readonly<RouteComponentProps>) {
     super(props);
-    this.state = { pageSize: 20, page: 1, rented: false, flats: [] };
-    this.getFlats(this.state.pageSize, this.state.page, this.state.rented);
+    this.state = { pageSize: 20, page: 0, hasMore: true, flats: [] };
+    this.loadFlats(this.state.page);
   }
 
   public render() {
     return (
       <FlexRow className={Styles.flatBoxes}>
         {/* <FlatFilters onPageCountChange={console.log} onShowRentedChange={this.handleShowRentedChange} /> */}
-        {/* <CreateFlatBox /> */}
-        {this.getFlatItems()}
+        <InfiniteScroll
+          className={Styles.scroller}
+          pageStart={0}
+          initialLoad={false}
+          loadMore={this.loadFlats}
+          hasMore={this.state.hasMore}
+          loader={this.getLoaderItems(4)}
+          useWindow={true}
+        >
+          {this.getFlatItems()}
+        </InfiniteScroll>
       </FlexRow>
     );
   }
-
-  private handleShowRentedChange = (rented: boolean) => {
-    this.setState({ rented });
-    this.getFlats(this.state.pageSize, this.state.page, rented);
-  };
-
-  private openFlat = (id: string) => {
-    this.props.history.push(`/flat/${id}`);
-  };
 
   private getFlatItems(): ReactNode[] {
     const flats = this.state.flats.map((flat) => <FlatBox key={flat.id} flat={flat} />);
     if (flats.length > 0) {
       return flats;
     } else {
-      return Array(12).fill(<FlatBoxLoader />);
+      return this.getLoaderItems(12);
     }
   }
 
-  private getFlats(pageSize: number, page: number, rented: boolean) {
-    FlatService.getFlats(pageSize, pageSize * (page - 1), rented)
+  private getLoaderItems(count: number): ReactNode[] {
+    return Array(count).fill(0).map((_, idx) => <FlatBoxLoader key={idx} />);
+  }
+
+  private loadFlats = (pageNumber: number) => {
+    FlatService.getFlats(this.state.pageSize, this.state.pageSize * pageNumber)
       .then(this.handleFlatResult)
       .catch(this.handleFail);
   }
@@ -60,7 +60,7 @@ class FlatList extends Component<
       const errors = Object.keys(result.errors).map((key) => result.errors![key].join("\n"));
       errors.forEach((error) => toast.error(error));
     } else if (result.flats !== undefined) {
-      this.setState({ flats: result.flats });
+      this.setState((state) => ({ flats: [...state.flats, ...result.flats!], hasMore: result.flats!.length !== 0 }));
     }
   };
 
@@ -68,8 +68,5 @@ class FlatList extends Component<
     toast.error("Įvyko nežinoma klaida.");
   }
 }
-
-
-
 
 export default FlatList;

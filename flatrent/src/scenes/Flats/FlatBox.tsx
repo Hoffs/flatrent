@@ -1,13 +1,12 @@
 import React from "react";
-import FlexColumn from "../../components/FlexColumn";
-import { getImageUrl } from "../../services/ApiUtilities";
-import { getAddressString, IFlatListItem } from "../../services/FlatService";
-import { roomOrRooms, flatUrl, joined } from "../../utilities/Utilities";
-import Styles from "./FlatBox.module.css";
-import SmartImg from "../../components/SmartImg";
-import { withRouter, Link } from "react-router-dom";
-import { RouterProps, RouteComponentProps } from "react-router";
 import ContentLoader from "react-content-loader";
+import { Link } from "react-router-dom";
+import FlexColumn from "../../components/FlexColumn";
+import SmartImg from "../../components/SmartImg";
+import { getImageUrl } from "../../services/ApiUtilities";
+import { IFlatListItem } from "../../services/FlatService";
+import { flatUrl, roomOrRooms } from "../../utilities/Utilities";
+import Styles from "./FlatBox.module.css";
 
 interface IFlatItemProps {
   flat: IFlatListItem;

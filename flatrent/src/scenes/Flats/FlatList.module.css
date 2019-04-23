@@ -5,3 +5,10 @@
   margin-top: 36px;
   justify-content: flex-start;
 }
+
+.scroller {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}

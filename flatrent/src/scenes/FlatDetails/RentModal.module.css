@@ -1,0 +1,72 @@
+
+.modalWrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  overflow-y: auto;
+}
+
+.modal {
+  pointer-events: all;
+  width: var(--main-width);
+  max-width: var(--main-max-width);
+  height: fit-content;
+  max-height: calc(100% - 40px);
+  overflow-y: auto;
+  background: white;
+  align-self: center;
+  padding: 20px;
+  border-radius: 4px;
+  margin: auto;
+}
+
+.editLink {
+  color: var(--text-color);
+  font-family: var(--title-font-family);
+}
+
+.datepickerWrapper {
+  display: block;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.infoInPicker {
+  width: 100%;
+  text-align: center;
+  padding: 0px 4px 12px 4px;
+}
+
+.inputArea {
+  height: 10em;
+}
+
+.dropzone {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.button {
+}
+
+.title {
+  font-family: var(--title-font-family);
+  font-size: 1.4em;
+  margin-bottom: 16px;
+}
+
+.subTitle {
+  font-family: var(--title-font-family);
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+.subText {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.subRow {
+  justify-content: space-between;
+}

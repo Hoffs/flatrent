@@ -169,19 +169,30 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-content: center;
 }
 
 .modal {
   pointer-events: all;
-  width: 350px;
+  width: var(--main-width);
+  max-width: var(--main-max-width);
   height: 500px;
   background: white;
   align-self: center;
-  justify-self: center;
 }
 
 .editLink {
   color: var(--text-color);
   font-family: var(--title-font-family);
+}
+
+.datepickerWrapper {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.infoInPicker {
+  width: 100%;
+  text-align: center;
+  padding: 0px 4px 12px 4px;
 }

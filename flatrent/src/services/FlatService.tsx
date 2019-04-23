@@ -98,12 +98,11 @@ class FlatService {
   public static async getFlats(
     count: number,
     offset: number,
-    rented: boolean = false
   ): Promise<IFlatListResponse> {
     const data: IFlatListResponse = {};
     try {
-      const rentedQuery = rented ? "&rented=true" : "";
-      const result = await apiFetch(`/api/flat?count=${count}&offset=${offset}${rentedQuery}`, {
+      // const rentedQuery = rented ? "&rented=true" : "";
+      const result = await apiFetch(`/api/flat?count=${count}&offset=${offset}`, {
         headers: UserService.authorizationHeaders(),
       });
       if (result.ok) {

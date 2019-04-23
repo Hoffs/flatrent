@@ -1,5 +1,6 @@
 import React, { ChangeEvent, Component } from "react";
 import Styles from "./InputForm.module.css";
+import { joined } from "../../utilities/Utilities";
 
 interface InputAreaFormProps {
   className?: string;

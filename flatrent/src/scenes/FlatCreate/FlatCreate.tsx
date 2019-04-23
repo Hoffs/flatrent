@@ -271,10 +271,10 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
         />
 
         <FlexRow className={Styles.buttonRow}>
-          <Button disabled={this.state.requesting} onClick={this.createFlat}>
+          <Button className={Styles.button} disabled={this.state.requesting} onClick={this.createFlat}>
             Sukurti
           </Button>
-          <Button disabled={this.state.requesting} onClick={this.createFlat}>
+          <Button className={Styles.button} disabled={this.state.requesting} onClick={this.createFlat}>
             Išsaugoti
           </Button>
         </FlexRow>

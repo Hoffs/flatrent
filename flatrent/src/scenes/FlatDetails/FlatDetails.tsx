@@ -14,6 +14,7 @@ import RentModal from "./RentModal";
 import FlexColumn from "../../components/FlexColumn";
 import { flatEditUrl } from "../../utilities/Utilities";
 import UserService from "../../services/UserService";
+import { StaticContext } from "react-router";
 
 interface IFlatDetailsState {
   loading: boolean;
@@ -33,11 +34,14 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
   public render() {
     const { flat } = this.state;
 
-    const editNode = flat !== undefined && UserService.canEdit(flat.owner.id) ? (
-      <Link className={Styles.editLink} to={flatEditUrl(flat.id)}>Redaguoti</Link>
-    ) : (
-      <></>
-    );
+    const editNode =
+      flat !== undefined && UserService.canEdit(flat.owner.id) ? (
+        <Link className={Styles.editLink} to={flatEditUrl(flat.id)}>
+          Redaguoti
+        </Link>
+      ) : (
+        <></>
+      );
 
     return (
       <>
@@ -47,7 +51,7 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
         />
         <FlexRow className={Styles.contentWrapper}>
           <FlexRow className={Styles.detailsContainer}>
-          {editNode}
+            {editNode}
             <FlexRow className={Styles.sectionEnd}>
               <FlatShortInfo flat={flat} />
               <FlexColumn>
@@ -59,16 +63,28 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
           </FlexRow>
           <RentPanel flat={flat} />
         </FlexRow>
-        <Route exact={true} path={`${this.props.match.path}/rent`} component={RentModal} />
+        {this.getRentRoute()}
       </>
     );
   }
+
+  private getRentRoute = () => {
+    return this.state.flat !== undefined ? (
+      <Route exact={true} path={`${this.props.match.path}/rent`} render={this.getRentModal} />
+    ) : (
+      <></>
+    );
+  };
+
+  private getRentModal = (props: RouteComponentProps<any, StaticContext, any>) => (
+    this.state.flat !== undefined ? <RentModal flat={this.state.flat} {...props} /> : <></>
+  );
 
   private fetchFlat = (id: string) => {
     FlatService.getFlat(id)
       .then(this.handleResult)
       .catch(this.handleFail);
-  }
+  };
 
   private handleResult = (result: IFlatDetailsResponse) => {
     if (result.errors !== undefined) {
@@ -77,7 +93,7 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
     } else if (result.flat !== undefined) {
       this.setState({ flat: result.flat, loading: false });
     }
-  }
+  };
 
   private handleFail() {
     toast.error("Įvyko nežinoma klaida.");
