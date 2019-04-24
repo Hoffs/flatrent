@@ -4,6 +4,7 @@
     {
         public const string NotFound = "Įrašas nerastas.";
         public const string ImageAlreadyUploaded = "Ši nuotrauka jau buvo įkelta.";
+        public const string AttachmentAlreadyUploaded = "Šis failas jau buvo įkeltas.";
         public const string BadCredentials = "Neteisingi prisijungimo duomenys.";
         public const string BadToken = "Blogas autorizacijos raktas.";
         public const string Required = "Šis laukas yra privalomas.";

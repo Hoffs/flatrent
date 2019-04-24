@@ -82,25 +82,22 @@ namespace FlatRent.Controllers
         [EntityMustExist]
         public async Task<IActionResult> ApplyForRent([FromRoute] Guid id, [FromBody] RentAgreementForm form)
         {
-            var errors = new List<FormError>();
+            var flat = await _flatRepository.GetAsync(id);
 
             // TODO: Move to Business Rule
 
-            var rentPeriod = TimeSpan.FromTicks(form.To.Ticks - form.From.Ticks).Days;
-            if (rentPeriod < BusinessConstants.MinRentPeriodDays)
+            var rentPeriod = TimeSpan.FromTicks(form.To.Date.Ticks - form.From.Date.Ticks).Days;
+            if (rentPeriod < flat.MinimumRentDays)
             {
-                errors.Add(new FormError("To", string.Format(Errors.FlatRentPeriodGreater, BusinessConstants.MinRentPeriodDays)));
-                return BadRequest(  );
+                return BadRequest(new FormError("To", string.Format(Errors.FlatRentPeriodGreater, BusinessConstants.MinRentPeriodDays)));
             }
 
             if (rentPeriod > BusinessConstants.MaxRentPeriodDays)
             {
-                errors.Add(new FormError("To", string.Format(Errors.FlatRentPeriodLess, BusinessConstants.MaxRentPeriodDays)));
-                return BadRequest(errors.GetFormattedResponse());
+                return BadRequest(new FormError("To", string.Format(Errors.FlatRentPeriodLess, BusinessConstants.MaxRentPeriodDays));
             }
 
             // TODO: Move to BR
-            var flat = await _flatRepository.GetAsync(id);
             if (flat.IsRented || !flat.IsPublished)
             {
                 return BadRequest(new FormError(Errors.FlatNotAvailableForRent));
@@ -108,7 +105,7 @@ namespace FlatRent.Controllers
 
             // TODO: Move to BR
 
-            if (HttpContext.User.GetUserId() == flat.AuthorId)
+            if (User.GetUserId() == flat.AuthorId)
             {
                 return BadRequest(new FormError(Errors.TenantCantBeOwner));
             }

@@ -33,6 +33,10 @@ namespace FlatRent.Entities
 
         [JsonIgnore]
         [InverseProperty("Agreement")]
+        public virtual ICollection<Invoice> Attachments { get; set; }
+
+        [JsonIgnore]
+        [InverseProperty("Agreement")]
         public virtual ICollection<Invoice> Invoices { get; set; }
 
         [JsonIgnore]

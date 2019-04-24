@@ -18,6 +18,7 @@ namespace FlatRent.Globals
                 .ForMember(i => i.Bytes, opt => opt.MapFrom(file => file.OpenReadStream().GetByteArray()));
 
             CreateMap<IFormFile, Image>();
+            CreateMap<IFormFile, Attachment>();
 
             CreateMap<FileMetadata, File>()
                 .IncludeAllDerived()
@@ -25,6 +26,7 @@ namespace FlatRent.Globals
                 .ForMember(i => i.MimeType, opt => opt.MapFrom(_ => ""))
                 .ForMember(i => i.Bytes, opt => opt.MapFrom(_ => new byte[0]));
             CreateMap<FileMetadata, Image>();
+            CreateMap<FileMetadata, Attachment>();
         }
     }
 }

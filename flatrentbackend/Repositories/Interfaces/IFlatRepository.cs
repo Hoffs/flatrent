@@ -15,6 +15,5 @@ namespace FlatRent.Repositories.Interfaces
         Task<IEnumerable<FormError>> UpdateAsync(Flat flat);
         Task<IEnumerable<Flat>> GetListAsync(bool includeRented = false, int count = 20, int offset = 0);
         Task<int> GetCountAsync(bool includeRented = false);
-        Task<IEnumerable<FormError>> AddAgreementTask(Guid flatId, Guid clientId, RentAgreementForm form);
     }
 }

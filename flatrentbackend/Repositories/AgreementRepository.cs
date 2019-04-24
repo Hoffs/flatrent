@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FlatRent.Constants;
 using FlatRent.Entities;
+using FlatRent.Extensions;
 using FlatRent.Models;
 using FlatRent.Models.Requests;
 using FlatRent.Repositories.Abstractions;
@@ -39,6 +41,11 @@ namespace FlatRent.Repositories
             RentAgreementForm form)
         {
             var agreement = _mapper.Map<Agreement>(form);
+
+            var images = _mapper.Map<IEnumerable<FileMetadata>, IEnumerable<Attachment>>(form.Attachments).ToArray();
+            images.SetProperty(i => i.AuthorId, userId);
+            images.SetProperty(i => i.Agreement, agreement);
+
             agreement.TenantId = userId;
             agreement.FlatId = flatId;
             agreement.StatusId = AgreementStatus.Statuses.Requested;

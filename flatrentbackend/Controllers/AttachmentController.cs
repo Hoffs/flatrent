@@ -51,7 +51,7 @@ namespace FlatRent.Controllers
 
                 var attachment = await _repository.GetAsync(id).ConfigureAwait(false);
                 if (attachment.Bytes?.Length > 0)
-                    return BadRequest(new FormError("Id", Errors.ImageAlreadyUploaded));
+                    return BadRequest(new FormError("Id", Errors.AttachmentAlreadyUploaded));
 
                 attachment.Bytes = new byte[fileStream.Length];
                 attachment.MimeType = file.ContentType;

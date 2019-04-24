@@ -57,7 +57,6 @@ namespace FlatRent.Repositories
 
         public new async Task<IEnumerable<FormError>> UpdateAsync(Flat flat)
         {
-
             return await base.UpdateAsync(flat);
         }
 
@@ -75,28 +74,6 @@ namespace FlatRent.Repositories
                 ? _context.Flats
                 : _context.Flats.Where(x => !x.Agreements.Any(agreement => agreement.To > DateTime.UtcNow && !agreement.Deleted) && !x.Deleted);
             return query.CountAsync();
-        }
-
-        public async Task<IEnumerable<FormError>> AddAgreementTask(Guid flatId, Guid clientId, RentAgreementForm form)
-        {
-            var flat = await GetAsync(flatId).ConfigureAwait(false);
-            if (flat?.IsAvailableForRent != true)
-            {
-                return new []{new FormError(Errors.FlatNotAvailableForRent)};
-            }
-
-            if (clientId == flat.AuthorId)
-            {
-                return new[] { new FormError(Errors.TenantCantBeOwner) };
-            }
-
-            var agreement = _mapper.Map<Agreement>(form);
-            agreement.TenantId = clientId;
-            agreement.FlatId = flatId;
-            agreement.StatusId = AgreementStatus.Statuses.Requested;
-            flat.Agreements.Add(agreement);
-
-            return await UpdateAsync(flat);
         }
     }
 }

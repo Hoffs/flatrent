@@ -11,7 +11,6 @@ using FlatRent.Extensions;
 using FlatRent.Models;
 using FlatRent.Repositories;
 using FlatRent.Repositories.Interfaces;
-using ImageMagick;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

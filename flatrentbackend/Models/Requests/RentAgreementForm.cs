@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using FlatRent.Attributes;
 using FlatRent.Constants;
@@ -14,9 +15,11 @@ namespace FlatRent.Models.Requests
         public DateTime From { get; set; }
 
         [Required(ErrorMessage = Errors.Required)]
-        [DateAfter(DaysAfter = 7 + 30, ErrorMessage = Errors.DateAfter)]
+        [DateAfter(DaysAfter = 7, ErrorMessage = Errors.DateAfter)]
         public DateTime To { get; set; }
 
         public string Comments { get; set; }
+
+        public IEnumerable<FileMetadata> Attachments { get; set; }
     }
 }
