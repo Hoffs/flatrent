@@ -8,8 +8,6 @@ namespace FlatRent.Models.Requests
 {
     public class RentAgreementForm
     {
-        public Guid ClientId { get; set; }
-
         [Required(ErrorMessage = Errors.Required)]
         [DateAfter(DaysAfter = 7, ErrorMessage = Errors.DateAfter)]
         public DateTime From { get; set; }
@@ -18,8 +16,10 @@ namespace FlatRent.Models.Requests
         [DateAfter(DaysAfter = 7, ErrorMessage = Errors.DateAfter)]
         public DateTime To { get; set; }
 
+        [MaxLength(64000, ErrorMessage = Errors.MaxLength)]
         public string Comments { get; set; }
 
+        [MaxLength(8, ErrorMessage = Errors.MaxLength)]
         public IEnumerable<FileMetadata> Attachments { get; set; }
     }
 }

@@ -1,20 +1,21 @@
 import React, { Component } from "react";
-import { RouteComponentProps, withRouter, Route, Link } from "react-router-dom";
+import { Link, Route, RouteComponentProps, withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import FlexRow from "../../components/FlexRow";
-import FlatService, { IFlatDetails, IFlatDetailsResponse } from "../../services/FlatService";
 import Styles from "./FlatDetails.module.css";
 
+import FlexColumn from "../../components/FlexColumn";
 import ImageCarousel from "../../components/ImageCarousel";
+import FlatService from "../../services/FlatService";
+import { IFlatDetails } from "../../services/interfaces/FlatServiceInterfaces";
+import UserService from "../../services/UserService";
+import { flatEditUrl } from "../../utilities/Utilities";
 import FlatDescription from "./FlatDescription";
 import FlatShortInfo from "./FlatShortInfo";
+import RentModal from "./RentModal";
 import RentPanel from "./RentPanel";
 import UserDisplay from "./UserInfo";
-import RentModal from "./RentModal";
-import FlexColumn from "../../components/FlexColumn";
-import { flatEditUrl } from "../../utilities/Utilities";
-import UserService from "../../services/UserService";
-import { StaticContext } from "react-router";
+import { IApiResponse } from "../../services/interfaces/Common";
 
 interface IFlatDetailsState {
   loading: boolean;
@@ -74,26 +75,26 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
     ) : (
       <></>
     );
-  };
+  }
 
-  private getRentModal = (props: RouteComponentProps<any, StaticContext, any>) => (
+  private getRentModal = (props: RouteComponentProps<any, any, any>) => (
     this.state.flat !== undefined ? <RentModal flat={this.state.flat} {...props} /> : <></>
-  );
+  )
 
   private fetchFlat = (id: string) => {
     FlatService.getFlat(id)
       .then(this.handleResult)
       .catch(this.handleFail);
-  };
+  }
 
-  private handleResult = (result: IFlatDetailsResponse) => {
+  private handleResult = (result: IApiResponse<IFlatDetails>) => {
     if (result.errors !== undefined) {
       const errors = Object.keys(result.errors).map((key) => result.errors![key].join("\n"));
       errors.forEach((error) => toast.error(error));
-    } else if (result.flat !== undefined) {
-      this.setState({ flat: result.flat, loading: false });
+    } else if (result.data !== undefined) {
+      this.setState({ flat: result.data, loading: false });
     }
-  };
+  }
 
   private handleFail() {
     toast.error("Įvyko nežinoma klaida.");

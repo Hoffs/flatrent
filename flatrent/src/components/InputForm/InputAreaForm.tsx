@@ -10,7 +10,7 @@ interface InputAreaFormProps {
   name: string;
   title: string;
   errorsOnly?: boolean;
-  setValue: (name: string, newValue: string) => void;
+  setValue: (name: string, value: string) => void;
   extraProps?: { [key: string]: string };
 }
 

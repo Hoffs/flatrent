@@ -46,10 +46,6 @@ namespace FlatRent.Entities
         [Required]
         public bool IsPublished { get; set; }
 
-        // Should be shown in listings
-        [Required]
-        public bool IsPublic { get; set; }
-
         [NotMapped]
         public bool IsRented =>
             ActiveAgreement != null;

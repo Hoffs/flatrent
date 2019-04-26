@@ -3,9 +3,11 @@ import InfiniteScroll from "react-infinite-scroller";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import FlexRow from "../../components/FlexRow";
-import FlatService, { IFlatListItem, IFlatListResponse } from "../../services/FlatService";
+import FlatService from "../../services/FlatService";
+import { IFlatListItem, IFlatListResponse } from "../../services/interfaces/FlatServiceInterfaces";
 import FlatBox, { FlatBoxLoader } from "./FlatBox";
 import Styles from "./FlatList.module.css";
+import { IApiResponse } from "../../services/interfaces/Common";
 
 class FlatList extends Component<
   RouteComponentProps,
@@ -55,14 +57,14 @@ class FlatList extends Component<
       .catch(this.handleFail);
   }
 
-  private handleFlatResult = (result: IFlatListResponse) => {
+  private handleFlatResult = (result: IApiResponse<IFlatListItem[]>) => {
     if (result.errors !== undefined) {
       const errors = Object.keys(result.errors).map((key) => result.errors![key].join("\n"));
       errors.forEach((error) => toast.error(error));
-    } else if (result.flats !== undefined) {
-      this.setState((state) => ({ flats: [...state.flats, ...result.flats!], hasMore: result.flats!.length !== 0 }));
+    } else if (result.data !== undefined) {
+      this.setState((state) => ({ flats: [...state.flats, ...result.data!], hasMore: result.data!.length !== 0 }));
     }
-  };
+  }
 
   private handleFail(e: any) {
     toast.error("Įvyko nežinoma klaida.");

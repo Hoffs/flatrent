@@ -52,23 +52,26 @@ function FlexDropzone({text, className, onDrop, minSize, maxSize, maxFiles = 8, 
   }, [files]);
 
   const removeItem = (name: string, size: number) =>
-    () => setFiles(files.filter((f) => f.name !== name));
+    () => {
+      const leftFiles = files.filter((f) => f.name !== name);
+      setFiles(leftFiles);
+      onDrop(leftFiles);
+    };
 
   const getThumbContent = (file: IPreviewFile) => {
     if (file.type.startsWith("image")) {
       return (<img
-        onClick={removeItem(file.name, file.size)}
         src={file.preview}
         className={Styles.img}
         key={file.name}
       />);
     } else {
-      return <span onClick={removeItem(file.name, file.size)} className={Styles.textThumb}>{file.name}</span>;
+      return <span className={Styles.textThumb}>{file.name}</span>;
     }
   }
 
   const thumbs = files.map((file) => (
-    <div className={Styles.thumb} key={file.name}>
+    <div onClick={removeItem(file.name, file.size)} className={Styles.thumb} key={file.name}>
       {getThumbContent(file)}
     </div>
   ));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using FlatRent.Constants;
 using FlatRent.Controllers.Abstractions;
@@ -41,7 +42,7 @@ namespace FlatRent.Controllers
 
         [HttpPut("{id}")]
         [MustBeEntityAuthor]
-        public async Task<IActionResult> UploadAttachmentAsync([FromRoute] Guid id, IFormFile file)
+        public async Task<IActionResult> UploadAttachmentAsync([FromRoute, Required] Guid id, [Required] IFormFile file)
         {
             _logger.Debug("Uploading file with {Id}", id);
             using (var fileStream = file.OpenReadStream())

@@ -70,6 +70,7 @@ reqObject['area'] = reqObject['area'].replace(' ', '')
 reqObject['features'] = list(map(lambda f: f.get_text().strip(), details.find_all('span', class_='special-comma')))
 reqObject['minimumRentDays'] = 120
 reqObject['tenantRequirements'] = 'Geras ir tvarkingas žmogus'
+reqObject['isPublished'] = True
 
 longText = soup.find('div', id='collapsedText').get_text().strip()
 reqObject['description'] = longText

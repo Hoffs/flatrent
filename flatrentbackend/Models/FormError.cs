@@ -7,6 +7,11 @@ namespace FlatRent.Models
         public string Name { get; set; }
         public string Message { get; set; }
 
+        public FormError()
+        {
+
+        }
+
         public FormError(string name, string message)
         {
             Name = name;

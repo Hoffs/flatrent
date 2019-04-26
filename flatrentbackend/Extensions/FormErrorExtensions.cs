@@ -5,7 +5,7 @@ namespace FlatRent.Extensions
 {
     public static class FormErrorExtensions
     {
-        public static object GetFormattedResponse(this IEnumerable<FormError> errors)
+        public static Dictionary<string, List<string>> GetFormattedResponse(this IEnumerable<FormError> errors)
         {
             var dict = new Dictionary<string, List<string>>();
             foreach (var formError in errors)

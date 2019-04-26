@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { toast } from "react-toastify";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
-import FlexRow from "../../components/FlexRow";
 import FlexColumn from "../../components/FlexColumn";
-import { IBasicResponse, IErrorResponse } from "../../services/Settings";
-import UserService, { IAgreementData, IUserData, IUserAgreements } from "../../services/UserService";
-import Styles from "./Profile.module.css";
-import { getAddressString } from "../../services/FlatService";
+import FlexRow from "../../components/FlexRow";
 import AgreementsService from "../../services/AgreementsService";
+import { getAddressString } from "../../services/FlatService";
+import UserService, { IAgreementData, IUserAgreements, IUserData } from "../../services/UserService";
+import Styles from "./Profile.module.css";
+import { IErrorResponse } from "../../services/interfaces/Common";
 
 const doNothing = () => {};
 
@@ -66,7 +66,7 @@ class Profile extends Component<{}, IProfileState> {
         </span>
       </FlexColumn>
     );
-  };
+  }
 
   private getAgreementsJsx = () => {
     const { tenantAgreements } = this.state;
@@ -100,7 +100,7 @@ class Profile extends Component<{}, IProfileState> {
         </Button>
       </FlexRow>
     ));
-  };
+  }
 
   private getPdfFile = async (id: string) => {
     try {
@@ -113,7 +113,7 @@ class Profile extends Component<{}, IProfileState> {
     } catch (error) {
       toast.error("Įvyko nežinoma klaida.");
     }
-  };
+  }
   private cancelAgreement = async (id: string) => {
     try {
       const response = await AgreementsService.cancelAgreement(id);
@@ -126,7 +126,7 @@ class Profile extends Component<{}, IProfileState> {
     } catch (error) {
       toast.error("Įvyko nežinoma klaida.");
     }
-  };
+  }
 
   private handleFail(e: any) {
     toast.error("Įvyko nežinoma klaida.");
@@ -135,7 +135,7 @@ class Profile extends Component<{}, IProfileState> {
   private fetchData = () => {
     this.fetchUserData();
     this.fetchUserAgreements();
-  };
+  }
 
   private fetchUserData = async () => {
     try {
@@ -151,7 +151,7 @@ class Profile extends Component<{}, IProfileState> {
       console.log(error);
       toast.error("Įvyko nežinoma klaida.");
     }
-  };
+  }
 
   private fetchUserAgreements = async () => {
     try {
@@ -166,7 +166,7 @@ class Profile extends Component<{}, IProfileState> {
       console.log(error);
       toast.error("Įvyko nežinoma klaida.");
     }
-  };
+  }
 }
 
 function isOfType<T>(ob: T | IErrorResponse): ob is T {

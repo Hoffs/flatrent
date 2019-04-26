@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FlatRent.Controllers.Abstractions
 {
+    [ApiController]
     public abstract class AuthoredBaseEntityController<T> : ErrorHandlingController, IIdentifiableEntityController, IAuthoredEntityController where T : AuthoredBaseEntity
     {
         private readonly IAuthoredBaseRepository<T> _repository;
@@ -31,7 +32,6 @@ namespace FlatRent.Controllers.Abstractions
                 ? null
                 : Unauthorized(new FormError(fieldId, Errors.NotAuthor));
         }
-
 
         [NonAction]
         public async Task<IActionResult> DoesEntityExistAsync(Guid id, string fieldId)

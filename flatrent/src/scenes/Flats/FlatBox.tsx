@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import FlexColumn from "../../components/FlexColumn";
 import SmartImg from "../../components/SmartImg";
 import { getImageUrl } from "../../services/ApiUtilities";
-import { IFlatListItem } from "../../services/FlatService";
+import { IFlatListItem } from "../../services/interfaces/FlatServiceInterfaces";
 import { flatUrl, roomOrRooms } from "../../utilities/Utilities";
 import Styles from "./FlatBox.module.css";
 

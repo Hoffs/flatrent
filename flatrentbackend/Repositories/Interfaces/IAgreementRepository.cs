@@ -9,7 +9,7 @@ namespace FlatRent.Repositories.Interfaces
 {
     public interface IAgreementRepository : IAuthoredBaseRepository<Agreement>
     {
-        Task<IEnumerable<FormError>> CancelAgreement(Guid id);
-        Task<IEnumerable<FormError>> CreateAgreementTask(Guid id, Guid userId, RentAgreementForm form);
+        Task<IEnumerable<FormError>> CancelAgreementAsync(Guid id);
+        Task<(IEnumerable<FormError>, Guid)> AddAgreementAsync(Guid id, Guid userId, RentAgreementForm form);
     }
 }

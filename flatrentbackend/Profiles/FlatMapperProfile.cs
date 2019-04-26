@@ -5,7 +5,7 @@ using FlatRent.Models.Dtos;
 using FlatRent.Models.Requests;
 using FlatRent.Models.Requests.Flat;
 
-namespace FlatRent.Globals
+namespace FlatRent.Profiles
 {
     public class FlatMapperProfile : Profile
     {

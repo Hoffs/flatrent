@@ -6,7 +6,6 @@ using AutoMapper;
 using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Extensions;
-using FlatRent.Globals;
 using FlatRent.Models;
 using FlatRent.Repositories;
 using FlatRent.Repositories.Interfaces;
@@ -25,6 +24,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -86,6 +86,7 @@ namespace FlatRent
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<IAgreementRepository, AgreementRepository>();
             services.AddScoped<IUserService, UserService>();            
+            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
 
 
             services.AddSwaggerGen(c =>
@@ -113,7 +114,13 @@ namespace FlatRent
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(options => {
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 });;
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = ctx => new CustomModelErrorResponse();
+//                options.SuppressModelStateInvalidFilter = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

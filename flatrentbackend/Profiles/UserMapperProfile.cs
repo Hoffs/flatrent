@@ -3,7 +3,7 @@ using FlatRent.Entities;
 using FlatRent.Models.Dtos;
 using FlatRent.Models.Requests;
 
-namespace FlatRent.Globals
+namespace FlatRent.Profiles
 {
     public class UserMapperProfile : Profile
     {

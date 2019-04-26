@@ -178,4 +178,4 @@ export const getAsRoleRoutes = () => {
   ));
 };
 
-export const ApplicableRoutes: IRouteInfo[] = Routes.filter(filterApplicable);
+export const getApplicableRoutes = () => Routes.filter(filterApplicable);

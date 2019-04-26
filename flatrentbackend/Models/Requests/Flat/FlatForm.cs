@@ -46,6 +46,9 @@ namespace FlatRent.Models.Requests.Flat
         [Required(ErrorMessage = Errors.Required)]
         public bool IsFurnished { get; set; }
 
+        [Required(ErrorMessage = Errors.Required)]
+        public bool IsPublished { get; set; }
+
         [Range(1, 3650)]
         [Required(ErrorMessage = Errors.Required)]
         public int MinimumRentDays { get; set; }

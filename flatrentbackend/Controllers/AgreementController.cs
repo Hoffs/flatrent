@@ -55,7 +55,7 @@ namespace FlatRent.Controllers
             }
 
 
-            var errors = await _repository.CancelAgreement(id).ConfigureAwait(false);
+            var errors = await _repository.CancelAgreementAsync(id).ConfigureAwait(false);
             if (errors.Any())
             {
                 return BadRequest(errors.GetFormattedResponse());

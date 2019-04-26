@@ -1,13 +1,12 @@
-import React, { Component, ReactNode } from "react";
-import ContentLoader from "react-content-loader"
+import React from "react";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import Button from "../../components/Button";
 import FlexColumn from "../../components/FlexColumn";
 import FlexRow from "../../components/FlexRow";
 import { TextRowLoader } from "../../components/Loaders";
-import { getAddressString, IFlatDetails } from "../../services/FlatService";
-import { dayOrDays, joined, roomOrRooms, flatRentUrl } from "../../utilities/Utilities";
+import { IFlatDetails } from "../../services/interfaces/FlatServiceInterfaces";
+import { flatRentUrl, joined } from "../../utilities/Utilities";
 import Styles from "./FlatDetails.module.css";
-import { withRouter, RouteComponentProps } from "react-router-dom";
 
 const RentPanel = ({history, flat}: {flat?: IFlatDetails} & RouteComponentProps) => {
   if (flat === undefined) {
@@ -18,7 +17,6 @@ const RentPanel = ({history, flat}: {flat?: IFlatDetails} & RouteComponentProps)
     );
   }
 
-  const rentPeriod = (days: number): ReactNode => (<>Trumpiausias nuomos laikotarpis {days} {dayOrDays(days)}.</>);
   const goToRent = () => history.push(flatRentUrl(flat.id));
 
   return (

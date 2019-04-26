@@ -6,12 +6,13 @@ import FlexColumn from "../../components/FlexColumn";
 import FlexRow from "../../components/FlexRow";
 import { InputForm, NumberInputForm, InputAreaForm } from "../../components/InputForm";
 import SimpleCheckbox from "../../components/SimpleCheckbox";
-import FlatService, { IFlatCreateResponse } from "../../services/FlatService";
+import FlatService from "../../services/FlatService";
 import Styles from "./FlatCreate.module.css";
 import { joined, flatUrl } from "../../utilities/Utilities";
 import FlexDropzone from "../../components/FlexDropzone";
 import { IPreviewFile } from "../../components/FlexDropzone/FlexDropzone";
-import { IBasicResponse } from "../../services/Settings";
+import { IFlatCreateResponse } from "../../services/interfaces/FlatServiceInterfaces";
+import { IBasicResponse } from "../../services/interfaces/Common";
 
 interface ICreateFlatState {
   values: {
@@ -271,10 +272,10 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
         />
 
         <FlexRow className={Styles.buttonRow}>
-          <Button className={Styles.button} disabled={this.state.requesting} onClick={this.createFlat}>
-            Sukurti
+          <Button className={Styles.button} disabled={this.state.requesting} onClick={this.publishFlat}>
+            Publikuoti
           </Button>
-          <Button className={Styles.button} disabled={this.state.requesting} onClick={this.createFlat}>
+          <Button className={Styles.button} disabled={this.state.requesting} onClick={this.saveFlat}>
             Išsaugoti
           </Button>
         </FlexRow>
@@ -282,10 +283,13 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
     );
   }
 
-  private createFlat = async () => {
+  private saveFlat = async () => this.createFlat(false);
+  private publishFlat = async () => this.createFlat(true);
+
+  private createFlat = async (publish: boolean) => {
     try {
       this.setState({ requesting: true });
-      const response = await FlatService.createFlat(this.state.values, this.state.images);
+      const response = await FlatService.createFlat({...this.state.values, isPublished: publish }, this.state.images);
 
       if ((response as IFlatCreateResponse).id !== undefined) {
         toast.success("Sėkmingai sukurtas įrašas!", {

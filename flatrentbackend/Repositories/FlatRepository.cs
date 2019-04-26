@@ -35,6 +35,8 @@ namespace FlatRent.Repositories
             flat.AuthorId = userId;
             flat.Address.AuthorId = userId;
             flat.Features = flat.Features.Select(f => f.Trim());
+            flat.IsPublished = true;
+            
             var images = _mapper.Map<IEnumerable<FileMetadata>, IEnumerable<Image>>(form.Images).ToArray();
             images.SetProperty(i => i.AuthorId, userId);
             images.SetProperty(i => i.Flat, flat);
@@ -64,7 +66,7 @@ namespace FlatRent.Repositories
         {
             var query = includeRented
                 ? _context.Flats
-                : _context.Flats.Where(x => !x.Agreements.Any(agreement => agreement.To > DateTime.UtcNow && !agreement.Deleted) && !x.Deleted);
+                : _context.Flats.Where(x => x.IsPublished && !x.Agreements.Any(agreement => agreement.To > DateTime.UtcNow && !agreement.Deleted) && !x.Deleted);
             return query.OrderByDescending(x => x.CreatedDate).Skip(offset).Take(count);
         }
 

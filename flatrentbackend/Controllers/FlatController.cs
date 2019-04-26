@@ -18,7 +18,6 @@ using FlatRent.Models.Requests.Flat;
 using FlatRent.Models.Responses;
 using FlatRent.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -94,7 +93,7 @@ namespace FlatRent.Controllers
 
             if (rentPeriod > BusinessConstants.MaxRentPeriodDays)
             {
-                return BadRequest(new FormError("To", string.Format(Errors.FlatRentPeriodLess, BusinessConstants.MaxRentPeriodDays));
+                return BadRequest(new FormError("To", string.Format(Errors.FlatRentPeriodLess, BusinessConstants.MaxRentPeriodDays)));
             }
 
             // TODO: Move to BR
@@ -110,40 +109,39 @@ namespace FlatRent.Controllers
                 return BadRequest(new FormError(Errors.TenantCantBeOwner));
             }
 
-            var operationErrors = await _agreementRepository.CreateAgreementTask(id, HttpContext.User.GetUserId(), form).ConfigureAwait(false);
-
-            var formErrors = operationErrors as FormError[] ?? operationErrors.ToArray();
-            if (formErrors.Any())
+            var (operationErrors, agreementId) = await _agreementRepository.AddAgreementAsync(id, HttpContext.User.GetUserId(), form).ConfigureAwait(false);
+            if (operationErrors != null)
             {
-                return BadRequest(formErrors);
+                return BadRequest(operationErrors);
             }
 
-            return Ok();
+            var imageIds = (await _agreementRepository.GetAsync(agreementId)).Attachments.Select(i => new KeyValuePair<string, Guid>(i.Name, i.Id));
+            return StatusCode(201, new CreatedAgreementResponse(agreementId, imageIds));
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [ExactQueryParam("count", "offset")]
         [HttpGet]
-        public async Task<IActionResult> GetFlats([Range(1, 100, ErrorMessage = Errors.Range)] int count = 20, [Range(0, int.MaxValue, ErrorMessage = Errors.Range)] int offset = 0)
+        public async Task<IActionResult> GetFlats([Range(0, int.MaxValue, ErrorMessage = Errors.Range)] int offset = 0)
         {
-            var flats = await _flatRepository.GetListAsync(false, count, offset).ConfigureAwait(false);
+            var flats = await _flatRepository.GetListAsync(false, 20, offset).ConfigureAwait(false);
             var mappedFlats = _mapper.Map<List<FlatListItem>>(flats);
             Response.Headers.Add("X-Total-Count", (await _flatRepository.GetCountAsync().ConfigureAwait(false)).ToString());
             return new OkObjectResult(mappedFlats);
         }
 
-        [Authorize(Policy = "User")]
+        [AllowAnonymous]
         [ExactQueryParam("rented", "count", "offset")]
         [HttpGet]
-        public async Task<IActionResult> GetFlats(bool rented = false, [Range(1, 100)] int count = 20, [Range(0, int.MaxValue)] int offset = 0)
+        public async Task<IActionResult> GetFlats(bool rented = false, [Range(0, int.MaxValue)] int offset = 0)
         {
-            var flats = await _flatRepository.GetListAsync(rented, count, offset).ConfigureAwait(false);
+            var flats = await _flatRepository.GetListAsync(rented, 20, offset).ConfigureAwait(false);
             var mappedFlats = _mapper.Map<List<FlatListItem>>(flats);
             Response.Headers.Add("X-Total-Count", (await _flatRepository.GetCountAsync(rented).ConfigureAwait(false)).ToString());
             return new OkObjectResult(mappedFlats);
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet("{id}")]
         [EntityMustExist]
         public async Task<IActionResult> GetFlat([FromRoute] Guid id)

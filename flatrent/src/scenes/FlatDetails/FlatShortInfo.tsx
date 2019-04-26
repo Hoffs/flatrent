@@ -2,10 +2,11 @@ import React, { Component, ReactNode } from "react";
 import ContentLoader from "react-content-loader"
 import FlexColumn from "../../components/FlexColumn";
 import FlexRow from "../../components/FlexRow";
-import { getAddressString, IFlatDetails } from "../../services/FlatService";
+import { getAddressString } from "../../services/FlatService";
 import { roomOrRooms } from "../../utilities/Utilities";
 import Styles from "./FlatDetails.module.css";
 import { TextRowLoader } from "../../components/Loaders";
+import { IFlatDetails } from "../../services/interfaces/FlatServiceInterfaces";
 
 const getFeatures = (flat?: IFlatDetails): ReactNode[] => {
   const features = [];

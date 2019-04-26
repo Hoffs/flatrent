@@ -1,15 +1,19 @@
+import { createBrowserHistory } from "history";
 import React from "react";
 import {
   BrowserRouter,
   Redirect,
+  Router,
   Switch,
 } from "react-router-dom";
+import Footer from "./components/Footer";
 import Navigation from "./components/NavBar";
 import { getAsRoleRoutes } from "./Routes";
-import Footer from "./components/Footer";
+
+export const history = createBrowserHistory();
 
 const MainRouter = () => (
-  <BrowserRouter>
+  <Router history={history} >
     <div className="layout">
       <Navigation />
       <div className="content-wrapper">
@@ -20,7 +24,7 @@ const MainRouter = () => (
       </div>
       <Footer />
     </div>
-  </BrowserRouter>
+  </Router>
 );
 
 export default MainRouter;

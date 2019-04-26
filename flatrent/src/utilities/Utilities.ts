@@ -10,5 +10,6 @@ export const conversationWithUserUrl = (id: string): string => `/conversation/ne
 export const flatEditUrl = (id: string): string => `/flat/${id}/edit`;
 export const flatRentUrl = (id: string): string => `/flat/${id}/rent`;
 export const flatUrl = (id: string): string => `/flat/${id}`;
+export const loginUrl = (): string => `/login`;
 
 export const stopPropogation = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => event.stopPropagation();

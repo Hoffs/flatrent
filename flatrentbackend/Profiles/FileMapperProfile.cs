@@ -1,11 +1,10 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using FlatRent.Entities;
 using FlatRent.Extensions;
 using FlatRent.Models.Requests;
 using Microsoft.AspNetCore.Http;
 
-namespace FlatRent.Globals
+namespace FlatRent.Profiles
 {
     public class FileMapperProfile : Profile
     {

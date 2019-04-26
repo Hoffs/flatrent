@@ -2,7 +2,7 @@
 using FlatRent.Dtos;
 using FlatRent.Entities;
 
-namespace FlatRent.Globals
+namespace FlatRent.Profiles
 {
     public class AgreementsMapperProfile : Profile
     {

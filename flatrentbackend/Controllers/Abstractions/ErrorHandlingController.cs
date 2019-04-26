@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FlatRent.Constants;
 using FlatRent.Extensions;
 using FlatRent.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlatRent.Controllers.Abstractions
 {
+    [ApiController]
     public abstract class ErrorHandlingController : Controller
     {
         [NonAction]
@@ -45,9 +47,9 @@ namespace FlatRent.Controllers.Abstractions
             switch (error)
             {
                 case FormError formError:
-                    return new[] { formError }.GetFormattedResponse();
+                    return new ApiErrorResponse { Errors = new[] { formError }.GetFormattedResponse(), Message = Errors.BadRequest};
                 case IEnumerable<FormError> formErrors:
-                    return formErrors.GetFormattedResponse();
+                    return new ApiErrorResponse { Errors = formErrors.GetFormattedResponse(), Message = Errors.BadRequest};
             }
 
             return null;

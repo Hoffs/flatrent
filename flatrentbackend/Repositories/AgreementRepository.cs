@@ -26,7 +26,21 @@ namespace FlatRent.Repositories
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<FormError>> CancelAgreement(Guid id)
+        public async Task<(IEnumerable<FormError>, Guid)> AddAgreementAsync(Guid flatId, Guid userId,
+            RentAgreementForm form)
+        {
+            var agreement = _mapper.Map<Agreement>(form);
+
+            agreement.TenantId = userId;
+            agreement.FlatId = flatId;
+            agreement.StatusId = AgreementStatus.Statuses.Requested;
+            agreement.Attachments.SetProperty(a => a.AuthorId, userId);
+
+            var errors = await AddAsync(agreement, userId);
+            return (errors, agreement.Id);
+        }
+
+        public async Task<IEnumerable<FormError>> CancelAgreementAsync(Guid id)
         {
             var agreement = await _context.Agreements.FindAsync(id).ConfigureAwait(false);
             if (agreement == null)
@@ -35,22 +49,6 @@ namespace FlatRent.Repositories
             }
 
             return await DeleteAsync(agreement);
-        }
-
-        public async Task<IEnumerable<FormError>> CreateAgreementTask(Guid flatId, Guid userId,
-            RentAgreementForm form)
-        {
-            var agreement = _mapper.Map<Agreement>(form);
-
-            var images = _mapper.Map<IEnumerable<FileMetadata>, IEnumerable<Attachment>>(form.Attachments).ToArray();
-            images.SetProperty(i => i.AuthorId, userId);
-            images.SetProperty(i => i.Agreement, agreement);
-
-            agreement.TenantId = userId;
-            agreement.FlatId = flatId;
-            agreement.StatusId = AgreementStatus.Statuses.Requested;
-
-            return await AddAsync(agreement, userId);
         }
     }
 }

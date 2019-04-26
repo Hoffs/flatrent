@@ -52,7 +52,7 @@
 .title {
   font-family: var(--title-font-family);
   font-size: 1.4em;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .subTitle {
@@ -69,4 +69,15 @@
 
 .subRow {
   justify-content: space-between;
+}
+
+.generalErrors {
+  font-size: 1.1em;
+  text-align: center;
+}
+
+.generalErrors span {
+  font-size: 1.1em;
+  padding: 0;
+  margin-bottom: 4px;
 }

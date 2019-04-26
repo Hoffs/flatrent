@@ -2,6 +2,7 @@
 {
     public static class Errors
     {
+        public const string BadRequest = "Neteisinga užklausa.";
         public const string NotFound = "Įrašas nerastas.";
         public const string ImageAlreadyUploaded = "Ši nuotrauka jau buvo įkelta.";
         public const string AttachmentAlreadyUploaded = "Šis failas jau buvo įkeltas.";

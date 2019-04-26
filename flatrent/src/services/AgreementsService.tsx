@@ -1,7 +1,7 @@
 import { saveAs } from "file-saver";
 import { apiFetch } from "./Helpers";
-import { IErrorResponse } from "./Settings";
 import UserService from "./UserService";
+import { IErrorResponse } from "./interfaces/Common";
 
 class AgreementsService {
   public static getPdf = async (id: string): Promise<IErrorResponse> => {

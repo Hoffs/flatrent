@@ -1,8 +1,8 @@
 import jwtdecode from "jwt-decode";
-import { apiFetch } from "./Helpers";
-import { IErrorResponse, IBasicResponse, IAddress } from "./Settings";
-import { number } from "prop-types";
 import { Authentication } from "../Routes";
+import { fLocalStorage as localStorage } from "../utilities/LocalStorageWrapper";
+import { apiFetch, apiFetchTyped } from "./Helpers";
+import { IAddress, IBasicResponse, IErrorResponse, IApiResponse } from "./interfaces/Common";
 
 export enum Roles {
   Administrator = 1,
@@ -15,12 +15,11 @@ export const Policies = {
 };
 
 interface ILoginResponse {
-  token?: string;
+  token: string;
 }
 
 interface ITokenPayload {
   UserId: string;
-  UserType: string;
   role: string | string[];
   exp: number;
 }
@@ -104,28 +103,21 @@ class UserService {
     }
   }
 
-  public static async authenticate(email: string, password: string): Promise<{ [key: string]: string[] }> {
+  public static async authenticate(email: string, password: string): Promise<IApiResponse<ILoginResponse>> {
     try {
-      const result = await apiFetch("/api/user/login", {
+      const [result, parsed] = await apiFetchTyped<ILoginResponse>("/api/user/login", {
         body: JSON.stringify({ email, password }),
         method: "POST",
       });
-      if (result.ok) {
-        const response = (await result.json()) as ILoginResponse;
-        if (response.token !== undefined) {
-          this.setToken(response.token);
-          return {};
-        } else {
-          console.log(response);
-          return { General: ["Įvyko nežinoma klaida"] };
-        }
-      } else {
-        const response = (await result.json()) as IErrorResponse;
-        return response;
+      console.log(parsed);
+      if (parsed.data !== undefined) {
+        this.setToken(parsed.data.token);
       }
+      return parsed;
+
     } catch (e) {
       console.log(e);
-      return { General: ["Įvyko nežinoma klaida"] };
+      return { errors: { General: ["Įvyko nežinoma klaida"] } };
     }
   }
 
@@ -214,32 +206,30 @@ class UserService {
   public static readonly satisfiesAuthentication = (authLevel: Authentication) =>
     (UserService.isLoggedIn() && authLevel === Authentication.Authenticated)
     || (!UserService.isLoggedIn() && authLevel === Authentication.Anonymous)
-    || authLevel === Authentication.Either;
+    || authLevel === Authentication.Either
 
   public static readonly authorizationHeaders = (): { [key: string]: string } => ({
     Authorization: `Bearer ${UserService.token()}`,
-  });
+  })
 
   private static setToken(token: string): void {
     const decoded = jwtdecode(token) as ITokenPayload;
+
     if (!Array.isArray(decoded.role)) {
       decoded.role = [decoded.role as string];
     }
-    localStorage.setItem("Token", token);
-    localStorage.setItem("Roles", JSON.stringify(decoded.role));
-    localStorage.setItem("UserId", decoded.UserId);
-    localStorage.setItem("UserType", decoded.UserType);
-    localStorage.setItem("TokenExpires", decoded.exp.toString());
+
+    localStorage.setItems(
+      {key: "Token", value: token},
+      {key: "Roles", value: JSON.stringify(decoded.role)},
+      {key: "UserId", value: decoded.UserId},
+      {key: "TokenExpires", value: decoded.exp.toString()},
+    );
   }
 
   private static clearToken(): void {
-    localStorage.removeItem("Token");
-    localStorage.removeItem("Roles");
-    localStorage.removeItem("UserId");
-    localStorage.removeItem("UserType");
-    localStorage.removeItem("TokenExpires");
+    localStorage.removeItems("Token", "Roles", "UserId", "TokenExpires");
   }
-
 }
 
 export default UserService;

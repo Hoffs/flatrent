@@ -1,11 +1,11 @@
-import React, { Component, ReactNode } from "react";
+import React from "react";
 import ContentLoader from "react-content-loader"
+import { Link } from "react-router-dom";
 import FlexColumn from "../../components/FlexColumn";
 import { avatarUrl } from "../../services/ApiUtilities";
-import { IUserDetails } from "../../services/Settings";
+import { IUserDetails } from "../../services/interfaces/Common";
+import { conversationWithUserUrl, userProfileUrl } from "../../utilities/Utilities";
 import Styles from "./UserInfo.module.css";
-import { Link } from "react-router-dom";
-import { userProfileUrl, conversationWithUserUrl } from "../../utilities/Utilities";
 
 const UserDisplay = ({user}: {user?: IUserDetails}) => {
   if (user === undefined) {

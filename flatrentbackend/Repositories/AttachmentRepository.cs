@@ -16,7 +16,7 @@ namespace FlatRent.Repositories
 
         public Task<IEnumerable<FormError>> UpdateAsync(Attachment attachment)
         {
-            throw new System.NotImplementedException();
+            return base.UpdateAsync(attachment);
         }
     }
 }

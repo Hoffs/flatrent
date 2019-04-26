@@ -50,16 +50,16 @@ class Login extends Component<RouteComponentProps, ILoginState> {
   private authenticate = async () => {
     this.setState({ Requesting: true });
     try {
-      const errors = await UserService.authenticate(this.state.Values.Email, this.state.Values.Password);
-      console.log(errors);
-      if (Object.keys(errors).length === 0) {
+      const response = await UserService.authenticate(this.state.Values.Email, this.state.Values.Password);
+      console.log(response);
+      if (response.errors === undefined) {
         toast.success("Sėkmingai prisijugėte!", {
           position: toast.POSITION.BOTTOM_CENTER,
         });
         this.props.history.push("/");
         console.log("success");
       } else {
-        this.setState({ Errors: errors, Requesting: false });
+        this.setState({ Errors: response.errors, Requesting: false });
         console.log("error");
       }
     } catch {

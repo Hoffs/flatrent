@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
 using Serilog.Events;
 
@@ -15,6 +16,7 @@ namespace FlatRent
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .ConfigureKestrel(opts => opts.ConfigureEndpointDefaults(op => op.Protocols = HttpProtocols.Http1AndHttp2))
                 .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration.ReadFrom
                     .Configuration(hostingContext.Configuration)
                     .MinimumLevel.Debug()

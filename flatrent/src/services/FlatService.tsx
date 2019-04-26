@@ -1,93 +1,10 @@
-import { apiFetch } from "./Helpers";
-import { IErrorResponse, IBasicResponse, IAddress, IUserDetails } from "./Settings";
-import UserService from "./UserService";
+import { apiFetch, uploadEach, apiFetchTyped, getGeneralError } from "./Helpers";
 import ImageService from "./ImageService";
-
-// FlatList interfaces
-export interface IFlatListItem {
-  id: string;
-  imageId: string;
-  name: string;
-  area: number;
-  floor: number;
-  roomCount: number;
-  price: number;
-  address: IShortAddress;
-}
-
-export interface IShortAddress {
-  street: string;
-  city: string;
-  country: string;
-}
-
-export interface IFlatListResponse {
-  flats?: IFlatListItem[];
-  errors?: IErrorResponse;
-}
-
-// Flat Detail intertfaces
-export interface IFlatDetails {
-  id: string;
-  name: string;
-  area: number;
-  floor: number;
-  roomCount: number;
-  price: number;
-  yearOfConstruction: number;
-  isFurnished: boolean;
-  features: string[];
-  description: string;
-  address: IAddress;
-  owner: IUserDetails;
-  tenantRequirements: string;
-  minimumRentDays: number;
-  isPublished: boolean;
-  isPublic: boolean;
-  isRented: boolean;
-  images: IImageDetails[];
-}
-
-export interface IImageDetails {
-  name: string;
-  id: string;
-}
-
-export interface IFlatDetailsResponse {
-  flat?: IFlatDetails;
-  errors?: IErrorResponse;
-}
-
-// Create Flat interfaces
-
-export interface IFlatCreateData {
-  name: string;
-  area: string;
-  floor: string;
-  totalFloors: string;
-  roomCount: string;
-  price: string;
-  yearOfConstruction: string;
-  minimumRentDays: number;
-  isFurnished: boolean;
-  description: string;
-  tenantRequirements: string;
-
-  street: string;
-  houseNumber: string;
-  flatNumber: string;
-  city: string;
-  country: string;
-  postCode: string;
-
-  features: string[];
-  images: Array<{ name: string }>;
-}
-
-export interface IFlatCreateResponse {
-  id: string;
-  images: { [key: string]: string };
-}
+import { IAddress, IBasicResponse, IErrorResponse, IApiResponse } from "./interfaces/Common";
+import { IFlatCreateRequest, IFlatCreateResponse, IFlatDetails, IFlatListItem, IFlatListResponse, IRentRequest, IAgreementCreateResponse } from "./interfaces/FlatServiceInterfaces";
+import UserService from "./UserService";
+import AttachmentService from "./AttachmentService";
+import { parseTwoDigitYear } from "moment";
 
 export const getAddressString = (address: IAddress) => {
   console.log(address);
@@ -99,126 +16,84 @@ class FlatService {
     count: number,
     offset: number,
   ): Promise<IFlatListResponse> {
-    const data: IFlatListResponse = {};
     try {
       // const rentedQuery = rented ? "&rented=true" : "";
-      const result = await apiFetch(`/api/flat?count=${count}&offset=${offset}`, {
-        headers: UserService.authorizationHeaders(),
-      });
-      if (result.ok) {
-        console.log("got flats");
-        const response = (await result.json()) as IFlatListItem[];
-        data.flats = response;
-      } else {
-        console.log("didnt get flats");
-        const response = (await result.json()) as IErrorResponse;
-        data.errors = response;
-      }
+      const [result, parsed] =
+        await apiFetchTyped<IFlatListItem[]>(`/api/flat?count=${count}&offset=${offset}`, undefined, true);
+      return parsed;
     } catch (e) {
       console.log(e);
-      data.errors = { General: ["Įvyko nežinoma klaida"] };
+      return getGeneralError<IFlatListItem[]>();
     }
-
-    return data;
   }
 
-  public static async getFlat(id: string): Promise<IFlatDetailsResponse> {
-    const data: IFlatDetailsResponse = {};
+  public static async getFlat(id: string): Promise<IApiResponse<IFlatDetails>> {
     try {
-      const result = await apiFetch(`/api/flat/${id}`, {
+      const [response, parsed] = await apiFetchTyped<IFlatDetails>(`/api/flat/${id}`, {
         headers: UserService.authorizationHeaders(),
       });
-      if (result.ok) {
-        console.log("got flat");
-        const response = (await result.json()) as IFlatDetails;
-        data.flat = response;
-      } else {
-        console.log("didnt get flat");
-        const response = (await result.json()) as IErrorResponse;
-        data.errors = response;
-      }
+      return parsed;
     } catch (e) {
       console.log(e);
-      data.errors = { General: ["Įvyko nežinoma klaida"] };
+      return {errors: { General: ["Įvyko nežinoma klaida"] } };
     }
-
-    return data;
   }
 
-  public static async rentFlat(id: string, from: string, to: string): Promise<IBasicResponse> {
-    const data: IBasicResponse = {};
+  public static async rentFlat(id: string, request: IRentRequest, files: File[]): Promise<IApiResponse<IAgreementCreateResponse>> {
     try {
-      const result = await apiFetch(`/api/flat/${id}/rent`, {
-        body: JSON.stringify({ from, to }),
+      const [response, parsed] = await apiFetchTyped<IAgreementCreateResponse>(`/api/flat/${id}/rent`, {
+        body: JSON.stringify({ ...request }),
         headers: UserService.authorizationHeaders(),
         method: "POST",
       });
 
-      if (result.ok) {
-        console.log("got flat");
-      } else {
+      if (!response.ok) {
         console.log("didnt get flat");
-        const response = (await result.json()) as IErrorResponse;
-        data.errors = response;
+        return parsed;
       }
+
+      console.log("created request");
+      if (parsed.data !== undefined) {
+        const uploadResult = await uploadEach(parsed.data.attachments, files, AttachmentService.putAttachment);
+        parsed.errors = uploadResult;
+      }
+      return parsed;
     } catch (e) {
       console.log(e);
-      data.errors = { General: ["Įvyko nežinoma klaida"] };
+      return getGeneralError<IAgreementCreateResponse>();
     }
-
-    return data;
   }
 
   public static async createFlat(
     requestData: { [key: string]: string | boolean },
-    images: File[]
-  ): Promise<IBasicResponse | IFlatCreateResponse> {
-    const data: IBasicResponse = {};
-    const request = (requestData as unknown) as IFlatCreateData;
+    images: File[],
+  ): Promise<IApiResponse<IFlatCreateResponse>> {
+    const request = (requestData as unknown) as IFlatCreateRequest;
     const featuresString = requestData.features as string;
     if (featuresString.split !== undefined) {
       request.features = (requestData.features as string).split(",");
     }
     request.images = images.map((i) => ({ name: i.name }));
     try {
-      const result = await apiFetch(`/api/flat/`, {
+      const [response, parsed] = await apiFetchTyped<IFlatCreateResponse>(`/api/flat/`, {
         body: JSON.stringify(requestData),
         headers: UserService.authorizationHeaders(),
         method: "POST",
       });
-      if (result.ok) {
-        const response = (await result.json()) as IFlatCreateResponse;
-        const promises = Object.keys(response.images).map((key) => {
-          const image = images.find((img) => img.name === key);
-          return ImageService.putFlatImage(response.images[key], image!);
-        });
-        const results = await Promise.all(promises);
-        let errorsOb: IErrorResponse = {};
-        results
-          .map((r) => r.errors)
-          .forEach((err) => {
-            if (err === undefined) {
-              return;
-            }
-            errorsOb = { ...errorsOb, ...err };
-          });
 
-        if (Object.keys(errorsOb).length === 0) {
-          return response;
-        }
-        data.errors = errorsOb;
-        console.log("created flat");
-      } else {
-        console.log("didnt create flat");
-        const response = (await result.json()) as IErrorResponse;
-        data.errors = response;
+      if (parsed.errors !== undefined) {
+        return parsed;
       }
+
+      if (parsed.data !== undefined) {
+        const uploadResult = await uploadEach(parsed.data.images, images, ImageService.putFlatImage);
+        parsed.errors = uploadResult;
+      }
+      return parsed;
     } catch (e) {
       console.log(e);
-      data.errors = { General: ["Įvyko nežinoma klaida"] };
+      return getGeneralError<IFlatCreateResponse>();
     }
-    console.log("end");
-    return data;
   }
 }
 
