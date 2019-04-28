@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
-import { TextRowLoader } from "../../components/Loaders";
-import { IFlatDetails } from "../../services/interfaces/FlatServiceInterfaces";
-import { dayOrDays, joined } from "../../utilities/Utilities";
+import { TextRowLoader } from "../../../../components/Loaders";
+import { IFlatDetails } from "../../../../services/interfaces/FlatServiceInterfaces";
+import { dayOrDays, joined } from "../../../../utilities/Utilities";
 import Styles from "./FlatDetails.module.css";
 
 const FlatDescription = ({ flat }: { flat?: IFlatDetails }) => {

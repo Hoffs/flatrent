@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
-import Button from "../../components/Button";
-import FlexColumn from "../../components/FlexColumn";
-import FlexRow from "../../components/FlexRow";
-import { InputForm, NumberInputForm, InputAreaForm } from "../../components/InputForm";
-import SimpleCheckbox from "../../components/SimpleCheckbox";
-import FlatService from "../../services/FlatService";
+import Button from "../../../../components/Button";
+import FlexColumn from "../../../../components/FlexColumn";
+import FlexRow from "../../../../components/FlexRow";
+import { InputForm, NumberInputForm, InputAreaForm } from "../../../../components/InputForm";
+import SimpleCheckbox from "../../../../components/SimpleCheckbox";
+import FlatService from "../../../../services/FlatService";
 import Styles from "./FlatCreate.module.css";
-import { joined, flatUrl } from "../../utilities/Utilities";
-import FlexDropzone from "../../components/FlexDropzone";
-import { IPreviewFile } from "../../components/FlexDropzone/FlexDropzone";
-import { IFlatCreateResponse } from "../../services/interfaces/FlatServiceInterfaces";
-import { IBasicResponse } from "../../services/interfaces/Common";
+import { joined, flatUrl } from "../../../../utilities/Utilities";
+import FlexDropzone from "../../../../components/FlexDropzone";
+import { IPreviewFile } from "../../../../components/FlexDropzone/FlexDropzone";
+import { IFlatCreateResponse } from "../../../../services/interfaces/FlatServiceInterfaces";
+import { IBasicResponse } from "../../../../services/interfaces/Common";
 
 interface ICreateFlatState {
   values: {

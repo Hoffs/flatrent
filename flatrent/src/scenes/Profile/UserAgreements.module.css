@@ -1,8 +1,9 @@
 .content {
   min-height: 120px;
   max-height: 640px;
-  max-width: 400px;
-  min-width: 400px;
+  max-width: 500px;
+  width: calc(100% - 20px);
+  flex-grow: 1;
   overflow-y: auto;
   width: 100%;
   margin-bottom: 26px;
@@ -11,6 +12,7 @@
   /* border-left: 1px solid #dadce0;
   border-right: 1px solid #dadce0; */
 }
+
 
 .title {
   font-family: var(--title-font-family);
@@ -28,8 +30,8 @@
 .agreement {
   position: relative;
   font-family: var(--text-font-family);
-  padding-bottom: 6px;
-  margin-bottom: 6px;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
 }
 
 .agreement::after {
@@ -57,6 +59,7 @@
 }
 
 .moreLink {
+  margin-left: 8px;
   display: flex;
   justify-content: center;
   text-decoration: none;

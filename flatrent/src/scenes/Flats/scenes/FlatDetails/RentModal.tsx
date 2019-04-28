@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
-import Dimmer from "../../components/Dimmer";
-import FlexRow from "../../components/FlexRow";
-import FlatService from "../../services/FlatService";
-import { flatUrl, stopPropogation } from "../../utilities/Utilities";
+import Dimmer from "../../../../components/Dimmer";
+import FlexRow from "../../../../components/FlexRow";
+import FlatService from "../../../../services/FlatService";
+import { flatUrl, stopPropogation } from "../../../../utilities/Utilities";
 import Styles from "./RentModal.module.css";
 
 import Moment from "moment";
@@ -12,13 +12,13 @@ import "moment/locale/lt";
 import { DateRangePicker, FocusedInputShape } from "react-dates";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
-import Button from "../../components/Button";
-import FlexColumn from "../../components/FlexColumn";
-import FlexDropzone from "../../components/FlexDropzone";
-import { IPreviewFile } from "../../components/FlexDropzone/FlexDropzone";
-import { InputAreaForm, InputForm } from "../../components/InputForm";
-import { IFlatDetails, IAgreementCreateResponse } from "../../services/interfaces/FlatServiceInterfaces";
-import { IBasicResponse, IApiResponse } from "../../services/interfaces/Common";
+import Button from "../../../../components/Button";
+import FlexColumn from "../../../../components/FlexColumn";
+import FlexDropzone from "../../../../components/FlexDropzone";
+import { IPreviewFile } from "../../../../components/FlexDropzone/FlexDropzone";
+import { InputAreaForm, InputForm } from "../../../../components/InputForm";
+import { IFlatDetails, IAgreementCreateResponse } from "../../../../services/interfaces/FlatServiceInterfaces";
+import { IBasicResponse, IApiResponse } from "../../../../services/interfaces/Common";
 
 Moment.locale("lt");
 

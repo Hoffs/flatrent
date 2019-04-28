@@ -82,3 +82,9 @@
   font-size: 1.5em;
   font-family: var(--title-font-family);
 }
+
+.agreements {
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}

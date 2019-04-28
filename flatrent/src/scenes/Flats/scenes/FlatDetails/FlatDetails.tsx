@@ -1,21 +1,21 @@
 import React, { Component } from "react";
 import { Link, Route, RouteComponentProps, withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
-import FlexRow from "../../components/FlexRow";
+import FlexRow from "../../../../components/FlexRow";
 import Styles from "./FlatDetails.module.css";
 
-import FlexColumn from "../../components/FlexColumn";
-import ImageCarousel from "../../components/ImageCarousel";
-import FlatService from "../../services/FlatService";
-import { IFlatDetails } from "../../services/interfaces/FlatServiceInterfaces";
-import UserService from "../../services/UserService";
-import { flatEditUrl } from "../../utilities/Utilities";
+import FlexColumn from "../../../../components/FlexColumn";
+import ImageCarousel from "../../../../components/ImageCarousel";
+import FlatService from "../../../../services/FlatService";
+import { IFlatDetails } from "../../../../services/interfaces/FlatServiceInterfaces";
+import UserService from "../../../../services/UserService";
+import { flatEditUrl } from "../../../../utilities/Utilities";
 import FlatDescription from "./FlatDescription";
 import FlatShortInfo from "./FlatShortInfo";
 import RentModal from "./RentModal";
 import RentPanel from "./RentPanel";
-import UserInfo from "./UserInfo";
-import { IApiResponse } from "../../services/interfaces/Common";
+import UserBox from "./UserBox";
+import { IApiResponse } from "../../../../services/interfaces/Common";
 
 interface IFlatDetailsState {
   loading: boolean;
@@ -56,7 +56,7 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
             <FlexRow className={Styles.sectionEnd}>
               <FlatShortInfo flat={flat} />
               <FlexColumn>
-                <UserInfo user={flat ? flat.owner : undefined} />
+                <UserBox user={flat ? flat.owner : undefined} />
               </FlexColumn>
             </FlexRow>
 

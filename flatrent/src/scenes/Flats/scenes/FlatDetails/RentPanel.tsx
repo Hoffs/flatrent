@@ -1,11 +1,11 @@
 import React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import Button from "../../components/Button";
-import FlexColumn from "../../components/FlexColumn";
-import FlexRow from "../../components/FlexRow";
-import { TextRowLoader } from "../../components/Loaders";
-import { IFlatDetails } from "../../services/interfaces/FlatServiceInterfaces";
-import { flatRentUrl, joined } from "../../utilities/Utilities";
+import Button from "../../../../components/Button";
+import FlexColumn from "../../../../components/FlexColumn";
+import FlexRow from "../../../../components/FlexRow";
+import { TextRowLoader } from "../../../../components/Loaders";
+import { IFlatDetails } from "../../../../services/interfaces/FlatServiceInterfaces";
+import { flatRentUrl, joined } from "../../../../utilities/Utilities";
 import Styles from "./FlatDetails.module.css";
 
 const RentPanel = ({ history, flat }: { flat?: IFlatDetails } & RouteComponentProps) => {

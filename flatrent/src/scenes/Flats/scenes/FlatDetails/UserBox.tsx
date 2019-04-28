@@ -1,13 +1,13 @@
 import React from "react";
 import ContentLoader from "react-content-loader";
 import { Link } from "react-router-dom";
-import FlexColumn from "../../components/FlexColumn";
-import { avatarUrl } from "../../services/ApiUtilities";
-import { conversationWithUserUrl, userProfileUrl } from "../../utilities/Utilities";
-import Styles from "./UserInfo.module.css";
-import { IUserDetails, IShortUserDetails } from "../../services/interfaces/UserInterfaces";
+import FlexColumn from "../../../../components/FlexColumn";
+import { avatarUrl } from "../../../../services/ApiUtilities";
+import { conversationWithUserUrl, userProfileUrl } from "../../../../utilities/Utilities";
+import Styles from "./UserBox.module.css";
+import { IUserDetails, IShortUserDetails } from "../../../../services/interfaces/UserInterfaces";
 
-const UserInfo = ({ user }: { user?: IShortUserDetails }) => {
+const UserBox = ({ user }: { user?: IShortUserDetails }) => {
   if (user === undefined) {
     return <UserDisplayLoader />;
   }
@@ -42,4 +42,4 @@ const UserDisplayLoader = () => (
   </ContentLoader>
 );
 
-export default UserInfo;
+export default UserBox;

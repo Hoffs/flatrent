@@ -1,22 +1,13 @@
 import React, { Component } from "react";
+import ContentLoader from "react-content-loader";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { toast } from "react-toastify";
-import Button from "../../components/Button";
-import Card from "../../components/Card";
 import FlexColumn from "../../components/FlexColumn";
 import FlexRow from "../../components/FlexRow";
-import AgreementsService from "../../services/AgreementsService";
-import { getAddressString } from "../../services/FlatService";
 import UserService from "../../services/UserService";
 import Styles from "./Profile.module.css";
-import OwnerAgreements from "./OwnerAgreements";
-import ContentLoader from "react-content-loader";
-import UserInfo from "../FlatDetails/UserInfo";
-import UserProfile from "./UserProfile";
 import UserAgreements from "./UserAgreements";
 import UserFlatList from "./UserFlatList";
-
-const doNothing = () => {};
+import UserProfile from "./UserProfile";
 
 class Profile extends Component<RouteComponentProps<{ id: string }>> {
   constructor(props: RouteComponentProps<{ id: string }>) {
@@ -32,7 +23,7 @@ class Profile extends Component<RouteComponentProps<{ id: string }>> {
       <FlexColumn className={Styles.content}>
         <UserProfile userId={id} />
 
-        <FlexRow>
+        <FlexRow className={Styles.agreements}>
           <UserAgreements title="Nuomotojo sutartys" fetchData={UserService.getUserAgreementsOwner} userId={id} />
           <UserAgreements title="Nuomininko sutartys" fetchData={UserService.getUserAgreementsTenant} userId={id} />
         </FlexRow>
@@ -42,7 +33,7 @@ class Profile extends Component<RouteComponentProps<{ id: string }>> {
     );
   }
 
-  componentWillReceiveProps(newProps: RouteComponentProps<{ id: string }>) {
+  public componentWillReceiveProps(newProps: RouteComponentProps<{ id: string }>) {
     if (this.props.match.params.id !== newProps.match.params.id) {
       this.forceUpdate();
     }
@@ -148,15 +139,5 @@ class Profile extends Component<RouteComponentProps<{ id: string }>> {
   // }
 }
 
-const ProfileLoader = () => (
-  <ContentLoader height={130} width={380} speed={2} primaryColor="#f3f3f3" secondaryColor="#ecebeb">
-    <rect x="70" y="15" rx="4" ry="4" width="117" height="6" />
-    <rect x="70" y="35" rx="3" ry="3" width="85" height="6" />
-    <rect x="0" y="80" rx="3" ry="3" width="350" height="6" />
-    <rect x="0" y="100" rx="3" ry="3" width="380" height="6" />
-    <rect x="0" y="120" rx="3" ry="3" width="201" height="6" />
-    <circle cx="30" cy="30" r="30" />
-  </ContentLoader>
-);
 
 export default withRouter(Profile);
