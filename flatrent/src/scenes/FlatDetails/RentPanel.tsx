@@ -8,7 +8,7 @@ import { IFlatDetails } from "../../services/interfaces/FlatServiceInterfaces";
 import { flatRentUrl, joined } from "../../utilities/Utilities";
 import Styles from "./FlatDetails.module.css";
 
-const RentPanel = ({history, flat}: {flat?: IFlatDetails} & RouteComponentProps) => {
+const RentPanel = ({ history, flat }: { flat?: IFlatDetails } & RouteComponentProps) => {
   if (flat === undefined) {
     return (
       <FlexColumn className={Styles.panel}>

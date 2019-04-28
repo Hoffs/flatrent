@@ -54,7 +54,7 @@ export const apiFetch = async (
 export async function apiFetchTyped<T>(
   path: string,
   init?: RequestInit | undefined,
-  withAuth: boolean = false,
+  withAuth: boolean = false
 ): Promise<[Response, IApiResponse<T>]> {
   if (init !== undefined) {
     init.headers = {
@@ -92,12 +92,12 @@ export async function apiFetchTyped<T>(
     apiResponse.data = json as T;
   } else {
     const bresponse = json as IBasicResponse;
-    console.log(bresponse.errors)
+    console.log(bresponse.errors);
     apiResponse.errors = bresponse.errors;
   }
 
   return [response, apiResponse];
-};
+}
 
 export const uploadEach = async (
   toUpload: { [key: string]: string },
@@ -125,7 +125,6 @@ export const uploadEach = async (
   }
   return errorsOb;
 };
-
 
 export function getGeneralError<T>(): IApiResponse<T> {
   return { errors: { General: ["Įvyko nežinoma klaida"] } };

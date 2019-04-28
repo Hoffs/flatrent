@@ -184,7 +184,6 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             title="Minimali nuoma dienomis"
             setValue={this.handleUpdate}
           />
-
         </FlexRow>
 
         <span className={Styles.section}>Buto adresas:</span>
@@ -289,7 +288,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
   private createFlat = async (publish: boolean) => {
     try {
       this.setState({ requesting: true });
-      const response = await FlatService.createFlat({...this.state.values, isPublished: publish }, this.state.images);
+      const response = await FlatService.createFlat({ ...this.state.values, isPublished: publish }, this.state.images);
 
       if ((response as IFlatCreateResponse).id !== undefined) {
         toast.success("Sėkmingai sukurtas įrašas!", {
@@ -302,19 +301,18 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
         this.setState({ errors, requesting: false });
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast.error("Įvyko nežinoma klaida!", {
         position: toast.POSITION.BOTTOM_CENTER,
       });
       this.setState({ requesting: false });
     }
-  }
+  };
 
   private handleUpdate = (name: string, value: string | boolean) =>
-    this.setState((state) => ({ values: { ...state.values, [name]: value } }))
+    this.setState((state) => ({ values: { ...state.values, [name]: value } }));
 
-  private handleImageUpdate = (images: IPreviewFile[]) =>
-    this.setState({ images })
+  private handleImageUpdate = (images: IPreviewFile[]) => this.setState({ images });
 }
 
 export default CreateFlat;

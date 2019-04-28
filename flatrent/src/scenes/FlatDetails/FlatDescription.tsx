@@ -4,9 +4,12 @@ import { IFlatDetails } from "../../services/interfaces/FlatServiceInterfaces";
 import { dayOrDays, joined } from "../../utilities/Utilities";
 import Styles from "./FlatDetails.module.css";
 
-const FlatDescription = ({flat}: {flat?: IFlatDetails}) => {
-
-  const rentPeriod = (days: number): ReactNode => (<>Trumpiausias nuomos laikotarpis {days} {dayOrDays(days)}.</>);
+const FlatDescription = ({ flat }: { flat?: IFlatDetails }) => {
+  const rentPeriod = (days: number): ReactNode => (
+    <>
+      Trumpiausias nuomos laikotarpis {days} {dayOrDays(days)}.
+    </>
+  );
 
   return (
     <>

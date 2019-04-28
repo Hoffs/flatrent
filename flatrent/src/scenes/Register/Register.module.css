@@ -7,7 +7,8 @@
   align-self: center;
 }
 
-.content input, .content textarea {
+.content input,
+.content textarea {
   margin-left: 4px;
   margin-right: 4px;
 }
@@ -25,4 +26,3 @@
   min-height: 100px;
   resize: vertical;
 }
-

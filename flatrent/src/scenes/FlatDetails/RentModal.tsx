@@ -134,9 +134,10 @@ class RentModal extends Component<RouteComponentProps<{ id: string }> & IRentMod
         from: startDate!.toISOString(),
         to: endDate!.toISOString(),
       },
-      files,
-    ).then(this.handleResponse)
-    .catch(this.handleError);
+      files
+    )
+      .then(this.handleResponse)
+      .catch(this.handleError);
   };
 
   private handleResponse = (response: IApiResponse<IAgreementCreateResponse>) => {
@@ -149,7 +150,7 @@ class RentModal extends Component<RouteComponentProps<{ id: string }> & IRentMod
       });
       this.exitModal();
     }
-  }
+  };
 
   private handleError = (errors: any) => {
     console.log(errors);
@@ -157,7 +158,7 @@ class RentModal extends Component<RouteComponentProps<{ id: string }> & IRentMod
       position: toast.POSITION.BOTTOM_CENTER,
     });
     this.setState({ requesting: false });
-  }
+  };
 
   private isDayBlocked = (day: Moment.Moment): boolean => {
     if (this.state.focusedInput === "startDate") {

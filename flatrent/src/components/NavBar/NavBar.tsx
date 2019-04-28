@@ -35,9 +35,7 @@ class NavBar extends Component<RouteComponentProps> {
             {this.getLinks()}
           </ul>
         </nav> */}
-        <div className={Styles.nav} >
-          {this.getNavigationButtons()}
-        </div>
+        <div className={Styles.nav}>{this.getNavigationButtons()}</div>
       </div>
     );
   }
@@ -45,7 +43,7 @@ class NavBar extends Component<RouteComponentProps> {
   private onStorageEvent = (key: string, value: string, action: string) => {
     console.log("storageEvent received");
     this.forceUpdate();
-  }
+  };
 
   private getLinks() {
     const filteredLinks = getApplicableRoutes().filter((link) => link.addToNav);
@@ -58,7 +56,7 @@ class NavBar extends Component<RouteComponentProps> {
 
   private getNavigationButtons() {
     const filteredLinks = getApplicableRoutes().filter((link) => link.addToNav);
-    const idx = filteredLinks.findIndex(x => x.text === "Paskyra");
+    const idx = filteredLinks.findIndex((x) => x.text === "Paskyra");
     filteredLinks[idx].link = userProfileUrl(UserService.userId());
     return filteredLinks.map((link, index) => (
       <NavigationButton link={link.link} currentUrl={this.props.location.pathname} key={index}>

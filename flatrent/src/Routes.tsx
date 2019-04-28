@@ -148,8 +148,7 @@ const UserRoutes: IRouteInfo[] = [
 
 export const sortByOrder = (a: IRouteInfo, b: IRouteInfo): number => a.order - b.order;
 export const filterApplicable = (route: IRouteInfo): boolean =>
-  UserService.satisfiesAuthentication(route.authentication)
-  && UserService.hasRoles(...route.roles);
+  UserService.satisfiesAuthentication(route.authentication) && UserService.hasRoles(...route.roles);
 
 export const Routes: IRouteInfo[] = [
   ...AuthRoutes,
@@ -169,17 +168,19 @@ export const Routes: IRouteInfo[] = [
 ].sort(sortByOrder);
 
 export const getAsRoleRoutes = () => {
-  return Routes.filter((route) => route.navOnly !== true).sort(sortByOrder).map((link, index) => (
-    <RoleRoute
-      key={index}
-      path={link.link}
-      exact={link.exact}
-      redirect={link.redirect}
-      authenticated={link.authentication}
-      allowedRoles={link.roles}
-      component={link.component}
-    />
-  ));
+  return Routes.filter((route) => route.navOnly !== true)
+    .sort(sortByOrder)
+    .map((link, index) => (
+      <RoleRoute
+        key={index}
+        path={link.link}
+        exact={link.exact}
+        redirect={link.redirect}
+        authenticated={link.authentication}
+        allowedRoles={link.roles}
+        component={link.component}
+      />
+    ));
 };
 
 export const getApplicableRoutes = () => Routes.filter(filterApplicable);

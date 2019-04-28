@@ -7,16 +7,17 @@ interface ILoaderProps {
   children: ReactNode[];
 }
 
-const Loader = ({loading = true, children}: ILoaderProps) => {
-  const showing: ReactNode = loading ? (<ScaleLoader color={"#ff5a5e"} loading={loading}/>) : children;
-  console.log(children)
-  return (<div className={Styles.wrapper}>
+const Loader = ({ loading = true, children }: ILoaderProps) => {
+  const showing: ReactNode = loading ? <ScaleLoader color={"#ff5a5e"} loading={loading} /> : children;
+  console.log(children);
+  return (
+    <div className={Styles.wrapper}>
       {showing}
       {/* <ScaleLoader color={"#ff5a5e"} loading={loading}/> */}
       {/* {loading ? (<></>) : {...children}} */}
-    </div>);
+    </div>
+  );
 };
-
 
 // const Loader = (props: ILoaderProps) => {
 //   return props.loading ? <ScaleLoader color={"#ff5a5e"} loading={props.loading}/> : props.children;

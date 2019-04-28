@@ -43,20 +43,24 @@ class FlatList extends Component<
     if (flats.length > 0) {
       return flats;
     } else {
-      return Array(12).fill(0).map((_, idx) => <FlatBoxLoader key={idx} />);
+      return Array(12)
+        .fill(0)
+        .map((_, idx) => <FlatBoxLoader key={idx} />);
     }
   }
 
   private getLoaderItems(count: number) {
-    const els = Array(count).fill(0).map((_, idx) => <FlatBoxLoader key={idx} />);
-    return <>{els}</> ;
+    const els = Array(count)
+      .fill(0)
+      .map((_, idx) => <FlatBoxLoader key={idx} />);
+    return <>{els}</>;
   }
 
   private loadFlats = (pageNumber: number) => {
     FlatService.getFlats(this.state.pageSize, this.state.pageSize * pageNumber)
       .then(this.handleFlatResult)
       .catch(this.handleFail);
-  }
+  };
 
   private handleFlatResult = (result: IApiResponse<IShortFlatDetails[]>) => {
     if (result.errors !== undefined) {
@@ -65,7 +69,7 @@ class FlatList extends Component<
     } else if (result.data !== undefined) {
       this.setState((state) => ({ flats: [...state.flats, ...result.data!], hasMore: result.data!.length !== 0 }));
     }
-  }
+  };
 
   private handleFail(e: any) {
     toast.error("Įvyko nežinoma klaida.");

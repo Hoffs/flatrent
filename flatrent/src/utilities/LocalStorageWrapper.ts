@@ -2,8 +2,7 @@ class FiringLocalStorage {
     private storage: Storage;
     private listeners: { [key: string]: (key: string, value: string, action: "set" | "remove") => void } = {};
 
-    constructor(storage: Storage)
-    {
+    constructor(storage: Storage) {
         this.storage = storage;
     }
 
@@ -22,7 +21,7 @@ class FiringLocalStorage {
         this.callListeners(key, value, "set");
     }
 
-    public setItems(...items: Array<{key: string, value: string}>) {
+    public setItems(...items: Array<{ key: string; value: string }>) {
         items.forEach((i) => this.storage.setItem(i.key, i.value));
         this.callListeners("", "", "set");
     }

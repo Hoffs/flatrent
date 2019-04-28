@@ -47,7 +47,6 @@
   opacity: 0;
 }
 
-
 .imageWrapper {
   width: 100%;
   padding-top: 66.6667%;
@@ -80,7 +79,8 @@
   margin-top: 4px;
 }
 
-.address, .details {
+.address,
+.details {
   font-size: 0.8em;
   color: var(--text-faded-color);
   font-weight: 500;

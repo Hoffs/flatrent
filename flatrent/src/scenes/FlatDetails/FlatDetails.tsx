@@ -75,17 +75,16 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
     ) : (
       <></>
     );
-  }
+  };
 
-  private getRentModal = (props: RouteComponentProps<any, any, any>) => (
-    this.state.flat !== undefined ? <RentModal flat={this.state.flat} {...props} /> : <></>
-  )
+  private getRentModal = (props: RouteComponentProps<any, any, any>) =>
+    this.state.flat !== undefined ? <RentModal flat={this.state.flat} {...props} /> : <></>;
 
   private fetchFlat = (id: string) => {
     FlatService.getFlat(id)
       .then(this.handleResult)
       .catch(this.handleFail);
-  }
+  };
 
   private handleResult = (result: IApiResponse<IFlatDetails>) => {
     if (result.errors !== undefined) {
@@ -94,7 +93,7 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
     } else if (result.data !== undefined) {
       this.setState({ flat: result.data, loading: false });
     }
-  }
+  };
 
   private handleFail() {
     toast.error("Įvyko nežinoma klaida.");

@@ -1,7 +1,16 @@
 import { apiFetch, uploadEach, apiFetchTyped, getGeneralError } from "./Helpers";
 import ImageService from "./ImageService";
 import { IBasicResponse, IErrorResponse, IApiResponse } from "./interfaces/Common";
-import { IFlatCreateRequest, IFlatCreateResponse, IFlatDetails, IShortFlatDetails, IFlatListResponse, IRentRequest, IAgreementCreateResponse, IAddress } from "./interfaces/FlatServiceInterfaces";
+import {
+  IFlatCreateRequest,
+  IFlatCreateResponse,
+  IFlatDetails,
+  IShortFlatDetails,
+  IFlatListResponse,
+  IRentRequest,
+  IAgreementCreateResponse,
+  IAddress,
+} from "./interfaces/FlatServiceInterfaces";
 import UserService from "./UserService";
 import AttachmentService from "./AttachmentService";
 import { parseTwoDigitYear } from "moment";
@@ -12,14 +21,14 @@ export const getAddressString = (address: IAddress) => {
 };
 
 class FlatService {
-  public static async getFlats(
-    count: number,
-    offset: number,
-  ): Promise<IFlatListResponse> {
+  public static async getFlats(count: number, offset: number): Promise<IFlatListResponse> {
     try {
       // const rentedQuery = rented ? "&rented=true" : "";
-      const [result, parsed] =
-        await apiFetchTyped<IShortFlatDetails[]>(`/api/flat?count=${count}&offset=${offset}`, undefined, true);
+      const [result, parsed] = await apiFetchTyped<IShortFlatDetails[]>(
+        `/api/flat?count=${count}&offset=${offset}`,
+        undefined,
+        true
+      );
       return parsed;
     } catch (e) {
       console.log(e);
@@ -35,11 +44,15 @@ class FlatService {
       return parsed;
     } catch (e) {
       console.log(e);
-      return {errors: { General: ["Įvyko nežinoma klaida"] } };
+      return { errors: { General: ["Įvyko nežinoma klaida"] } };
     }
   }
 
-  public static async rentFlat(id: string, request: IRentRequest, files: File[]): Promise<IApiResponse<IAgreementCreateResponse>> {
+  public static async rentFlat(
+    id: string,
+    request: IRentRequest,
+    files: File[]
+  ): Promise<IApiResponse<IAgreementCreateResponse>> {
     try {
       const [response, parsed] = await apiFetchTyped<IAgreementCreateResponse>(`/api/flat/${id}/rent`, {
         body: JSON.stringify({ ...request }),
@@ -66,7 +79,7 @@ class FlatService {
 
   public static async createFlat(
     requestData: { [key: string]: string | boolean },
-    images: File[],
+    images: File[]
   ): Promise<IApiResponse<IFlatCreateResponse>> {
     const request = (requestData as unknown) as IFlatCreateRequest;
     const featuresString = requestData.features as string;

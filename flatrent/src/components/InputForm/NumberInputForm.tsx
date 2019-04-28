@@ -39,15 +39,21 @@ class NumberInputForm extends Component<INumberInputFormProps, { focused: boolea
   }
 
   private checkAndSet = (name: string, newValue: string) => {
-    let newNumber =  0;
+    let newNumber = 0;
     newNumber = Number.parseInt(newValue, 10);
-    if (isNaN(newNumber)) { return; }
+    if (isNaN(newNumber)) {
+      return;
+    }
 
     const { maxValue = Number.MAX_SAFE_INTEGER, minValue = Number.MIN_SAFE_INTEGER } = this.props;
-    if (newNumber < minValue) { newNumber = minValue; }
-    if (newNumber > maxValue) { newNumber = maxValue; }
+    if (newNumber < minValue) {
+      newNumber = minValue;
+    }
+    if (newNumber > maxValue) {
+      newNumber = maxValue;
+    }
     this.props.setValue(name, newNumber.toString());
-  }
+  };
 }
 
 export default NumberInputForm;

@@ -1,4 +1,3 @@
-
 /* Carousel */
 
 .imageWrapper {
@@ -35,23 +34,25 @@
 }
 
 .subTitle {
-  font-size: 1.0em;
+  font-size: 1em;
   margin-bottom: 32px;
 }
 
 /* Top flat info section */
 
-.flatCharacteristics, .ownerInfo {
+.flatCharacteristics,
+.ownerInfo {
   justify-content: flex-start;
   margin-bottom: 16px;
   margin-left: 12px;
   flex-wrap: wrap;
 }
 
-.flatCharacteristics > span:not(:last-of-type), .ownerInfo > span:not(:last-of-type), .features > span:not(:last-of-type) {
+.flatCharacteristics > span:not(:last-of-type),
+.ownerInfo > span:not(:last-of-type),
+.features > span:not(:last-of-type) {
   margin-right: 24px;
 }
-
 
 .flatDescription {
   white-space: pre-wrap;
@@ -59,7 +60,11 @@
 
 /* Sub texts */
 
-.flatCharacteristics, .subTitle, .flatDescription, .tenantRequirements, .features {
+.flatCharacteristics,
+.subTitle,
+.flatDescription,
+.tenantRequirements,
+.features {
   color: var(--text-color);
 }
 
@@ -101,7 +106,6 @@
   margin-top: 4px;
 }
 
-
 /* Rent panel */
 
 @media (max-width: 950px) {
@@ -126,7 +130,6 @@
     flex-wrap: wrap;
   }
 }
-
 
 .panel {
   margin-bottom: 24px;

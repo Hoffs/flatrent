@@ -33,7 +33,7 @@
 }
 
 .agreement::after {
-  content: ' ';
+  content: " ";
   width: 75%;
   position: absolute;
   bottom: 0;
@@ -65,7 +65,7 @@
 .separator {
   width: 60%;
   justify-self: center;
-  content: ' ';
+  content: " ";
   height: 1px;
   border-bottom: 1px solid #dadce0;
 }

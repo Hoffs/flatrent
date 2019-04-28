@@ -1,5 +1,5 @@
 import React from "react";
-import ContentLoader from "react-content-loader"
+import ContentLoader from "react-content-loader";
 import { Link } from "react-router-dom";
 import FlexColumn from "../../components/FlexColumn";
 import { avatarUrl } from "../../services/ApiUtilities";
@@ -7,7 +7,7 @@ import { conversationWithUserUrl, userProfileUrl } from "../../utilities/Utiliti
 import Styles from "./UserInfo.module.css";
 import { IUserDetails, IShortUserDetails } from "../../services/interfaces/UserInterfaces";
 
-const UserInfo = ({user}: {user?: IShortUserDetails}) => {
+const UserInfo = ({ user }: { user?: IShortUserDetails }) => {
   if (user === undefined) {
     return <UserDisplayLoader />;
   }
@@ -15,12 +15,14 @@ const UserInfo = ({user}: {user?: IShortUserDetails}) => {
   return (
     <FlexColumn className={Styles.userInfo}>
       <Link className={Styles.contactLink} to={userProfileUrl(user.id)}>
-      <span className={Styles.avatarName}>
-        {user.firstName}
-      </span>
-      <div className={Styles.avatarWrapper}><img className={Styles.avatar} src={avatarUrl(user.id)} /></div>
+        <span className={Styles.avatarName}>{user.firstName}</span>
+        <div className={Styles.avatarWrapper}>
+          <img className={Styles.avatar} src={avatarUrl(user.id)} />
+        </div>
       </Link>
-      <Link className={Styles.contactLink} to={conversationWithUserUrl(user.id)}>Siųsti žinutę</Link>
+      <Link className={Styles.contactLink} to={conversationWithUserUrl(user.id)}>
+        Siųsti žinutę
+      </Link>
     </FlexColumn>
   );
 };

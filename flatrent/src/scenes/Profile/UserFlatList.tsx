@@ -61,20 +61,22 @@ class UserFlatList extends Component<IUserFlatListProps, IUserFlatlistState> {
       const flats = this.state.flats.map((flat) => <FlatBox key={flat.id} flat={flat} />);
       return flats;
     } else {
-      return Array(12).fill(0).map((_, idx) => <FlatBoxLoader key={idx} />);
+      return Array(12)
+        .fill(0)
+        .map((_, idx) => <FlatBoxLoader key={idx} />);
     }
   }
 
   private getLoaderItems(count: number) {
     // return Array(count).fill(0).map((_, idx) => <FlatBoxLoader key={idx} />);
-    return (<FlatBoxLoader key={0} />);
+    return <FlatBoxLoader key={0} />;
   }
 
   private loadFlats = (pageNumber: number) => {
     UserService.getUserFlats(this.props.userId, this.state.pageSize * pageNumber)
       .then(this.handleFlatResult)
       .catch(this.handleFail);
-  }
+  };
 
   private getLoadFlats = (userId: string) => (pageNumber: number) => {
     UserService.getUserFlats(userId, this.state.pageSize * pageNumber)
@@ -89,8 +91,10 @@ class UserFlatList extends Component<IUserFlatListProps, IUserFlatlistState> {
     } else if (result.data !== undefined) {
       this.setState((state) => {
         // { flats: [...state.flats, ...result.data!], hasMore: result.data!.length !== 0 }
-        const newState: { hasMore: boolean, flats: IShortFlatDetails[]}
-          = { hasMore: result.data!.length === state.pageSize, flats: [] };
+        const newState: { hasMore: boolean; flats: IShortFlatDetails[] } = {
+          hasMore: result.data!.length === state.pageSize,
+          flats: [],
+        };
         if (state.flats !== undefined) {
           newState.flats.push(...state.flats);
         }
@@ -98,7 +102,7 @@ class UserFlatList extends Component<IUserFlatListProps, IUserFlatlistState> {
         return newState;
       });
     }
-  }
+  };
 
   private handleFail(e: any) {
     toast.error("Įvyko nežinoma klaida.");

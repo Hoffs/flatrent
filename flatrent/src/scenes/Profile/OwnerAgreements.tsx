@@ -29,35 +29,38 @@ class OwnerAgreements extends Component<IOwnerAgreementsProps, IOwnerAgreementsS
   public render() {
     const { agreements } = this.state;
     if (UserService.userId() !== this.props.userId) {
-      return (<></>);
+      return <></>;
     }
 
     if (agreements === undefined) {
-      return (<div>loadin</div>);
+      return <div>loadin</div>;
     }
 
     return (
-    <FlexColumn className={Styles.content}>
-      <span className={Styles.title}>Nuomotojo sutartys</span>
-      {this.getAgreementItems(agreements)}
-    </FlexColumn>);
+      <FlexColumn className={Styles.content}>
+        <span className={Styles.title}>Nuomotojo sutartys</span>
+        {this.getAgreementItems(agreements)}
+      </FlexColumn>
+    );
   }
 
   private getAgreementItems = (agreements: IShortAgreementData[]): ReactNode[] => {
-    return agreements.map(x => (
+    return agreements.map((x) => (
       <FlexColumn key={x.id} className={Styles.agreement}>
-        <FlexRow >{x.flatName}</FlexRow>
-        <FlexRow>Nuo {x.from} iki {x.to}</FlexRow>
+        <FlexRow>{x.flatName}</FlexRow>
+        <FlexRow>
+          Nuo {x.from} iki {x.to}
+        </FlexRow>
       </FlexColumn>
     ));
-  }
+  };
 
   private fetchAgreements = async (userId: string) => {
     if (UserService.userId() !== userId) {
       return;
     }
     try {
-      const {errors, data} = await UserService.getUserAgreementsOwner(userId);
+      const { errors, data } = await UserService.getUserAgreementsOwner(userId);
       if (errors !== undefined) {
         const error = Object.keys(errors).map((key) => errors![key].join("\n"));
         error.forEach((err) => toast.error(err));
@@ -68,7 +71,7 @@ class OwnerAgreements extends Component<IOwnerAgreementsProps, IOwnerAgreementsS
       console.log(error);
       toast.error("Įvyko nežinoma klaida.");
     }
-  }
+  };
 }
 
 // const UserAgreementsA = ({ userId }: IUserAgreementsProps) => {
@@ -95,14 +98,8 @@ class OwnerAgreements extends Component<IOwnerAgreementsProps, IOwnerAgreementsS
 
 export const AgreementLoader = () => (
   <div className={Styles.flatBox}>
-    <div className={Styles.loader} >
-      <ContentLoader
-        speed={2}
-        height={334}
-        width={400}
-        primaryColor="#f3f3f3"
-        secondaryColor="#ecebeb"
-      >
+    <div className={Styles.loader}>
+      <ContentLoader speed={2} height={334} width={400} primaryColor="#f3f3f3" secondaryColor="#ecebeb">
         <rect x="0" y="0" rx="5" ry="5" width="400" height="266" />
         <rect x="0" y="276" rx="4" ry="4" width="240" height="12" />
         <rect x="0" y="296" rx="4" ry="4" width="290" height="12" />

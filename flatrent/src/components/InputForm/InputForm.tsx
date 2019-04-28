@@ -68,7 +68,9 @@ class InputForm extends Component<IInputFormProps, { focused: boolean }> {
   }
 
   private handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (this.props.setValue !== undefined) { this.props.setValue(event.target.name, event.target.value); }
+    if (this.props.setValue !== undefined) {
+      this.props.setValue(event.target.name, event.target.value);
+    }
   };
 
   private onFocus = (event: React.FocusEvent<HTMLInputElement>) => {
