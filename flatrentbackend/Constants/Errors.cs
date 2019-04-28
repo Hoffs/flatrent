@@ -2,6 +2,7 @@
 {
     public static class Errors
     {
+        public const string AlreadyRequested = "Jau egzistuoja Jūsų sukurta užklausa.";
         public const string BadRequest = "Neteisinga užklausa.";
         public const string NotFound = "Įrašas nerastas.";
         public const string ImageAlreadyUploaded = "Ši nuotrauka jau buvo įkelta.";
@@ -16,6 +17,7 @@
         public const string MinLength = "Simbolių kiekis turi būti didesnis arba lygus {1}.";
         public const string Range = "Reikšmė turi būti nuo {1} iki {2}.";
         public const string DateAfter = "Data turi būti velesnė arba lygi {1}.";
+        public const string DateBefore = "Data turi būti ankstesnė už {1}.";
 
 
         public const string UserIsNotClient = "Naudotojas nėra klientas.";

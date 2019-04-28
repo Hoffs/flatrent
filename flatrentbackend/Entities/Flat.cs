@@ -59,14 +59,16 @@ namespace FlatRent.Entities
         public Agreement ActiveAgreement =>
             Agreements.FirstOrDefault(y =>
                 !y.Deleted && y.StatusId == AgreementStatus.Statuses.Accepted
-                           && y.From.Date >= DateTime.Now.Date && y.To <= DateTime.Now.Date
             );
 
         [NotMapped]
         public static Expression<Func<Flat, bool>> HasNoActiveAgreement =>
+            //            (flat) => flat.Agreements.FirstOrDefault(y =>
+            //                !y.Deleted && y.StatusId == AgreementStatus.Statuses.Accepted
+            //                           && y.From.Date >= DateTime.Now.Date && y.To <= DateTime.Now.Date
+            //            ) == null;
             (flat) => flat.Agreements.FirstOrDefault(y =>
                 !y.Deleted && y.StatusId == AgreementStatus.Statuses.Accepted
-                           && y.From.Date >= DateTime.Now.Date && y.To <= DateTime.Now.Date
             ) == null;
 //            Agreements.FirstOrDefault(y =>
 //                !y.Deleted && y.StatusId == AgreementStatus.Statuses.Accepted
@@ -89,10 +91,6 @@ namespace FlatRent.Entities
 
         [InverseProperty("Flat")]
         public virtual ICollection<Image> Images { get; set; }
-
-        [JsonIgnore]
-        [InverseProperty("Flat")]
-        public virtual ICollection<Fault> Faults { get; set; }
 
         [JsonIgnore]
         [InverseProperty("AssociatedFlat")]

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using FlatRent.Dtos;
 using FlatRent.Entities;
+using FlatRent.Models.Dtos;
+using FlatRent.Models.Requests;
 
 namespace FlatRent.Profiles
 {
@@ -9,8 +10,14 @@ namespace FlatRent.Profiles
         public AgreementsMapperProfile()
         {
             CreateMap<Agreement, ShortAgreementDetails>()
-                .ForMember(x => x.FlatName, opt => opt.MapFrom(x => x.Flat.Name))
-                .ForMember(x => x.Owner, opt => opt.MapFrom(x => x.Flat.Author));
+                .ForMember(x => x.FlatName, opt => opt.MapFrom(x => x.Flat.Name));
+
+            CreateMap<Agreement, AgreementDetails>()
+                .ForMember(dto => dto.Owner, opt => opt.MapFrom(o => o.Flat.Author));
+
+            CreateMap<RentAgreementForm, Agreement>()
+                .ForMember(a => a.From, opt => opt.MapFrom(o => o.From.Date))
+                .ForMember(a => a.To, opt => opt.MapFrom(o => o.To.Date));
         }
     }
 }

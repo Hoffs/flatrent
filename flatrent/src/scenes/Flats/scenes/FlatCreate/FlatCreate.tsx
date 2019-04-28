@@ -81,12 +81,12 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
     return (
       <FlexColumn className={Styles.content}>
         <span className={Styles.title}>Sukurti naują buto įrašą</span>
-        <InputForm value={""} errors={errors.General} errorsOnly={true} name="" title="" setValue={this.handleUpdate} />
+        <InputForm value={""} errors={errors.general} errorsOnly={true} name="" title="" setValue={this.handleUpdate} />
         <FlexRow>
           <InputForm
             className={Styles.input}
             value={this.state.values.name}
-            errors={errors.Name}
+            errors={errors.name}
             name="name"
             title="Pavadinimas"
             setValue={this.handleUpdate}
@@ -98,7 +98,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             minValue={0}
             maxValue={2050}
             value={this.state.values.yearOfConstruction}
-            errors={errors.YearOfConstruction}
+            errors={errors.yearOfConstruction}
             name="yearOfConstruction"
             title="Statybos metai"
             setValue={this.handleUpdate}
@@ -108,7 +108,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             minValue={0}
             maxValue={100}
             value={this.state.values.floor}
-            errors={errors.Floor}
+            errors={errors.floor}
             name="floor"
             title="Aukštas"
             setValue={this.handleUpdate}
@@ -118,7 +118,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             minValue={0}
             maxValue={100}
             value={this.state.values.totalFloors.toString()}
-            errors={errors.TotalFloors}
+            errors={errors.totalFloors}
             name="totalFloors"
             title="Aukštų skaičius"
             setValue={this.handleUpdate}
@@ -130,7 +130,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             minValue={1}
             maxValue={128}
             value={this.state.values.roomCount}
-            errors={errors.RoomCount}
+            errors={errors.roomCount}
             name="roomCount"
             title="Kambarių skaičius"
             setValue={this.handleUpdate}
@@ -140,7 +140,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             minValue={1}
             maxValue={512}
             value={this.state.values.area}
-            errors={errors.Area}
+            errors={errors.area}
             name="area"
             title="Plotas"
             setValue={this.handleUpdate}
@@ -158,7 +158,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
         <InputForm
           className={Styles.input}
           value={this.state.values.features.toString()}
-          errors={errors.Features}
+          errors={errors.features}
           name="features"
           title="Ypatybės (atskirti kableliu)"
           setValue={this.handleUpdate}
@@ -169,7 +169,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             minValue={1}
             maxValue={10000}
             value={this.state.values.price}
-            errors={errors.Price}
+            errors={errors.price}
             name="price"
             title="Kaina (Eurų per mėnesį)"
             setValue={this.handleUpdate}
@@ -179,7 +179,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
             minValue={1}
             maxValue={3650}
             value={this.state.values.minimumRentDays}
-            errors={errors.MinimumRentDays}
+            errors={errors.minimumRentDays}
             name="minimumRentDays"
             title="Minimali nuoma dienomis"
             setValue={this.handleUpdate}
@@ -190,7 +190,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
         <InputForm
           className={Styles.input}
           value={this.state.values.country}
-          errors={errors.Country}
+          errors={errors.country}
           name="country"
           title="Šalis"
           setValue={this.handleUpdate}
@@ -199,7 +199,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
           <InputForm
             className={Styles.input}
             value={this.state.values.city}
-            errors={errors.City}
+            errors={errors.city}
             name="city"
             title="Miestas"
             setValue={this.handleUpdate}
@@ -207,7 +207,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
           <InputForm
             className={Styles.input}
             value={this.state.values.postCode}
-            errors={errors.PostCode}
+            errors={errors.postCode}
             name="postCode"
             title="Pašto kodas"
             setValue={this.handleUpdate}
@@ -217,7 +217,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
         <InputForm
           className={Styles.input}
           value={this.state.values.street}
-          errors={errors.Street}
+          errors={errors.street}
           name="street"
           title="Gatvė"
           setValue={this.handleUpdate}
@@ -226,7 +226,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
           <InputForm
             className={Styles.input}
             value={this.state.values.houseNumber}
-            errors={errors.HouseNumber}
+            errors={errors.houseNumber}
             name="houseNumber"
             title="Namo numeris"
             setValue={this.handleUpdate}
@@ -234,7 +234,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
           <InputForm
             className={Styles.input}
             value={this.state.values.flatNumber}
-            errors={errors.FlatNumber}
+            errors={errors.flatNumber}
             name="flatNumber"
             title="Buto numeris"
             setValue={this.handleUpdate}
@@ -243,7 +243,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
 
         <InputAreaForm
           className={Styles.descriptionArea}
-          errors={errors.Description}
+          errors={errors.description}
           name="description"
           title="Aprašymas"
           setValue={this.handleUpdate}
@@ -251,13 +251,13 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
 
         <InputAreaForm
           className={Styles.requirementsArea}
-          errors={errors.TenantRequirements}
+          errors={errors.tenantRequirements}
           name="tenantRequirements"
           title="Reikalavimai nuomininkui"
           setValue={this.handleUpdate}
         />
 
-        <InputForm errorsOnly={true} errors={this.state.errors.images} />
+        <InputForm errorsOnly={true} errors={errors.images} />
         <FlexDropzone
           className={Styles.dropzone}
           accept={["image/png", "image/jpg", "image/jpeg"]}

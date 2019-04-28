@@ -1,8 +1,7 @@
 ﻿using System;
 using FlatRent.Entities;
-using FlatRent.Models.Dtos;
 
-namespace FlatRent.Dtos
+namespace FlatRent.Models.Dtos
 {
     public class ShortAgreementDetails
     {
@@ -14,8 +13,5 @@ namespace FlatRent.Dtos
 
         public string FlatName { get; set; }
         public ShortAddress Address { get; set; }
-
-        public ShortUserInfo Tenant { get; set; }
-        public ShortUserInfo Owner { get; set; }
     }
 }

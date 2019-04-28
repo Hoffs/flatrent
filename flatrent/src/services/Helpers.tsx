@@ -127,5 +127,5 @@ export const uploadEach = async (
 };
 
 export function getGeneralError<T>(): IApiResponse<T> {
-  return { errors: { General: ["Įvyko nežinoma klaida"] } };
+  return { errors: { general: ["Įvyko nežinoma klaida"] } };
 }

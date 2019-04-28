@@ -47,7 +47,6 @@ namespace FlatRent.Repositories
             modelBuilder.Entity<Agreement>().HasOne(e => e.Flat).WithMany(e => e.Agreements).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Agreement>().HasOne(e => e.Tenant).WithMany(e => e.TenantAgreements).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Fault>().HasOne(e => e.Author).WithMany(e => e.RegisteredFaults).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Fault>().HasOne(e => e.Flat).WithMany(e => e.Faults).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Conversation>().HasOne(e => e.Author).WithMany(e => e.StartedConversations).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Conversation>().HasOne(e => e.Recipient).WithMany(e => e.RecipientConversations).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Conversation>().HasOne(e => e.AssociatedFlat).WithMany(e => e.Conversations).OnDelete(DeleteBehavior.Restrict);

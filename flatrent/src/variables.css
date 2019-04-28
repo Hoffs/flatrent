@@ -40,4 +40,10 @@
   --form-border-color-active: #767676;
 
   --maxvh-navless: calc(100vh - 82px);
+
+  --green-color: #4cd964;
+  --green-color-rgb: 76, 217, 100;
+  --red-color: #ff3b30;
+
+  --link-color: #ff5a5f;
 }

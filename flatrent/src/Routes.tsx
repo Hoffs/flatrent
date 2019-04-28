@@ -11,6 +11,7 @@ import FlatDetails from "./scenes/Flats/scenes/FlatDetails";
 import Profile from "./scenes/Profile";
 import { Redirect } from "react-router-dom";
 import { fLocalStorage } from "./utilities/LocalStorageWrapper";
+import AgreementDetails from "./scenes/Agreement";
 
 export enum Authentication {
   Anonymous = 0,
@@ -122,6 +123,19 @@ const FlatRoutes: IRouteInfo[] = [
   },
 ];
 
+// 60
+const AgreementRoutes: IRouteInfo[] = [
+  {
+    addToNav: false,
+    authentication: Authentication.Authenticated,
+    component: AgreementDetails,
+    link: "/agreement/:id",
+    order: 60,
+    redirect: "/",
+    roles: [],
+  },
+];
+
 // 90
 const UserRoutes: IRouteInfo[] = [
   {
@@ -164,6 +178,7 @@ export const Routes: IRouteInfo[] = [
   //   text: "Pradžia",
   // },
   ...FlatRoutes,
+  ...AgreementRoutes,
   ...UserRoutes,
 ].sort(sortByOrder);
 

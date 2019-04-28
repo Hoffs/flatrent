@@ -1,0 +1,149 @@
+.content {
+  margin: 20px;
+  max-width: var(--main-max-width);
+  width: var(--main-width);
+  text-align: left;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: center;
+}
+
+/* Titles */
+
+.agreementTitle {
+  font-size: 2.5em;
+  font-family: var(--title-font-family);
+}
+
+.flatNameHeader {
+  font-size: 1.2em;
+  font-family: var(--title-font-family);
+}
+
+.flatName {
+  font-size: 1.3em;
+  text-decoration: none;
+  color: var(--link-color);
+  font-family: var(--title-font-family);
+}
+
+/* End titles */
+
+.detailsRow {
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* User boxes */
+
+.noStyleLink {
+  text-decoration: none;
+  color: var(--main-font-color);
+}
+
+.user {
+  text-align: left;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.userDetails {
+  margin-left: 12px;
+}
+
+.userTitle {
+  font-size: 0.9em;
+  font-family: var(--title-font-family);
+}
+
+.name {
+  font-family: var(--text-font-family);
+}
+
+.contact {
+  color: var(--link-color);
+  font-size: 1.1em;
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.avatar {
+  border: 1px solid var(--split-color);
+  border-radius: 50px;
+  min-width: 100%;
+  width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background-color: #e2e2e0;
+}
+
+/* End user boxes */
+
+/* Agreement period */
+
+.agreementDetails {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.detailHeader {
+  font-family: var(--title-font-family);
+  font-size: 1.2em;
+}
+
+.detail {
+  font-family: var(--text-font-family);
+  font-size: 1.1em;
+}
+
+/* End agreement period */
+
+/* Comments */
+
+.comments {
+  margin-top: 12px;
+}
+
+.commentsHeader {
+  font-family: var(--title-font-family);
+  font-size: 1.1em;
+}
+
+.commentsText {
+  font-family: var(--text-font-family);
+}
+
+/* End comments */
+
+/* Buttons */
+
+.buttons {
+  width: 100%;
+}
+
+.buttons > button {
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
+.accept {
+  background-color: var(--green-color);
+}
+
+.accept:hover {
+  box-shadow: 0 1px 2px 0 rgba(var(--green-color-rgb), 0.5), 0 1px 3px 1px rgba(var(--green-color-rgb), 0.4);
+}
+
+/* End buttons */

@@ -13,7 +13,6 @@ using FlatRent.Constants;
 using FlatRent.Controllers.Abstractions;
 using FlatRent.Controllers.Filters;
 using FlatRent.Controllers.Interfaces;
-using FlatRent.Dtos;
 using FlatRent.Entities;
 using FlatRent.Extensions;
 using FlatRent.Models;

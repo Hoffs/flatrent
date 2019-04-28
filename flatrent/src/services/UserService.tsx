@@ -2,7 +2,7 @@ import jwtdecode from "jwt-decode";
 import { Authentication } from "../Routes";
 import { fLocalStorage as localStorage } from "../utilities/LocalStorageWrapper";
 import { apiFetch, apiFetchTyped, getGeneralError } from "./Helpers";
-import { IShortAgreementData } from "./interfaces/AgreementInterfaces";
+import { IShortAgreementDetails } from "./interfaces/AgreementInterfaces";
 import { IApiResponse, IBasicResponse, IErrorResponse } from "./interfaces/Common";
 import { IShortFlatDetails } from "./interfaces/FlatServiceInterfaces";
 import {
@@ -41,9 +41,9 @@ class UserService {
     }
   }
 
-  public static async getUserAgreementsTenant(userId: string): Promise<IApiResponse<IShortAgreementData[]>> {
+  public static async getUserAgreementsTenant(userId: string): Promise<IApiResponse<IShortAgreementDetails[]>> {
     try {
-      const [result, parsed] = await apiFetchTyped<IShortAgreementData[]>(
+      const [result, parsed] = await apiFetchTyped<IShortAgreementDetails[]>(
         `/api/user/${userId}/agreements/tenant`,
         {
           method: "GET",
@@ -54,13 +54,13 @@ class UserService {
       return parsed;
     } catch (e) {
       console.log(e);
-      return getGeneralError<IShortAgreementData[]>();
+      return getGeneralError<IShortAgreementDetails[]>();
     }
   }
 
-  public static async getUserAgreementsOwner(userId: string): Promise<IApiResponse<IShortAgreementData[]>> {
+  public static async getUserAgreementsOwner(userId: string): Promise<IApiResponse<IShortAgreementDetails[]>> {
     try {
-      const [result, parsed] = await apiFetchTyped<IShortAgreementData[]>(
+      const [result, parsed] = await apiFetchTyped<IShortAgreementDetails[]>(
         `/api/user/${userId}/agreements/owner`,
         {
           method: "GET",
@@ -71,7 +71,7 @@ class UserService {
       return parsed;
     } catch (e) {
       console.log(e);
-      return getGeneralError<IShortAgreementData[]>();
+      return getGeneralError<IShortAgreementDetails[]>();
     }
   }
 

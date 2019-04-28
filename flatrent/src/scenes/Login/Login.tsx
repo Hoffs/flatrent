@@ -11,7 +11,7 @@ const fields = ["Email", "Password"];
 
 interface ILoginState {
   Values: { [key: string]: string };
-  Errors: { [key: string]: string[] };
+  errors: { [key: string]: string[] };
   Requesting: boolean;
 }
 
@@ -19,7 +19,7 @@ class Login extends Component<RouteComponentProps, ILoginState> {
   constructor(props: Readonly<RouteComponentProps>) {
     super(props);
     this.state = {
-      Errors: {},
+      errors: {},
       Requesting: false,
       Values: { Email: "", Password: "" },
     };
@@ -31,14 +31,14 @@ class Login extends Component<RouteComponentProps, ILoginState> {
         <span className={Styles.title}>Prisijungimas</span>
         <InputForm
           value={this.state.Values.Email}
-          errors={this.state.Errors.Email}
+          errors={this.state.errors.email}
           name="Email"
           title="El. Paštas"
           setValue={this.handleChange}
         />
         <InputForm
           value={this.state.Values.Password}
-          errors={this.state.Errors.Password}
+          errors={this.state.errors.password}
           name="Password"
           type="password"
           title="Slaptažodis"
@@ -47,7 +47,7 @@ class Login extends Component<RouteComponentProps, ILoginState> {
         <InputForm
           value={""}
           errorsOnly={true}
-          errors={this.state.Errors.General}
+          errors={this.state.errors.general}
           name=""
           title=""
           setValue={this.handleChange}
@@ -74,7 +74,7 @@ class Login extends Component<RouteComponentProps, ILoginState> {
         this.props.history.push("/");
         console.log("success");
       } else {
-        this.setState({ Errors: response.errors, Requesting: false });
+        this.setState({ errors: response.errors, Requesting: false });
         console.log("error");
       }
     } catch {

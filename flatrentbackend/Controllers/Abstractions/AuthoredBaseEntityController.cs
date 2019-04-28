@@ -30,7 +30,7 @@ namespace FlatRent.Controllers.Abstractions
             if (HttpContext.User.IsInRole(UserType.Administrator.Id.ToString())) return null;
             return await _repository.IsAuthorAsync(id, HttpContext.User.GetUserId())
                 ? null
-                : Unauthorized(new FormError(fieldId, Errors.NotAuthor));
+                : Forbid();
         }
 
         [NonAction]

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Linq.Expressions;
 using Newtonsoft.Json;
 
 namespace FlatRent.Entities
@@ -12,9 +14,12 @@ namespace FlatRent.Entities
         public DateTime From { get; set; }
         [Required]
         public DateTime To { get; set; }
+        [Required]
+        public float Price { get; set; }
 
-        [MaxLength(65536)]
+        [MaxLength(5000)]
         public string Comments { get; set; }
+
 
         [Required]
         [ForeignKey("Status")]
@@ -31,8 +36,11 @@ namespace FlatRent.Entities
         public Guid FlatId { get; set; }
         public virtual Flat Flat { get; set; }
 
-        [Required]
-        public float Price { get; set; }
+        public static Func<Agreement, bool> RequestedAgreementByUserFunc (Guid userId) =>
+            (agreement) => 
+                !agreement.Deleted
+                && agreement.StatusId == AgreementStatus.Statuses.Requested
+                && agreement.AuthorId == userId;
 
         [JsonIgnore]
         [InverseProperty("Agreement")]

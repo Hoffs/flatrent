@@ -4,11 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using FlatRent.Attributes;
 using FlatRent.Constants;
 using FlatRent.Controllers.Abstractions;
+using FlatRent.Controllers.Attributes;
 using FlatRent.Controllers.Filters;
-using FlatRent.Dtos;
 using FlatRent.Entities;
 using FlatRent.Extensions;
 using FlatRent.Models;
@@ -100,7 +99,7 @@ namespace FlatRent.Controllers
 
             // flat.IsRented ||
 
-            if (!flat.IsPublished)
+            if (!flat.IsPublished || flat.ActiveAgreement != null)
             {
                 return BadRequest(new FormError(Errors.FlatNotAvailableForRent));
             }
@@ -110,6 +109,11 @@ namespace FlatRent.Controllers
             if (User.GetUserId() == flat.AuthorId)
             {
                 return BadRequest(new FormError(Errors.TenantCantBeOwner));
+            }
+
+            if (flat.Agreements.Any(Agreement.RequestedAgreementByUserFunc(User.GetUserId())))
+            {
+                return BadRequest(new FormError(Errors.AlreadyRequested));
             }
 
             var (operationErrors, agreementId) = await _agreementRepository.AddAgreementAsync(id, HttpContext.User.GetUserId(), form).ConfigureAwait(false);

@@ -56,9 +56,9 @@
 
 .Toastify__toast--error {
   /* background: #ff0033; */
-  background: rgb(255, 59, 48);
+  background: #ff3b30;
 }
 
 .Toastify__toast--success {
-  background: rgb(76, 217, 100);
+  background: #4cd964;
 }

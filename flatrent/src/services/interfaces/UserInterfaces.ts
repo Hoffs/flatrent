@@ -1,4 +1,4 @@
-import { IShortAgreementData } from "./AgreementInterfaces";
+import { IShortAgreementDetails } from "./AgreementInterfaces";
 
 export interface ILoginResponse {
     token: string;
@@ -45,6 +45,6 @@ export interface IClientData {
 }
 
 export interface IUserAgreements {
-    ownerAgreements: IShortAgreementData[];
-    tenantAgreements: IShortAgreementData[];
+    ownerAgreements: IShortAgreementDetails[];
+    tenantAgreements: IShortAgreementDetails[];
 }

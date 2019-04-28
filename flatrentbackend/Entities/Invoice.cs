@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -25,5 +26,8 @@ namespace FlatRent.Entities
         [ForeignKey("Agreement")]
         public Guid AgreementId { get; set; }
         public virtual Agreement Agreement { get; set; }
+
+        [InverseProperty("Invoice")]
+        public virtual ICollection<Fault> Faults { get; set; }
     }
 }

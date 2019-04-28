@@ -32,7 +32,7 @@ class UserFlatList extends Component<IUserFlatListProps, IUserFlatlistState> {
   }
 
   componentWillReceiveProps(newProps: IUserFlatListProps) {
-    this.setState({ flats: [] });
+    this.setState({ flats: undefined });
     this.loadFlatsFunc = this.getLoadFlats(newProps.userId);
     this.loadFlatsFunc(0);
   }

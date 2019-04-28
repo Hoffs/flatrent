@@ -12,8 +12,6 @@ import UserProfile from "./UserProfile";
 class Profile extends Component<RouteComponentProps<{ id: string }>> {
   constructor(props: RouteComponentProps<{ id: string }>) {
     super(props);
-    this.state = { user: undefined, ownerAgreements: undefined, tenantAgreements: undefined };
-    // this.fetchData();
   }
 
   public render() {
@@ -38,106 +36,6 @@ class Profile extends Component<RouteComponentProps<{ id: string }>> {
       this.forceUpdate();
     }
   }
-
-  // private getAgreementsJsx = () => {
-  //   const { tenantAgreements } = this.state;
-  //   if (tenantAgreements === undefined) {
-  //     return <></>;
-  //   }
-
-  //   const getPdfFunction = (id: string) => {
-  //     return () => this.getPdfFile(id);
-  //   };
-
-  //   const getCancelFunction = (id: string) => {
-  //     return () => this.cancelAgreement(id);
-  //   };
-
-  //   return tenantAgreements.map((x) => (
-  //     <FlexRow key={x.id} className={Styles.agreementRow}>
-  //       <FlexColumn className={Styles.rowText}>
-  //         <span className={Styles.topLine}>
-  //           {x.flatName}, {getAddressString(x.Address)}
-  //         </span>
-  //         <span className={Styles.bottomLine}>
-  //           Laikotarpis: {x.from.split("T")[0]} -> {x.to.split("T")[0]}
-  //         </span>
-  //       </FlexColumn>
-  //       <Button className={Styles.button} outline={true} onClick={getCancelFunction(x.id)}>
-  //         Nutraukti
-  //       </Button>
-  //       <Button className={Styles.button} outline={true} onClick={getPdfFunction(x.id)}>
-  //         Sutartis
-  //       </Button>
-  //     </FlexRow>
-  //   ));
-  // }
-
-  // private getPdfFile = async (id: string) => {
-  //   try {
-  //     const response = await AgreementsService.getPdf(id);
-  //     if (Object.keys(response).length > 0) {
-  //       const errors = Object.keys(response).map((key) => response![key].join("\n"));
-  //       errors.forEach((error) => toast.error(error));
-  //       return;
-  //     }
-  //   } catch (error) {
-  //     toast.error("Įvyko nežinoma klaida.");
-  //   }
-  // }
-
-  // private cancelAgreement = async (id: string) => {
-  //   try {
-  //     const response = await AgreementsService.cancelAgreement(id);
-  //     if (Object.keys(response).length > 0) {
-  //       const errors = Object.keys(response).map((key) => response![key].join("\n"));
-  //       errors.forEach((error) => toast.error(error));
-  //       return;
-  //     }
-  //     // this.fetchUserAgreements(this.props.match.params.id);
-  //   } catch (error) {
-  //     toast.error("Įvyko nežinoma klaida.");
-  //   }
-  // }
-
-  // private handleFail(e: any) {
-  //   toast.error("Įvyko nežinoma klaida.");
-  // }
-
-  // private fetchData = () => {
-  //   const { id } = this.props.match.params;
-  // }
-
-  // private fetchUserAgreements = async (userId: string) => {
-  //   try {
-  //     const {errors, data} = await UserService.getUserAgreementsTenant(userId);
-  //     if (errors !== undefined) {
-  //       const error = Object.keys(errors).map((key) => errors![key].join("\n"));
-  //       error.forEach((err) => toast.error(err));
-  //     } else if (data !== undefined) {
-  //       this.setState({ ownerAgreements: data.ownerAgreements, tenantAgreements: data.tenantAgreements });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error("Įvyko nežinoma klaida.");
-  //   }
-  // }
-
-  // private fetchUserFlats = async (userId: string) => {
-  //   try {
-  //     const {errors, data} = await UserService.getUserFlats(userId);
-  //     if (errors !== undefined) {
-  //       const error = Object.keys(errors).map((key) => errors![key].join("\n"));
-  //       error.forEach((err) => toast.error(err));
-  //     } else if (data !== undefined) {
-  //       this.setState({ flats: data });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error("Įvyko nežinoma klaida.");
-  //   }
-  // }
 }
-
 
 export default withRouter(Profile);

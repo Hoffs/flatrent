@@ -9,6 +9,7 @@ using FlatRent.Entities;
 using FlatRent.Extensions;
 using FlatRent.Files;
 using FlatRent.Models;
+using FlatRent.Models.Dtos;
 using FlatRent.Repositories.Interfaces;
 using jsreport.Binary;
 using jsreport.Local;
@@ -34,13 +35,38 @@ namespace FlatRent.Controllers
             _logger = logger;
         }
 
+        [HttpGet("{id}")]
+        [Authorize]
+        [EntityMustExist]
+        public async Task<IActionResult> GetAgreementAsync([FromRoute] Guid id)
+        {
+            var agreement = await _repository.GetAsync(id);
+            if (agreement.TenantId != User.GetUserId() && agreement.Flat.AuthorId != User.GetUserId())
+            {
+                return Forbid();
+            }
+
+            var mapped = _mapper.Map<AgreementDetails>(agreement);
+
+            // Don't show email and phone if agreement wasn't accepted.
+            // POSSIBLE BUSINESS RULE
+            if (mapped.Status.Id != AgreementStatus.Statuses.Accepted)
+            {
+                mapped.Owner.Email = "";
+                mapped.Owner.PhoneNumber = "";
+                mapped.Tenant.Email = "";
+                mapped.Tenant.PhoneNumber = "";
+            }
+            return Ok(mapped);
+        }
+
         [HttpDelete("{id}")]
         [Authorize(Policy = "User")]
         [MustBeEntityAuthor]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var errors = await _repository.DeleteAsync(id).ConfigureAwait(false);
-            if (errors.Any())
+            if (errors != null)
             {
                 return BadRequest(errors);
             }
@@ -58,10 +84,28 @@ namespace FlatRent.Controllers
 
             agreement.StatusId = AgreementStatus.Statuses.Accepted;
             var errors = await _repository.UpdateAsync(agreement);
-            if (errors.Any())
+            if (errors != null)
             {
                 return BadRequest(errors);
             }
+
+
+            // Update other agreement to rejected.
+            try
+            {
+                var requestedAgreements =
+                    agreement.Flat.Agreements.Where(a => a.StatusId == AgreementStatus.Statuses.Requested).ToList();
+                requestedAgreements.SetProperty(ra => ra.StatusId, AgreementStatus.Statuses.Rejected);
+                foreach (var ra in requestedAgreements)
+                {
+                    await _repository.UpdateAsync(ra);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, $"Exception thrown while updating other requested agreements.");
+            }
+
 
             return Ok();
         }
@@ -76,7 +120,7 @@ namespace FlatRent.Controllers
 
             agreement.StatusId = AgreementStatus.Statuses.Rejected;
             var errors = await _repository.UpdateAsync(agreement);
-            if (errors.Any())
+            if (errors != null)
             {
                 return BadRequest(errors);
             }

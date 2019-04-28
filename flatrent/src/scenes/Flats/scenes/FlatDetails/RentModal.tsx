@@ -59,7 +59,7 @@ class RentModal extends Component<RouteComponentProps<{ id: string }> & IRentMod
         <div className={Styles.modalWrapper}>
           <FlexColumn onClick={stopPropogation} className={Styles.modal}>
             <span className={Styles.title}>Buto nuoma</span>
-            <InputForm className={Styles.generalErrors} errorsOnly={true} errors={this.state.errors.General} />
+            <InputForm className={Styles.generalErrors} errorsOnly={true} errors={this.state.errors.general} />
             <FlexRow className={Styles.subRow}>
               <span className={Styles.subTitle}>Pageidavimai nuomininkui:</span>
               <span className={Styles.subText}>{flat.tenantRequirements}</span>
@@ -98,7 +98,7 @@ class RentModal extends Component<RouteComponentProps<{ id: string }> & IRentMod
             </FlexRow>
 
             <InputAreaForm
-              errors={this.state.errors.Comments}
+              errors={this.state.errors.comments}
               className={Styles.inputArea}
               name="comments"
               setValue={this.updateComments}

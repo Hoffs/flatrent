@@ -24,7 +24,6 @@ namespace FlatRent.Models.Dtos
         public int MinimumRentDays { get; set; }
 
         public bool IsPublished { get; set; }
-        public bool IsPublic { get; set; }
         public bool IsRented { get; set; }
         public Address Address { get; set; }
         public ShortUserInfo Owner { get; set; }

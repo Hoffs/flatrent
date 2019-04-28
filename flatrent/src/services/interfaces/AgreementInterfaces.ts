@@ -1,45 +1,68 @@
-import { IShortAddress } from "./FlatServiceInterfaces";
+import { IShortAddress, IShortFlatDetails } from "./FlatServiceInterfaces";
 import { IShortUserDetails } from "./UserInterfaces";
 
-export enum AgreementStatuses {
-    Requested = "Išsiųsta",
+export enum AgreementStatusesText {
+    Requested = "Išsiųsta nuomotojui",
     Accepted = "Patvirtinta",
     Rejected = "Atmesta",
-    Expired = "Nepatvirtinta",
+    Expired = "Nepatvirtinta laiku",
     Ended = "Pasibaigusi",
 }
 
+export enum AgreementStatuses {
+    Requested = 1,
+    Accepted = 2,
+    Rejected = 3,
+    Expired = 4,
+    Ended = 5,
+}
+
 export const getAgreementStatusText = (id: number): string => {
-    if (id === 1) {
-        return AgreementStatuses.Requested;
+    if (id === AgreementStatuses.Requested) {
+        return AgreementStatusesText.Requested;
     }
-    if (id === 2) {
-        return AgreementStatuses.Accepted;
+    if (id === AgreementStatuses.Accepted) {
+        return AgreementStatusesText.Accepted;
     }
-    if (id === 3) {
-        return AgreementStatuses.Rejected;
+    if (id === AgreementStatuses.Rejected) {
+        return AgreementStatusesText.Rejected;
     }
-    if (id === 4) {
-        return AgreementStatuses.Expired;
+    if (id === AgreementStatuses.Expired) {
+        return AgreementStatusesText.Expired;
     }
-    if (id === 5) {
-        return AgreementStatuses.Ended;
+    if (id === AgreementStatuses.Ended) {
+        return AgreementStatusesText.Ended;
     }
     return "Nežinoma";
 };
 
-export interface IShortAgreementData {
+export interface IShortAgreementDetails {
     id: string;
     from: string;
     to: string;
     flatName: string;
     address: IShortAddress;
     status: IAgreementStatus;
-    tenant: IShortUserDetails;
-    owner: IShortUserDetails;
 }
 
 export interface IAgreementStatus {
     id: number;
     name: string;
+}
+
+export interface IAgreementShortUserDetails extends IShortUserDetails {
+    email: string;
+    phoneNumber: string;
+}
+
+export interface IAgreementDetails {
+    id: string;
+    status: IAgreementStatus;
+    from: string;
+    to: string;
+    comments: string;
+    price: number;
+    flat: IShortFlatDetails;
+    tenant: IAgreementShortUserDetails;
+    owner: IAgreementShortUserDetails;
 }

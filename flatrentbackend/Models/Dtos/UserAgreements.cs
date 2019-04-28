@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using FlatRent.Dtos;
 
 namespace FlatRent.Models.Dtos
 {

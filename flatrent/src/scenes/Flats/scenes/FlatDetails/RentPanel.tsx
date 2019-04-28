@@ -34,7 +34,9 @@ const RentPanel = ({ history, flat }: { flat?: IFlatDetails } & RouteComponentPr
         <span className={joined(Styles.rentPrice, Styles.rightHand)}>{flat.price} Eur</span>
       </FlexRow>
 
-      <Button onClick={goToRent}>Nuomotis</Button>
+      <Button disabled={flat.isRented} onClick={goToRent}>
+        Nuomotis
+      </Button>
     </FlexColumn>
   );
 };

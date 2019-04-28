@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Dtos\" />
     <Folder Include="Entities\Interfaces\" />
     <Folder Include="Interfaces\" />
     <Folder Include="wwwroot\" />

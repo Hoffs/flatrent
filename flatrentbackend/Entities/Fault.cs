@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Linq.Expressions;
+using Newtonsoft.Json;
 
 namespace FlatRent.Entities
 {
@@ -11,7 +14,7 @@ namespace FlatRent.Entities
         public string Description { get; set; }
         [Required]
         public bool Repaired { get; set; }
-        [Required]
+
         public float Price { get; set; }
 
         // Associated Agreement
@@ -20,13 +23,20 @@ namespace FlatRent.Entities
         public Guid AgreementId { get; set; }
         public virtual Agreement Agreement { get; set; }
 
-        // Associated Flat
-        [Required]
-        [ForeignKey("Flat")]
-        public Guid FlatId { get; set; }
-        public virtual Flat Flat { get; set; }
+        [JsonIgnore]
+        [InverseProperty("Fault")]
+        public virtual ICollection<Attachment> Attachments { get; set; }
+
+        [NotMapped]
+        public static Func<Fault, bool> NotInvoicedFaultsFunc =>
+            (fault) => fault.Repaired && fault.InvoiceId == null;
 
         [InverseProperty("AssociatedFault")]
         public virtual ICollection<Conversation> Conversations { get; set; }
+
+        // Assigned invoice
+        [ForeignKey("Invoice")]
+        public virtual Guid? InvoiceId { get; set; }
+        public virtual Invoice Invoice { get; set; }
     }
 }

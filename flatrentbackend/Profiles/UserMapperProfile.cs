@@ -12,7 +12,9 @@ namespace FlatRent.Profiles
         public UserMapperProfile()
         {
             CreateMap<RegistrationForm, User>();
-            CreateMap<User, ShortUserInfo>();
+            CreateMap<User, ShortUserInfo>()
+                .IncludeAllDerived();
+            CreateMap<User, ShortAgreementUserInfo>();
 
             CreateMap<User, UserProfile>()
                 .IncludeAllDerived()

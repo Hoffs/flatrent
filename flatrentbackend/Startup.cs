@@ -87,6 +87,8 @@ namespace FlatRent
             services.AddScoped<IAgreementRepository, AgreementRepository>();
             services.AddScoped<IUserService, UserService>();            
             services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            services.AddScoped<IInvoiceService, InvoiceService>();
 
 
             services.AddSwaggerGen(c =>
