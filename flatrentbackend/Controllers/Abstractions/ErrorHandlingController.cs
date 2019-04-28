@@ -3,6 +3,7 @@ using System.Linq;
 using FlatRent.Constants;
 using FlatRent.Extensions;
 using FlatRent.Models;
+using FlatRent.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlatRent.Controllers.Abstractions

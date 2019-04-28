@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using FlatRent.Entities;
 
 namespace FlatRent.Models.Dtos

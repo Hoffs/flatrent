@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlatRent.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190418205440_AddAvatarAndBankAccount")]
-    partial class AddAvatarAndBankAccount
+    [Migration("20190427170211_AddFixedPriceToAgreementOnCreate")]
+    partial class AddFixedPriceToAgreementOnCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace FlatRent.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("FlatRent.Entities.FlatDetailsAddress", b =>
+            modelBuilder.Entity("FlatRent.Entities.Address", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -82,6 +82,8 @@ namespace FlatRent.Migrations
                     b.Property<DateTime>("From");
 
                     b.Property<DateTime?>("ModifiedDate");
+
+                    b.Property<float>("Price");
 
                     b.Property<int>("StatusId");
 
@@ -148,6 +150,8 @@ namespace FlatRent.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid?>("AgreementId");
+
                     b.Property<Guid>("AuthorId");
 
                     b.Property<byte[]>("Bytes")
@@ -158,7 +162,9 @@ namespace FlatRent.Migrations
 
                     b.Property<bool>("Deleted");
 
-                    b.Property<Guid>("MessageId");
+                    b.Property<Guid?>("FaultId");
+
+                    b.Property<Guid?>("MessageId");
 
                     b.Property<string>("MimeType")
                         .IsRequired()
@@ -172,7 +178,11 @@ namespace FlatRent.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AgreementId");
+
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("FaultId");
 
                     b.HasIndex("MessageId");
 
@@ -315,8 +325,6 @@ namespace FlatRent.Migrations
 
                     b.Property<bool>("IsFurnished");
 
-                    b.Property<bool>("IsPublic");
-
                     b.Property<bool>("IsPublished");
 
                     b.Property<int>("MinimumRentDays");
@@ -444,7 +452,7 @@ namespace FlatRent.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("About")
-                        .HasMaxLength(64000);
+                        .HasMaxLength(1000);
 
                     b.Property<Guid>("AvatarId")
                         .ValueGeneratedOnAdd()
@@ -542,7 +550,7 @@ namespace FlatRent.Migrations
                         });
                 });
 
-            modelBuilder.Entity("FlatRent.Entities.FlatDetailsAddress", b =>
+            modelBuilder.Entity("FlatRent.Entities.Address", b =>
                 {
                     b.HasOne("FlatRent.Entities.User", "Author")
                         .WithMany()
@@ -563,7 +571,7 @@ namespace FlatRent.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FlatRent.Entities.AgreementStatus", "Status")
-                        .WithMany("Invoices")
+                        .WithMany("Agreements")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -575,10 +583,18 @@ namespace FlatRent.Migrations
 
             modelBuilder.Entity("FlatRent.Entities.Attachment", b =>
                 {
+                    b.HasOne("FlatRent.Entities.Agreement", "Agreement")
+                        .WithMany("Attachments")
+                        .HasForeignKey("AgreementId");
+
                     b.HasOne("FlatRent.Entities.User", "Author")
                         .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("FlatRent.Entities.Fault", "Fault")
+                        .WithMany()
+                        .HasForeignKey("FaultId");
 
                     b.HasOne("FlatRent.Entities.Message", "Message")
                         .WithMany("Attachments")
@@ -634,7 +650,7 @@ namespace FlatRent.Migrations
 
             modelBuilder.Entity("FlatRent.Entities.Flat", b =>
                 {
-                    b.HasOne("FlatRent.Entities.FlatDetailsAddress", "FlatDetailsAddress")
+                    b.HasOne("FlatRent.Entities.Address", "Address")
                         .WithOne("Flat")
                         .HasForeignKey("FlatRent.Entities.Flat", "AddressId")
                         .OnDelete(DeleteBehavior.Restrict);

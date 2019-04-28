@@ -7,6 +7,7 @@ using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Extensions;
 using FlatRent.Models;
+using FlatRent.Models.Dtos;
 using FlatRent.Models.Requests;
 using FlatRent.Models.Requests.Flat;
 using FlatRent.Repositories.Abstractions;
@@ -22,7 +23,7 @@ namespace FlatRent.Repositories
         private readonly DataContext _context;
         private readonly IMapper _mapper;
 
-        public FlatRepository(DataContext context, IMapper mapper, ILogger logger) : base(context, logger)
+        public FlatRepository(DataContext context, IMapper mapper, ILogger logger) : base(context, mapper, logger)
         {
             _context = context;
             _mapper = mapper;
@@ -62,20 +63,27 @@ namespace FlatRent.Repositories
             return await base.UpdateAsync(flat);
         }
 
-        public async Task<IEnumerable<Flat>> GetListAsync(bool includeRented = false, int count = 20, int offset = 0)
+        public IQueryable<Flat> GetListAsync(bool includeRented = false, int count = 20, int offset = 0)
         {
-            var query = includeRented
-                ? _context.Flats
-                : _context.Flats.Where(x => x.IsPublished && !x.Agreements.Any(agreement => agreement.To > DateTime.UtcNow && !agreement.Deleted) && !x.Deleted);
-            return query.OrderByDescending(x => x.CreatedDate).Skip(offset).Take(count);
+            IQueryable<Flat> query = _context.Flats.Where(x => !x.Deleted).OrderByDescending(x => x.CreatedDate);
+            if (!includeRented)
+            {
+                query = query.Where(Flat.HasNoActiveAgreement);
+            }
+            query = query.Skip(offset).Take(count).Include(x => x.Images);
+            query.Load();
+            return query;
         }
 
         public Task<int> GetCountAsync(bool includeRented = false)
         {
-            var query = includeRented
-                ? _context.Flats
-                : _context.Flats.Where(x => !x.Agreements.Any(agreement => agreement.To > DateTime.UtcNow && !agreement.Deleted) && !x.Deleted);
-            return query.CountAsync();
+            IQueryable<Flat> query = _context.Flats.Where(x => !x.Deleted).OrderByDescending(x => x.CreatedDate);
+            if (!includeRented)
+            {
+                //                query = query.Where(x => x.ActiveAgreement == null);
+                query = query.Where(Flat.HasNoActiveAgreement);
+            }
+            return query.AsTracking().CountAsync();
         }
     }
 }

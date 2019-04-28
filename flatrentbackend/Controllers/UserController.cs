@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -10,18 +14,17 @@ using FlatRent.Controllers.Abstractions;
 using FlatRent.Controllers.Filters;
 using FlatRent.Controllers.Interfaces;
 using FlatRent.Dtos;
+using FlatRent.Entities;
 using FlatRent.Extensions;
 using FlatRent.Models;
+using FlatRent.Models.Dtos;
 using FlatRent.Models.Requests;
 using FlatRent.Repositories.Interfaces;
 using FlatRent.Services.Interfaces;
-using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace FlatRent.Controllers
@@ -43,9 +46,7 @@ namespace FlatRent.Controllers
             _logger = logger;
         }
 
-        [HttpPost("login")]
-        [SwaggerOperation(Summary = "Login with credentials")]
-        [Produces("application/json")]
+        [HttpPost("login"), Produces("application/json")]
         public async Task<IActionResult> LoginAsync(LoginForm form)
         {
             var token = await _userService.AuthenticateAsync(form.Email, form.Password).ConfigureAwait(false);
@@ -57,9 +58,7 @@ namespace FlatRent.Controllers
             return Ok(new { Token = token });
         }
 
-        [Authorize]
-        [SwaggerOperation(Summary = "Refresh bearer token")]
-        [HttpPost("refresh")]
+        [Authorize, HttpPost("refresh")]
         public async Task<IActionResult> RefreshAsync()
         {
             var newToken = await _userService.RefreshAsync(HttpContext.User).ConfigureAwait(false);
@@ -72,7 +71,6 @@ namespace FlatRent.Controllers
         }
 
         [HttpPost("register")]
-        [SwaggerOperation(Summary = "Register")]
         public async Task<IActionResult> Register(RegistrationForm form)
         {
             var errors = await _userService.RegisterAsync(form).ConfigureAwait(false);
@@ -80,34 +78,58 @@ namespace FlatRent.Controllers
             return StatusCode(201);
         }
 
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetSelfData()
+        [HttpGet("{id}"), Authorize]
+        public async Task<IActionResult> GetProfileData([FromRoute] Guid id)
         {
-            var userId = HttpContext.User.GetUserId();
-            if (userId == Guid.Empty)
-            {
-                return BadRequest(new FormError(Errors.Exception));
-            }
-
+            var userId = id == Guid.Empty ? User.GetUserId() : id;
             var userData = await _repository.GetUser(userId).ConfigureAwait(false);
-            return Ok(userData);
+            var mappedProfile = _mapper.Map<User, UserProfile>(userData);
+            return Ok(mappedProfile);
         }
 
-        [HttpGet("{id}/avatar")]
-        [AllowAnonymous]
-        [EntityMustExist]
+        [HttpGet("{id}/agreements/owner"), EntityMustExist, Authorize]
+        public async Task<IActionResult> GetUserAgreementsOwner(Guid id, int offset = 0)
+        {
+            var userId = HttpContext.User.GetUserId();
+            if (userId != id) return Forbid();
+
+            var ownerAgreements = await _repository.GetUserAgreementsOwner(userId, offset);
+
+            return Ok(_mapper.Map<IEnumerable<ShortAgreementDetails>>(ownerAgreements));
+        }
+
+        [HttpGet("{id}/agreements/tenant"), EntityMustExist, Authorize]
+        public async Task<IActionResult> GetUserAgreementsTenant(Guid id, int offset = 0)
+        {
+            var userId = HttpContext.User.GetUserId();
+            if (userId != id) return Forbid();
+
+            var tenantAgreements = await _repository.GetUserAgreementsTenant(userId, offset);
+
+            return Ok(_mapper.Map<IEnumerable<ShortAgreementDetails>>(tenantAgreements));
+        }
+
+        [HttpGet("{id}/flats"), EntityMustExist, Authorize(Policy = "User")]
+        public async Task<IActionResult> GetUserFlats(Guid id, int offset = 0)
+        {
+            var userId = HttpContext.User.GetUserId();
+            var flats = await _repository.GetUserFlats(id, userId == id, offset);
+            
+            return Ok(_mapper.Map<IEnumerable<ShortFlatDetails>>(flats));
+        }
+
+        [HttpGet("{id}/avatar"), AllowAnonymous, EntityMustExist]
         public async Task<IActionResult> GetAvatar(Guid id)
         {
             var user = await _repository.GetUser(id);
             return File(user.Avatar.Bytes, user.Avatar.MimeType, user.Avatar.Name);
         }
 
-        [HttpPut("{id}/avatar")]
-        [EntityMustExist]
+        [HttpPut("{id}/avatar"), EntityMustExist]
         public async Task<IActionResult> UpdateAvatar(Guid id, IFormFile image)
         {
             _logger.Debug("Uploading image with {Id}", id);
+            if (User.GetUserId() != id) return Forbid();
             using (var stream = image.OpenReadStream())
             {
                 if (stream.Length > 1 * MemorySize.Megabyte)
@@ -117,6 +139,13 @@ namespace FlatRent.Controllers
                     return BadRequest(new FormError("File", Errors.InvalidImage));
                 var user = await _repository.GetUser(id).ConfigureAwait(false);
 
+                if (user.AvatarId == Guid.Parse("00000000-0000-0000-0000-000000000001"))
+                {
+                    user.Avatar = new Avatar
+                    {
+                        Name = "avatar"
+                    };
+                }
                 user.Avatar.Bytes = new byte[stream.Length];
                 user.Avatar.MimeType = image.ContentType;
                 await stream.ReadAsync(user.Avatar.Bytes);
@@ -125,52 +154,6 @@ namespace FlatRent.Controllers
                 if (errors != null) return BadRequest(errors);
                 return Ok();
             }
-        }
-
-
-        [HttpGet("agreements")]
-        [Authorize(Policy = "User")]
-        public async Task<IActionResult> GetAgreements(int count = 20, int offset = 0)
-        {
-            var userId = HttpContext.User.GetUserId();
-            var user = await _repository.GetUser(userId).ConfigureAwait(false);
-            if (user == null)
-            {
-                return BadRequest(new FormError(Errors.Exception));
-            }
-
-            var ownerAgreements = user.OwnerAgreements.AsQueryable().ProjectTo<RentAgreementListItem>(_mapper.ConfigurationProvider);
-            var renterAgreements = user.TenantAgreements.AsQueryable().ProjectTo<RentAgreementListItem>(_mapper.ConfigurationProvider);
-            
-            return Ok(new { owner = ownerAgreements, tenant = renterAgreements });
-        }
-
-        [HttpGet("test/roleclient")]
-        [Authorize(Roles = "User")]
-        public async Task<IActionResult> TestUser()
-        {
-            return StatusCode(200);
-        }
-
-        [HttpGet("test/roleadmin")]
-        [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> TestAdmin()
-        {
-            return StatusCode(200);
-        }
-
-        [HttpGet("test/policyuser")]
-        [Authorize(Policy = "User")]
-        public async Task<IActionResult> TestPolicyUser()
-        {
-            return StatusCode(200);
-        }
-
-        [HttpGet("test/policyadmin")]
-        [Authorize(Policy = "Administrator")]
-        public async Task<IActionResult> TestPolicyAdmin()
-        {
-            return StatusCode(200);
         }
 
         [NonAction]

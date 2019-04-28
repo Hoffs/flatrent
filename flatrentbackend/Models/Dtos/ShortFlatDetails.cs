@@ -1,9 +1,8 @@
 ﻿using System;
-using FlatRent.Entities;
 
-namespace FlatRent.Dtos
+namespace FlatRent.Models.Dtos
 {
-    public class FlatListItem
+    public class ShortFlatDetails
     {
         public Guid Id { get; set; }
         public Guid ImageId { get; set; }
@@ -12,13 +11,8 @@ namespace FlatRent.Dtos
         public int Floor { get; set; }
         public int RoomCount { get; set; }
         public float Price { get; set; }
-        public FlatListItemAddress Address { get; set; }
-    }
-
-    public class FlatListItemAddress
-    {
-        public string Street { get; set; }
-        public string City { get; set; }
-        public string Country { get; set; }
+        public bool IsPublished { get; set; }
+        public ShortAddress Address { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

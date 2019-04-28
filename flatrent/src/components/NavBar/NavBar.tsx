@@ -8,6 +8,7 @@ import LinkWithHighlight from "./LinkWithHighlight";
 import NavigationButton from "./NavigationButton";
 import Styles from "./NavBar.module.css";
 import { fLocalStorage } from "../../utilities/LocalStorageWrapper";
+import { userProfileUrl } from "../../utilities/Utilities";
 
 class NavBar extends Component<RouteComponentProps> {
   private listenerId: string;
@@ -57,6 +58,8 @@ class NavBar extends Component<RouteComponentProps> {
 
   private getNavigationButtons() {
     const filteredLinks = getApplicableRoutes().filter((link) => link.addToNav);
+    const idx = filteredLinks.findIndex(x => x.text === "Paskyra");
+    filteredLinks[idx].link = userProfileUrl(UserService.userId());
     return filteredLinks.map((link, index) => (
       <NavigationButton link={link.link} currentUrl={this.props.location.pathname} key={index}>
         {link.text}

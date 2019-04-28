@@ -4,14 +4,14 @@ import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import FlexRow from "../../components/FlexRow";
 import FlatService from "../../services/FlatService";
-import { IFlatListItem, IFlatListResponse } from "../../services/interfaces/FlatServiceInterfaces";
+import { IShortFlatDetails, IFlatListResponse } from "../../services/interfaces/FlatServiceInterfaces";
 import FlatBox, { FlatBoxLoader } from "./FlatBox";
 import Styles from "./FlatList.module.css";
 import { IApiResponse } from "../../services/interfaces/Common";
 
 class FlatList extends Component<
   RouteComponentProps,
-  { pageSize: number; page: number; hasMore: boolean; flats: IFlatListItem[] }
+  { pageSize: number; page: number; hasMore: boolean; flats: IShortFlatDetails[] }
 > {
   constructor(props: Readonly<RouteComponentProps>) {
     super(props);
@@ -43,12 +43,13 @@ class FlatList extends Component<
     if (flats.length > 0) {
       return flats;
     } else {
-      return this.getLoaderItems(12);
+      return Array(12).fill(0).map((_, idx) => <FlatBoxLoader key={idx} />);
     }
   }
 
-  private getLoaderItems(count: number): ReactNode[] {
-    return Array(count).fill(0).map((_, idx) => <FlatBoxLoader key={idx} />);
+  private getLoaderItems(count: number) {
+    const els = Array(count).fill(0).map((_, idx) => <FlatBoxLoader key={idx} />);
+    return <>{els}</> ;
   }
 
   private loadFlats = (pageNumber: number) => {
@@ -57,7 +58,7 @@ class FlatList extends Component<
       .catch(this.handleFail);
   }
 
-  private handleFlatResult = (result: IApiResponse<IFlatListItem[]>) => {
+  private handleFlatResult = (result: IApiResponse<IShortFlatDetails[]>) => {
     if (result.errors !== undefined) {
       const errors = Object.keys(result.errors).map((key) => result.errors![key].join("\n"));
       errors.forEach((error) => toast.error(error));

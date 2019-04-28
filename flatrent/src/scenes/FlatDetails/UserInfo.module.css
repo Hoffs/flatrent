@@ -40,12 +40,9 @@
   font-weight: 500;
 }
 
-.contactOwner > a {
+.contactLink {
   font-size: 0.9em;
   color: var(--main-accent-alt-color);
   font-weight: 500;
-}
-
-.contactLink {
   text-decoration: none;
 }

@@ -1,0 +1,14 @@
+.flatBoxes {
+  flex-wrap: wrap;
+  margin: 16px;
+  margin-top: 36px;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.scroller {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}

@@ -81,6 +81,8 @@ namespace FlatRent.Migrations
 
                     b.Property<DateTime?>("ModifiedDate");
 
+                    b.Property<float>("Price");
+
                     b.Property<int>("StatusId");
 
                     b.Property<Guid>("TenantId");
@@ -448,7 +450,7 @@ namespace FlatRent.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("About")
-                        .HasMaxLength(64000);
+                        .HasMaxLength(1000);
 
                     b.Property<Guid>("AvatarId")
                         .ValueGeneratedOnAdd()
@@ -567,7 +569,7 @@ namespace FlatRent.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FlatRent.Entities.AgreementStatus", "Status")
-                        .WithMany("Invoices")
+                        .WithMany("Agreements")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade);
 

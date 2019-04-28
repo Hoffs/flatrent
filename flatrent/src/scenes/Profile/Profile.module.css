@@ -69,3 +69,17 @@
 .rowText {
   flex-grow: 1;
 }
+
+
+/* New css */
+
+.content {
+  justify-content: center;
+  align-items: center;
+  margin-top: 36px;
+}
+
+.flatsTitle {
+  font-size: 1.5em;
+  font-family: var(--title-font-family);
+}

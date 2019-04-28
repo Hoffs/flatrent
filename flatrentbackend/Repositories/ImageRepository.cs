@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using FlatRent.Models;
 using FlatRent.Repositories.Abstractions;
 using FlatRent.Repositories.Interfaces;
@@ -14,7 +15,7 @@ namespace FlatRent.Repositories
         private readonly DataContext _context;
         private readonly ILogger _logger;
 
-        public ImageRepository(DataContext context, ILogger logger) : base(context, logger)
+        public ImageRepository(DataContext context, IMapper mapper, ILogger logger) : base(context, mapper, logger)
         {
             _context = context;
             _logger = logger;

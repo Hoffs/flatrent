@@ -7,8 +7,6 @@ namespace FlatRent.Models.Dtos
         public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
-//        public Guid Avatar { get; set; }
+        public Guid AvatarId { get; set; }
     }
 }

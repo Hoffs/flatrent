@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using FlatRent.Constants;
 using FlatRent.Extensions;
 using FlatRent.Models;
+using FlatRent.Models.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace FlatRent.Utilities
 {
@@ -41,7 +43,7 @@ namespace FlatRent.Utilities
                 Errors = errors.GetFormattedResponse(),
             };
 
-            var json = JsonConvert.SerializeObject(response);
+            var json = JsonConvert.SerializeObject(response, new JsonSerializerSettings() { ContractResolver = new CamelCasePropertyNamesContractResolver() });
 
             context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             context.HttpContext.Response.ContentType = "application/json";

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using FlatRent.Entities;
 using FlatRent.Models;
 using FlatRent.Repositories.Abstractions;
@@ -10,7 +11,7 @@ namespace FlatRent.Repositories
 {
     public class AttachmentRepository : AuthoredBaseRepository<Attachment>, IAttachmentRepository
     {
-        public AttachmentRepository(DataContext context, ILogger logger) : base(context, logger)
+        public AttachmentRepository(DataContext context, IMapper mapper, ILogger logger) : base(context, mapper, logger)
         {
         }
 

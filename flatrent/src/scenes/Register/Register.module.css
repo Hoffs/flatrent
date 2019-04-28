@@ -1,13 +1,28 @@
-.card {
+.content {
   min-width: 300px;
   margin-top: 40px;
+  margin-bottom: 40px;
+  max-width: 500px;
+  width: var(--main-width);
+  align-self: center;
+}
+
+.content input, .content textarea {
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 .title {
   font-weight: 400;
-  font-size: 1.5em;
+  font-size: 2.5em;
   margin-bottom: 18px;
   padding-bottom: 3px;
   width: 100%;
-  border-bottom: 2px solid rgba(var(--main-accent-alt-color-rgb), 0.05);
+  /* border-bottom: 2px solid rgba(var(--main-accent-alt-color-rgb), 0.05); */
 }
+
+.about {
+  min-height: 100px;
+  resize: vertical;
+}
+

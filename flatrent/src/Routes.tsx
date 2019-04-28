@@ -10,6 +10,7 @@ import { number } from "prop-types";
 import FlatDetails from "./scenes/FlatDetails";
 import Profile from "./scenes/Profile";
 import { Redirect } from "react-router-dom";
+import { fLocalStorage } from "./utilities/LocalStorageWrapper";
 
 export enum Authentication {
   Anonymous = 0,
@@ -20,6 +21,7 @@ export enum Authentication {
 interface IRouteInfo {
   order: number;
   addToNav: boolean;
+  navOnly?: boolean;
   authentication: Authentication;
   exact?: boolean;
   link: string;
@@ -127,6 +129,7 @@ const UserRoutes: IRouteInfo[] = [
     authentication: Authentication.Authenticated,
     component: Profile,
     link: `/user/${UserService.userId()}`,
+    navOnly: true,
     order: 90,
     redirect: "/",
     roles: [],
@@ -145,7 +148,8 @@ const UserRoutes: IRouteInfo[] = [
 
 export const sortByOrder = (a: IRouteInfo, b: IRouteInfo): number => a.order - b.order;
 export const filterApplicable = (route: IRouteInfo): boolean =>
-  UserService.satisfiesAuthentication(route.authentication) && UserService.hasRoles(...route.roles);
+  UserService.satisfiesAuthentication(route.authentication)
+  && UserService.hasRoles(...route.roles);
 
 export const Routes: IRouteInfo[] = [
   ...AuthRoutes,
@@ -165,7 +169,7 @@ export const Routes: IRouteInfo[] = [
 ].sort(sortByOrder);
 
 export const getAsRoleRoutes = () => {
-  return Routes.sort(sortByOrder).map((link, index) => (
+  return Routes.filter((route) => route.navOnly !== true).sort(sortByOrder).map((link, index) => (
     <RoleRoute
       key={index}
       path={link.link}

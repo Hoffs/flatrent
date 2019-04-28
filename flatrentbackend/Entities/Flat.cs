@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Linq.Expressions;
 using Newtonsoft.Json;
 
 namespace FlatRent.Entities
@@ -46,17 +47,31 @@ namespace FlatRent.Entities
         [Required]
         public bool IsPublished { get; set; }
 
-        [NotMapped]
-        public bool IsRented =>
-            ActiveAgreement != null;
+//        [NotMapped]
+//        public bool IsRented =>
+//            ActiveAgreement != null;
 
-        [NotMapped]
-        public bool IsAvailableForRent =>
-            !IsRented && IsPublished;
+//        [NotMapped]
+//        public bool IsAvailableForRent =>
+//            !IsRented && IsPublished;
 
         [NotMapped]
         public Agreement ActiveAgreement =>
-            Agreements.FirstOrDefault(x => x.From.Date >= DateTime.Now.Date && x.To <= DateTime.Now.Date && !x.Deleted);
+            Agreements.FirstOrDefault(y =>
+                !y.Deleted && y.StatusId == AgreementStatus.Statuses.Accepted
+                           && y.From.Date >= DateTime.Now.Date && y.To <= DateTime.Now.Date
+            );
+
+        [NotMapped]
+        public static Expression<Func<Flat, bool>> HasNoActiveAgreement =>
+            (flat) => flat.Agreements.FirstOrDefault(y =>
+                !y.Deleted && y.StatusId == AgreementStatus.Statuses.Accepted
+                           && y.From.Date >= DateTime.Now.Date && y.To <= DateTime.Now.Date
+            ) == null;
+//            Agreements.FirstOrDefault(y =>
+//                !y.Deleted && y.StatusId == AgreementStatus.Statuses.Accepted
+//                           && y.From.Date >= DateTime.Now.Date && y.To <= DateTime.Now.Date
+//            );
 
         [NotMapped]
         public Image CoverImage =>

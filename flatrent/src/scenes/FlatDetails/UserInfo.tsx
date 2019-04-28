@@ -3,11 +3,11 @@ import ContentLoader from "react-content-loader"
 import { Link } from "react-router-dom";
 import FlexColumn from "../../components/FlexColumn";
 import { avatarUrl } from "../../services/ApiUtilities";
-import { IUserDetails } from "../../services/interfaces/Common";
 import { conversationWithUserUrl, userProfileUrl } from "../../utilities/Utilities";
 import Styles from "./UserInfo.module.css";
+import { IUserDetails, IShortUserDetails } from "../../services/interfaces/UserInterfaces";
 
-const UserDisplay = ({user}: {user?: IUserDetails}) => {
+const UserInfo = ({user}: {user?: IShortUserDetails}) => {
   if (user === undefined) {
     return <UserDisplayLoader />;
   }
@@ -20,9 +20,7 @@ const UserDisplay = ({user}: {user?: IUserDetails}) => {
       </span>
       <div className={Styles.avatarWrapper}><img className={Styles.avatar} src={avatarUrl(user.id)} /></div>
       </Link>
-      <span className={Styles.contactOwner}>
-        <Link className={Styles.contactLink} to={conversationWithUserUrl(user.id)}>Siųsti žinutę</Link>
-      </span>
+      <Link className={Styles.contactLink} to={conversationWithUserUrl(user.id)}>Siųsti žinutę</Link>
     </FlexColumn>
   );
 };
@@ -42,4 +40,4 @@ const UserDisplayLoader = () => (
   </ContentLoader>
 );
 
-export default UserDisplay;
+export default UserInfo;

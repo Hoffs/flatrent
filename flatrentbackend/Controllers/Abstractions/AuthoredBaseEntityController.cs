@@ -21,7 +21,7 @@ namespace FlatRent.Controllers.Abstractions
         }
 
         [NonAction]
-        public async Task<IActionResult> IsAllowedToEditEntity(Guid id, string fieldId)
+        public async Task<IActionResult> IsEntityAuthor(Guid id, string fieldId)
         {
             var existsActionResult = await DoesEntityExistAsync(id, fieldId);
             if (existsActionResult != null) return existsActionResult;

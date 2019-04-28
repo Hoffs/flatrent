@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FlatRent.Models
+namespace FlatRent.Models.Responses
 {
     public class ApiErrorResponse
     {

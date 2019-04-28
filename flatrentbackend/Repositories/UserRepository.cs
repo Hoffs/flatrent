@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Models;
+using FlatRent.Models.Dtos;
 using FlatRent.Repositories.Abstractions;
 using FlatRent.Repositories.Interfaces;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -20,7 +23,7 @@ namespace FlatRent.Repositories
         private readonly DataContext _context;
         private readonly ILogger _logger;
 
-        public UserRepository(DataContext context, ILogger logger) : base(context, logger)
+        public UserRepository(DataContext context, IMapper mapper, ILogger logger) : base(context, mapper, logger)
         {
             _context = context;
             _logger = logger;
@@ -29,20 +32,61 @@ namespace FlatRent.Repositories
         public Task<User> GetUser(Guid id)
         {
             return _context.Users.FindAsync(id);
+//            return _context.Users.FindAsync(id);
         }
 
-        /// <exception cref="Exception">Rethrows exception.</exception>
-        public async Task<IEnumerable<FormError>> AddClientAsync(User client)
+        public Task<User> GetUserLoaded(Guid id)
         {
-            try
+            return _context.Users
+//                .Include(u => u.Flats).ThenInclude(f => f.Images)
+//                .Include(u => u.OwnerAgreements)
+//                .Include(u => u.TenantAgreements)
+                .FirstOrDefaultAsync(u => u.Id == id);
+//            return _context.Users.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Flat>> GetUserFlats(Guid id, bool includeNonPublished, int offset = 0)
+        {
+            var user = await _context.Users.FindAsync(id);
+//            var flatsQuery = _context.Flats.Where(f => f.AuthorId == id && !f.Deleted).Include(f => f.Images);
+//            profile.Flats = Mapper.ProjectTo<ShortFlatDetails>(flatsQuery);
+            IQueryable<Flat> flats = _context.Flats
+                .Where(f => f.AuthorId == id && !f.Deleted)
+                .OrderByDescending(f => f.CreatedDate);
+            if (!includeNonPublished)
             {
-                return await AddUserAsync(client, "Client").ConfigureAwait(false);
+                flats = flats.Where(f => f.IsPublished);
             }
-            catch (Exception e)
-            {
-                _logger.Error(e, "Exception thrown while adding {Client}", client);
-                throw;
-            }
+            return await flats.Skip(offset)
+                .Take(16)
+                .ToListAsync();
+//            var mappedFlats = Mapper.Map<IEnumerable<ShortFlatDetails>>(flats);
+//            return _context.Users
+//                .Include(u => u.Flats).ThenInclude(f => f.Images)
+////                .Include(u => u.OwnerAgreements)
+////                .Include(u => u.TenantAgreements)
+//                .FirstOrDefaultAsync(u => u.Id == id);
+//            return _context.Users.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Agreement>> GetUserAgreementsOwner(Guid id, int offset = 0)
+        {
+            return await _context.Agreements
+                .Where(f => f.Flat.AuthorId == id && !f.Deleted)
+                .OrderByDescending(f => f.CreatedDate)
+                .Skip(offset)
+                .Take(16)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Agreement>> GetUserAgreementsTenant(Guid id, int offset = 0)
+        {
+            return await _context.Agreements
+                .Where(f => f.TenantId == id && !f.Deleted)
+                .OrderByDescending(f => f.CreatedDate)
+                .Skip(offset)
+                .Take(16)
+                .ToListAsync();
         }
 
         public new async Task<IEnumerable<FormError>> UpdateAsync(User user)
@@ -50,12 +94,12 @@ namespace FlatRent.Repositories
             return await base.UpdateAsync(user);
         }
 
-        private async Task<IEnumerable<FormError>> AddUserAsync(User user, string type)
+        public async Task<IEnumerable<FormError>> AddUserAsync(User user)
         {
             var error = await CheckEmailAsync(user.Email).ConfigureAwait(false);
             if (error != null) return new[] {error};
 
-            user.Type = await _context.UserTypes.FirstAsync(x => x.Name.Equals(type)).ConfigureAwait(false);
+            user.TypeId = UserType.User.Id;
             user.Password = HashPassword(user.Password, user.FirstName, user.LastName);
 
             await _context.Users.AddAsync(user).ConfigureAwait(false);
@@ -78,7 +122,7 @@ namespace FlatRent.Repositories
         {
             var existing = await _context.Users.FirstOrDefaultAsync(x =>
                 string.Equals(x.Email, email, StringComparison.InvariantCultureIgnoreCase)).ConfigureAwait(false);
-            return existing != null ? new FormError("Email", Errors.EmailAlreadyExists) : null;
+            return existing != null ? new FormError("email", Errors.EmailAlreadyExists) : null;
         }
 
         private static string HashPassword(string password, string fname, string lname)

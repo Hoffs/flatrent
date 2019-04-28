@@ -1,8 +1,17 @@
 import jwtdecode from "jwt-decode";
 import { Authentication } from "../Routes";
 import { fLocalStorage as localStorage } from "../utilities/LocalStorageWrapper";
-import { apiFetch, apiFetchTyped } from "./Helpers";
-import { IAddress, IBasicResponse, IErrorResponse, IApiResponse } from "./interfaces/Common";
+import { apiFetch, apiFetchTyped, getGeneralError } from "./Helpers";
+import { IShortAgreementData } from "./interfaces/AgreementInterfaces";
+import { IApiResponse, IBasicResponse, IErrorResponse } from "./interfaces/Common";
+import { IShortFlatDetails } from "./interfaces/FlatServiceInterfaces";
+import {
+  ILoginResponse,
+  IRegisterRequest,
+  ITokenPayload,
+  IUserAgreements,
+  IUserDetails,
+} from "./interfaces/UserInterfaces";
 
 export enum Roles {
   Administrator = 1,
@@ -14,92 +23,72 @@ export const Policies = {
   User: [Roles.Administrator, Roles.User],
 };
 
-interface ILoginResponse {
-  token: string;
-}
-
-interface ITokenPayload {
-  UserId: string;
-  role: string | string[];
-  exp: number;
-}
-
-export interface IRegistrationModel {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  phoneNumber: string;
-}
-
-export interface IUserData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  clientInformation?: IClientData;
-}
-
-export interface IClientData {
-  id: string;
-  description: string;
-}
-
-export interface IAgreementData {
-  id: string;
-  from: string;
-  to: string;
-  flatName: string;
-  flatAddress: IAddress;
-}
-
-export interface IUserAgreements {
-  owner: IAgreementData[];
-  tenant: IAgreementData[];
-}
-
 class UserService {
-  public static async getUserData(): Promise<IUserData | IErrorResponse> {
+  public static async getUserData(userId: string): Promise<IApiResponse<IUserDetails>> {
     try {
-      const result = await apiFetch("/api/user", {
-        headers: this.authorizationHeaders(),
-        method: "GET",
-      });
+      const [result, parsed] = await apiFetchTyped<IUserDetails>(
+        `/api/user/${userId}`,
+        {
+          method: "GET",
+        },
+        true
+      );
 
-      if (result.ok) {
-        const response = (await result.json()) as IUserData;
-        return response;
-      } else {
-        const response = (await result.json()) as IErrorResponse;
-        return response;
-      }
+      return parsed;
     } catch (e) {
       console.log(e);
-      return { General: ["Įvyko nežinoma klaida"] };
+      return getGeneralError<IUserDetails>();
     }
   }
 
-  public static async getUserAgreements(): Promise<IUserAgreements | IErrorResponse> {
+  public static async getUserAgreementsTenant(userId: string): Promise<IApiResponse<IShortAgreementData[]>> {
     try {
-      const result = await apiFetch("/api/user/agreements", {
-        headers: this.authorizationHeaders(),
-        method: "GET",
-      });
+      const [result, parsed] = await apiFetchTyped<IShortAgreementData[]>(
+        `/api/user/${userId}/agreements/tenant`,
+        {
+          method: "GET",
+        },
+        true
+      );
 
-      if (result.ok) {
-        if (result.status === 204) {
-          return { owner: [], tenant: [] };
-        }
-
-        const response = (await result.json()) as IUserAgreements;
-        return response;
-      } else {
-        const response = (await result.json()) as IErrorResponse;
-        return response;
-      }
+      return parsed;
     } catch (e) {
       console.log(e);
-      return { General: ["Įvyko nežinoma klaida"] };
+      return getGeneralError<IShortAgreementData[]>();
+    }
+  }
+
+  public static async getUserAgreementsOwner(userId: string): Promise<IApiResponse<IShortAgreementData[]>> {
+    try {
+      const [result, parsed] = await apiFetchTyped<IShortAgreementData[]>(
+        `/api/user/${userId}/agreements/owner`,
+        {
+          method: "GET",
+        },
+        true
+      );
+
+      return parsed;
+    } catch (e) {
+      console.log(e);
+      return getGeneralError<IShortAgreementData[]>();
+    }
+  }
+
+  public static async getUserFlats(userId: string, offset: number): Promise<IApiResponse<IShortFlatDetails[]>> {
+    try {
+      const [result, parsed] = await apiFetchTyped<IShortFlatDetails[]>(
+        `/api/user/${userId}/flats?offset=${offset}`,
+        {
+          method: "GET",
+        },
+        true
+      );
+
+      return parsed;
+    } catch (e) {
+      console.log(e);
+      return getGeneralError<IShortFlatDetails[]>();
     }
   }
 
@@ -114,14 +103,13 @@ class UserService {
         this.setToken(parsed.data.token);
       }
       return parsed;
-
     } catch (e) {
       console.log(e);
       return { errors: { General: ["Įvyko nežinoma klaida"] } };
     }
   }
 
-  public static async register(model: IRegistrationModel): Promise<{ [key: string]: string[] }> {
+  public static async register(model: IRegisterRequest): Promise<{ [key: string]: string[] }> {
     try {
       const result = await apiFetch("/api/user/register", {
         body: JSON.stringify(model),
@@ -130,13 +118,15 @@ class UserService {
       if (result.ok) {
         return {};
       } else {
-        const response = (await result.json()) as IErrorResponse;
-        return response;
+        const response = (await result.json()) as IBasicResponse;
+        if (response.errors !== undefined) {
+          return response.errors;
+        }
       }
     } catch (e) {
       console.log(e);
-      return { General: ["Įvyko nežinoma klaida"] };
     }
+    return { General: ["Įvyko nežinoma klaida"] };
   }
 
   public static async refresh(): Promise<{ [key: string]: string[] }> {
@@ -200,17 +190,17 @@ class UserService {
   public static readonly userId = (): string => {
     const userId = localStorage.getItem("UserId");
     return userId ? userId : "";
-  }
+  };
   public static readonly token = (): string | null => localStorage.getItem("Token");
   public static readonly canEdit = (ownerId: string): boolean => ownerId === UserService.userId();
   public static readonly satisfiesAuthentication = (authLevel: Authentication) =>
-    (UserService.isLoggedIn() && authLevel === Authentication.Authenticated)
-    || (!UserService.isLoggedIn() && authLevel === Authentication.Anonymous)
-    || authLevel === Authentication.Either
+    (UserService.isLoggedIn() && authLevel === Authentication.Authenticated) ||
+    (!UserService.isLoggedIn() && authLevel === Authentication.Anonymous) ||
+    authLevel === Authentication.Either;
 
   public static readonly authorizationHeaders = (): { [key: string]: string } => ({
     Authorization: `Bearer ${UserService.token()}`,
-  })
+  });
 
   private static setToken(token: string): void {
     const decoded = jwtdecode(token) as ITokenPayload;
@@ -220,10 +210,10 @@ class UserService {
     }
 
     localStorage.setItems(
-      {key: "Token", value: token},
-      {key: "Roles", value: JSON.stringify(decoded.role)},
-      {key: "UserId", value: decoded.UserId},
-      {key: "TokenExpires", value: decoded.exp.toString()},
+      { key: "Token", value: token },
+      { key: "Roles", value: JSON.stringify(decoded.role) },
+      { key: "UserId", value: decoded.UserId },
+      { key: "TokenExpires", value: decoded.exp.toString() }
     );
   }
 

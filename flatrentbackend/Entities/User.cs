@@ -27,7 +27,7 @@ namespace FlatRent.Entities
         [Required]
         public string PhoneNumber { get; set; }
 
-        [MaxLength(64000)]
+        [MaxLength(1000)]
         public string About { get; set; }
 
 
@@ -58,7 +58,7 @@ namespace FlatRent.Entities
         public virtual ICollection<Flat> Flats { get; set; }
 
         [NotMapped]
-        public IEnumerable<Agreement> OwnerAgreements => Flats.SelectMany(x => x.Agreements);
+        public IEnumerable<Agreement> OwnerAgreements => Flats.SelectMany(x => x.Agreements).Where(a => !a.Deleted);
 
         [JsonIgnore]
         [InverseProperty("Author")]

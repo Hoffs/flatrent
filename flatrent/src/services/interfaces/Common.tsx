@@ -1,3 +1,4 @@
+import { SpawnSyncOptionsWithStringEncoding } from "child_process";
 
 export interface IErrorResponse {
   [key: string]: string[];
@@ -8,25 +9,6 @@ export interface IErrorResponse {
 export interface IBasicResponse {
   errors?: IErrorResponse;
   message?: string;
-}
-
-// General Flat
-
-export interface IAddress {
-  street: string;
-  houseNumber: string;
-  flatNumber: string;
-  city: string;
-  country: string;
-  postCode: string;
-}
-
-export interface IUserDetails {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
 }
 
 export interface IFileMetadata {

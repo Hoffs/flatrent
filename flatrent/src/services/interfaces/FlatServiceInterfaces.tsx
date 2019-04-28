@@ -1,7 +1,8 @@
-import { IErrorResponse, IAddress, IUserDetails, IFileMetadata, IBasicResponse } from "./Common";
+import { IErrorResponse, IFileMetadata, IBasicResponse } from "./Common";
+import { IUserDetails, IShortUserDetails } from "./UserInterfaces";
 
 // FlatList interfaces
-export interface IFlatListItem {
+export interface IShortFlatDetails {
   id: string;
   imageId: string;
   name: string;
@@ -18,8 +19,17 @@ export interface IShortAddress {
   country: string;
 }
 
+export interface IAddress {
+  street: string;
+  houseNumber: string;
+  flatNumber: string;
+  city: string;
+  country: string;
+  postCode: string;
+}
+
 export interface IFlatListResponse {
-  flats?: IFlatListItem[];
+  flats?: IShortFlatDetails[];
   errors?: IErrorResponse;
 }
 
@@ -36,7 +46,7 @@ export interface IFlatDetails {
   features: string[];
   description: string;
   address: IAddress;
-  owner: IUserDetails;
+  owner: IShortUserDetails;
   tenantRequirements: string;
   minimumRentDays: number;
   isPublished: boolean;

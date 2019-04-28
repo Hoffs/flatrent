@@ -21,7 +21,7 @@ namespace FlatRent.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("FlatRent.Entities.Address", b =>
+            modelBuilder.Entity("FlatRent.Entities.FlatDetailsAddress", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -482,7 +482,7 @@ namespace FlatRent.Migrations
                         });
                 });
 
-            modelBuilder.Entity("FlatRent.Entities.Address", b =>
+            modelBuilder.Entity("FlatRent.Entities.FlatDetailsAddress", b =>
                 {
                     b.HasOne("FlatRent.Entities.User", "Author")
                         .WithMany()
@@ -574,7 +574,7 @@ namespace FlatRent.Migrations
 
             modelBuilder.Entity("FlatRent.Entities.Flat", b =>
                 {
-                    b.HasOne("FlatRent.Entities.Address", "Address")
+                    b.HasOne("FlatRent.Entities.FlatDetailsAddress", "FlatDetailsAddress")
                         .WithOne("Flat")
                         .HasForeignKey("FlatRent.Entities.Flat", "AddressId")
                         .OnDelete(DeleteBehavior.Restrict);

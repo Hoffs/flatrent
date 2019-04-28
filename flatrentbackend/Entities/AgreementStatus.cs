@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace FlatRent.Entities
 {
@@ -13,7 +14,9 @@ namespace FlatRent.Entities
         public int Id { get; set; }
         [Required] public string Name { get; set; }
 
-        [InverseProperty("Status")] public virtual List<Agreement> Invoices { get; set; }
+        [JsonIgnore]
+        [InverseProperty("Status")]
+        public virtual List<Agreement> Agreements { get; set; }
 
         [NotMapped]
         public static IEnumerable<AgreementStatus> ExistingAgreementStatuses =>

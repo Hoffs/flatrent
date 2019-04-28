@@ -70,7 +70,7 @@ namespace FlatRent.Controllers
         [MustBeEntityAuthor]
         public async Task<IActionResult> UpdateFlat([FromRoute] Guid id, FlatForm form)
         {
-            var actionResult = await IsAllowedToEditEntity(id, "FlatId");
+            var actionResult = await IsEntityAuthor(id, "FlatId");
             if (actionResult != null) return actionResult;
 
             throw new NotImplementedException();
@@ -97,7 +97,10 @@ namespace FlatRent.Controllers
             }
 
             // TODO: Move to BR
-            if (flat.IsRented || !flat.IsPublished)
+
+            // flat.IsRented ||
+
+            if (!flat.IsPublished)
             {
                 return BadRequest(new FormError(Errors.FlatNotAvailableForRent));
             }
@@ -122,12 +125,9 @@ namespace FlatRent.Controllers
         [AllowAnonymous]
         [ExactQueryParam("count", "offset")]
         [HttpGet]
-        public async Task<IActionResult> GetFlats([Range(0, int.MaxValue, ErrorMessage = Errors.Range)] int offset = 0)
+        public Task<IActionResult> GetFlats([Range(0, int.MaxValue, ErrorMessage = Errors.Range)] int offset = 0)
         {
-            var flats = await _flatRepository.GetListAsync(false, 20, offset).ConfigureAwait(false);
-            var mappedFlats = _mapper.Map<List<FlatListItem>>(flats);
-            Response.Headers.Add("X-Total-Count", (await _flatRepository.GetCountAsync().ConfigureAwait(false)).ToString());
-            return new OkObjectResult(mappedFlats);
+            return GetFlats(false, offset);
         }
 
         [AllowAnonymous]
@@ -135,9 +135,10 @@ namespace FlatRent.Controllers
         [HttpGet]
         public async Task<IActionResult> GetFlats(bool rented = false, [Range(0, int.MaxValue)] int offset = 0)
         {
-            var flats = await _flatRepository.GetListAsync(rented, 20, offset).ConfigureAwait(false);
-            var mappedFlats = _mapper.Map<List<FlatListItem>>(flats);
+            var flats = _flatRepository.GetListAsync(rented, 20, offset);
+            var mappedFlats = _mapper.ProjectTo<ShortFlatDetails>(flats);
             Response.Headers.Add("X-Total-Count", (await _flatRepository.GetCountAsync(rented).ConfigureAwait(false)).ToString());
+            await Task.Delay(1500);
             return new OkObjectResult(mappedFlats);
         }
 

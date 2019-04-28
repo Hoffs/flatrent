@@ -9,7 +9,7 @@ const Button = ({
   outline,
 }: {
   className?: string;
-  onClick: () => void;
+  onClick?: () => void;
   children: ReactNode;
   disabled?: boolean;
   outline?: boolean;

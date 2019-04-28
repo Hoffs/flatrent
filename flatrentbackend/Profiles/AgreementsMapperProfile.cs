@@ -8,9 +8,9 @@ namespace FlatRent.Profiles
     {
         public AgreementsMapperProfile()
         {
-            CreateMap<Agreement, RentAgreementListItem>()
+            CreateMap<Agreement, ShortAgreementDetails>()
                 .ForMember(x => x.FlatName, opt => opt.MapFrom(x => x.Flat.Name))
-                .ForMember(x => x.FlatAddress, opt => opt.MapFrom(x => x.Flat.Address));
+                .ForMember(x => x.Owner, opt => opt.MapFrom(x => x.Flat.Author));
         }
     }
 }

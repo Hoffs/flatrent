@@ -70,7 +70,7 @@ namespace FlatRent.Services
         public Task<IEnumerable<FormError>> RegisterAsync(RegistrationForm data)
         {
             var user = _mapper.Map<User>(data);
-            return _userRepository.AddClientAsync(user);
+            return _userRepository.AddUserAsync(user);
         }
 
         private string GenerateJwtToken(IEnumerable<Claim> claims)

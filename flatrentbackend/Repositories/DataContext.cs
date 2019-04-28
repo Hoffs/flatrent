@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FlatRent.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using File = System.IO.File;
 
 namespace FlatRent.Repositories
@@ -60,7 +61,7 @@ namespace FlatRent.Repositories
             modelBuilder.Entity<AgreementStatus>().HasData(AgreementStatus.ExistingAgreementStatuses);
 
 //            modelBuilder.Entity<User>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
-//            modelBuilder.Entity<Address>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
+//            modelBuilder.Entity<FlatDetailsAddress>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
 //            modelBuilder.Entity<Fault>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
 //            modelBuilder.Entity<Flat>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
 //            modelBuilder.Entity<Invoice>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
@@ -94,6 +95,13 @@ namespace FlatRent.Repositories
                 Name = "avatar.png",
                 Bytes = File.ReadAllBytes("Files/defaultuser.png"),
                 MimeType = "image/png",
+            });
+
+
+
+            modelBuilder.Entity<Flat>(builder =>
+            {
+//                builder.Property(f => f.Id).Metadata.AfterSaveBehavior = PropertySaveBehavior.Ignore;
             });
 
             base.OnModelCreating(modelBuilder);

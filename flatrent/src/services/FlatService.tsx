@@ -1,7 +1,7 @@
 import { apiFetch, uploadEach, apiFetchTyped, getGeneralError } from "./Helpers";
 import ImageService from "./ImageService";
-import { IAddress, IBasicResponse, IErrorResponse, IApiResponse } from "./interfaces/Common";
-import { IFlatCreateRequest, IFlatCreateResponse, IFlatDetails, IFlatListItem, IFlatListResponse, IRentRequest, IAgreementCreateResponse } from "./interfaces/FlatServiceInterfaces";
+import { IBasicResponse, IErrorResponse, IApiResponse } from "./interfaces/Common";
+import { IFlatCreateRequest, IFlatCreateResponse, IFlatDetails, IShortFlatDetails, IFlatListResponse, IRentRequest, IAgreementCreateResponse, IAddress } from "./interfaces/FlatServiceInterfaces";
 import UserService from "./UserService";
 import AttachmentService from "./AttachmentService";
 import { parseTwoDigitYear } from "moment";
@@ -19,11 +19,11 @@ class FlatService {
     try {
       // const rentedQuery = rented ? "&rented=true" : "";
       const [result, parsed] =
-        await apiFetchTyped<IFlatListItem[]>(`/api/flat?count=${count}&offset=${offset}`, undefined, true);
+        await apiFetchTyped<IShortFlatDetails[]>(`/api/flat?count=${count}&offset=${offset}`, undefined, true);
       return parsed;
     } catch (e) {
       console.log(e);
-      return getGeneralError<IFlatListItem[]>();
+      return getGeneralError<IShortFlatDetails[]>();
     }
   }
 

@@ -31,6 +31,9 @@ namespace FlatRent.Entities
         public Guid FlatId { get; set; }
         public virtual Flat Flat { get; set; }
 
+        [Required]
+        public float Price { get; set; }
+
         [JsonIgnore]
         [InverseProperty("Agreement")]
         public virtual ICollection<Attachment> Attachments { get; set; }

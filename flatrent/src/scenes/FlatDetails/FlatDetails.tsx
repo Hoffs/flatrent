@@ -14,7 +14,7 @@ import FlatDescription from "./FlatDescription";
 import FlatShortInfo from "./FlatShortInfo";
 import RentModal from "./RentModal";
 import RentPanel from "./RentPanel";
-import UserDisplay from "./UserInfo";
+import UserInfo from "./UserInfo";
 import { IApiResponse } from "../../services/interfaces/Common";
 
 interface IFlatDetailsState {
@@ -56,7 +56,7 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
             <FlexRow className={Styles.sectionEnd}>
               <FlatShortInfo flat={flat} />
               <FlexColumn>
-                <UserDisplay user={flat ? flat.owner : undefined} />
+                <UserInfo user={flat ? flat.owner : undefined} />
               </FlexColumn>
             </FlexRow>
 

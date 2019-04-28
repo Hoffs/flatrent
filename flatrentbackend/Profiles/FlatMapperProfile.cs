@@ -4,6 +4,7 @@ using FlatRent.Entities;
 using FlatRent.Models.Dtos;
 using FlatRent.Models.Requests;
 using FlatRent.Models.Requests.Flat;
+using FlatRent.Models.Responses;
 
 namespace FlatRent.Profiles
 {
@@ -15,9 +16,9 @@ namespace FlatRent.Profiles
             
             CreateMap<FlatForm, Address>();
 
-            CreateMap<Address, FlatListItemAddress>();
+            CreateMap<Address, ShortAddress>();
 
-            CreateMap<Flat, FlatListItem>()
+            CreateMap<Flat, ShortFlatDetails>()
                 .ForMember(fi => fi.ImageId, opt => opt.MapFrom(f => f.CoverImage.Id));
 
             CreateMap<RentAgreementForm, Agreement>();

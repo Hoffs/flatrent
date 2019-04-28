@@ -36,29 +36,49 @@ namespace FlatRent.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Policy = "User")]
-        [EntityMustExist]
-//        [MustBeEntityAuthor] // Should be custom that allows for tenant and renter  to cancel
-        public async Task<IActionResult> Cancel([FromRoute] Guid id)
+        [MustBeEntityAuthor]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            // TODO: Overhaul, shouldn't be able to cancel this easily
-
-            if (HttpContext.User.IsInRole(UserType.User.Role))
-            {
-                var agreement = await _repository.GetAsync(id).ConfigureAwait(false);
-
-                // TODO: Maybe additional business rule that user can cancel if 30 days until agreement starts
-
-                if (agreement.TenantId != HttpContext.User.GetUserId())
-                {
-                    return BadRequest(new FormError(Errors.AgreementCancelNotOwner));
-                }
-            }
-
-
-            var errors = await _repository.CancelAgreementAsync(id).ConfigureAwait(false);
+            var errors = await _repository.DeleteAsync(id).ConfigureAwait(false);
             if (errors.Any())
             {
-                return BadRequest(errors.GetFormattedResponse());
+                return BadRequest(errors);
+            }
+
+            return Ok();
+        }
+
+        [HttpPost("{id}/accept")]
+        [Authorize(Policy = "User")]
+        [EntityMustExist]
+        public async Task<IActionResult> AcceptAgreement([FromRoute] Guid id)
+        {
+            var agreement = await _repository.GetAsync(id);
+            if (agreement.Flat.AuthorId != User.GetUserId()) return Forbid();
+
+            agreement.StatusId = AgreementStatus.Statuses.Accepted;
+            var errors = await _repository.UpdateAsync(agreement);
+            if (errors.Any())
+            {
+                return BadRequest(errors);
+            }
+
+            return Ok();
+        }
+
+        [HttpPost("{id}/reject")]
+        [Authorize(Policy = "User")]
+        [EntityMustExist]
+        public async Task<IActionResult> RejectAgreement([FromRoute] Guid id)
+        {
+            var agreement = await _repository.GetAsync(id);
+            if (agreement.Flat.AuthorId != User.GetUserId()) return Forbid();
+
+            agreement.StatusId = AgreementStatus.Statuses.Rejected;
+            var errors = await _repository.UpdateAsync(agreement);
+            if (errors.Any())
+            {
+                return BadRequest(errors);
             }
 
             return Ok();
@@ -71,13 +91,11 @@ namespace FlatRent.Controllers
         public async Task<IActionResult> GetPdf([FromRoute] Guid id)
         {
             var agreement = await _repository.GetAsync(id).ConfigureAwait(false);
+            var userId = User.GetUserId();
 
-            if (HttpContext.User.IsInRole(UserType.User.Role))
+            if (agreement.TenantId != userId && agreement.Flat.AuthorId != userId)
             {
-                if (agreement.TenantId != HttpContext.User.GetUserId())
-                {
-                    return BadRequest(new []{new FormError(Errors.AgreementPdfNotOwner)}.GetFormattedResponse());
-                }
+                return Forbid();
             }
 
             var agreementData = new AgreementPatchData

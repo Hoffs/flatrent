@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Extensions;
@@ -14,11 +15,13 @@ namespace FlatRent.Repositories.Abstractions
     public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
     {
         protected readonly DataContext Context;
+        protected readonly IMapper Mapper;
         protected readonly ILogger Logger;
 
-        protected BaseRepository(DataContext context, ILogger logger)
+        protected BaseRepository(DataContext context, IMapper mapper, ILogger logger)
         {
             Context = context;
+            Mapper = mapper;
             Logger = logger;
         }
 
@@ -76,7 +79,19 @@ namespace FlatRent.Repositories.Abstractions
                 return new[] { new FormError(Errors.Exception) };
             }
         }
-        
-//        public Task<IEnumerable<T>> GetListAsync()
+
+        protected async Task<IEnumerable<FormError>> DeleteAsync(Guid id)
+        {
+            try
+            {
+                var entity = await Context.Set<TEntity>().FindAsync(id);
+                return await DeleteAsync(entity);
+            }
+            catch (DbUpdateException e)
+            {
+                Logger.Error(e, "Exception thrown while removing entity of type {EntityType} with {EntityId}", typeof(TEntity), id);
+                return new[] { new FormError(Errors.Exception) };
+            }
+        }
     }
 }

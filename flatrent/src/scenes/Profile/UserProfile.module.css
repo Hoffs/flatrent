@@ -1,0 +1,82 @@
+.content {
+  margin: 20px;
+  max-width: var(--main-max-width);
+  width: var(--main-width);
+  text-align: left;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.name {
+  font-family: var(--title-font-family);
+  font-size: 2.5em;
+  margin-bottom: 2px;
+}
+
+.joined {
+  margin-bottom: 6px;
+}
+
+.about {
+  margin-top: 12px;
+}
+
+.aboutHeader {
+  font-family: var(--title-font-family);
+  font-weight: 500;
+  margin-bottom: 4px;
+  font-size: 1.2em;
+}
+
+.aboutText {
+  font-family: var(--text-font-family);
+  white-space: pre-wrap;
+}
+
+.textContent {
+  margin-top: 20px;
+  margin-left: 24px;
+}
+
+.avatarContent {
+}
+
+.message {
+  font-size: 1.1em;
+  color: var(--main-accent-alt-color);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.avatar {
+  border: 1px solid var(--split-color);
+  border-radius: 500px;
+  min-width: 100%;
+  width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background-color: #e2e2e0;
+}
+
+.avatarWrapper {
+  position: relative;
+  max-width: 180px;
+  width: 180px;
+  height: 180px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+
+.stats {
+  font-family: var(--text-font-family);
+}
+
+
+.edit {
+  color: var(--text-color);
+  font-family: var(--title-font-family);
+}

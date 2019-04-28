@@ -14,7 +14,7 @@ namespace FlatRent.Controllers.Filters
             if (context.Controller is IAuthoredEntityController authoredBaseEntityController && context.ActionArguments.ContainsKey("id"))
             {
                 var id = (Guid) context.ActionArguments["id"];
-                var actionResult = await authoredBaseEntityController.IsAllowedToEditEntity(id, "id");
+                var actionResult = await authoredBaseEntityController.IsEntityAuthor(id, "id");
                 if (actionResult != null)
                 {
                     context.Result = actionResult;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Models;
@@ -12,7 +13,7 @@ namespace FlatRent.Repositories.Abstractions
 {
     public class AuthoredBaseRepository<TEntity> : BaseRepository<TEntity>, IAuthoredRepository<TEntity> where TEntity : AuthoredBaseEntity
     {
-        public AuthoredBaseRepository(DataContext context, ILogger logger) : base(context, logger)
+        public AuthoredBaseRepository(DataContext context, IMapper mapper, ILogger logger) : base(context, mapper, logger)
         {
         }
 
