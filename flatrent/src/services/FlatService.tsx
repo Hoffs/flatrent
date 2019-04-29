@@ -13,7 +13,6 @@ import {
 } from "./interfaces/FlatServiceInterfaces";
 import UserService from "./UserService";
 import AttachmentService from "./AttachmentService";
-import { parseTwoDigitYear } from "moment";
 
 export const getAddressString = (address: IAddress) => {
   console.log(address);
@@ -41,6 +40,18 @@ class FlatService {
       const [response, parsed] = await apiFetchTyped<IFlatDetails>(`/api/flat/${id}`, {
         headers: UserService.authorizationHeaders(),
       });
+      return parsed;
+    } catch (e) {
+      console.log(e);
+      return { errors: { General: ["Įvyko nežinoma klaida"] } };
+    }
+  }
+
+  public static async deleteFlat(id: string): Promise<IApiResponse<any>> {
+    try {
+      const [response, parsed] = await apiFetchTyped<any>(`/api/flat/${id}`, {
+        method: "DELETE",
+      }, true);
       return parsed;
     } catch (e) {
       console.log(e);

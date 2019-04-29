@@ -9,7 +9,7 @@ import ImageCarousel from "../../../../components/ImageCarousel";
 import FlatService from "../../../../services/FlatService";
 import { IFlatDetails } from "../../../../services/interfaces/FlatServiceInterfaces";
 import UserService from "../../../../services/UserService";
-import { flatEditUrl } from "../../../../utilities/Utilities";
+import { flatEditUrl, userProfileUrl } from "../../../../utilities/Utilities";
 import FlatDescription from "./FlatDescription";
 import FlatShortInfo from "./FlatShortInfo";
 import RentModal from "./RentModal";
@@ -37,9 +37,14 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
 
     const editNode =
       flat !== undefined && UserService.canEdit(flat.owner.id) ? (
-        <Link className={Styles.editLink} to={flatEditUrl(flat.id)}>
-          Redaguoti
-        </Link>
+        <>
+          <Link className={Styles.editLink} to={flatEditUrl(flat.id)}>
+            Redaguoti
+          </Link>
+          <a  className={Styles.editLink} onClick={this.deleteFlat}>
+            Ištrinti
+          </a>
+        </>
       ) : (
         <></>
       );
@@ -79,6 +84,11 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
 
   private getRentModal = (props: RouteComponentProps<any, any, any>) =>
     this.state.flat !== undefined ? <RentModal flat={this.state.flat} {...props} /> : <></>;
+
+  private deleteFlat = async () => {
+    await FlatService.deleteFlat(this.props.match.params.id);
+    this.props.history.push(userProfileUrl(UserService.userId()));
+  }
 
   private fetchFlat = (id: string) => {
     FlatService.getFlat(id)
