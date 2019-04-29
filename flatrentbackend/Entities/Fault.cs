@@ -11,6 +11,8 @@ namespace FlatRent.Entities
     public class Fault : AuthoredBaseEntity
     {
         [Required]
+        public string Name { get; set; }
+        [Required]
         public string Description { get; set; }
         [Required]
         public bool Repaired { get; set; }

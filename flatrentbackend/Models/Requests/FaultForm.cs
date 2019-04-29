@@ -6,6 +6,9 @@ namespace FlatRent.Models.Requests
 {
     public class FaultForm
     {
+        [MaxLength(128, ErrorMessage = Errors.MaxLength)]
+        public string Name { get; set; }
+
         [MaxLength(5000, ErrorMessage = Errors.MaxLength)]
         public string Comments { get; set; }
 

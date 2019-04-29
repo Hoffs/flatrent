@@ -39,8 +39,12 @@ namespace FlatRent.Repositories.Abstractions
         {
             try
             {
-                await Context.AddAsync(entity).ConfigureAwait(false);
-                await Context.SaveChangesAsync().ConfigureAwait(false);
+                using (var transaction = await Context.Database.BeginTransactionAsync())
+                {
+                    await Context.AddAsync(entity).ConfigureAwait(false);
+                    await Context.SaveChangesAsync().ConfigureAwait(false);
+                    transaction.Commit();
+                }
                 return null;
             }
             catch (DbUpdateException e)
@@ -54,28 +58,17 @@ namespace FlatRent.Repositories.Abstractions
         {
             try
             {
-                Context.Update(entity);
-                await Context.SaveChangesAsync().ConfigureAwait(false);
+                using (var transaction = await Context.Database.BeginTransactionAsync())
+                {
+                    Context.Update(entity);
+                    await Context.SaveChangesAsync().ConfigureAwait(false);
+                    transaction.Commit();
+                }
                 return null;
             }
             catch (DbUpdateException e)
             {
                 Logger.Error(e, "Exception thrown while updating entity of type {EntityType} with {EntityId}", typeof(TEntity), entity.Id);
-                return new[] { new FormError(Errors.Exception) };
-            }
-        }
-
-        protected async Task<IEnumerable<FormError>> DeleteAsync(TEntity entity)
-        {
-            try
-            {
-                Context.Set<TEntity>().Delete(entity);
-                await Context.SaveChangesAsync().ConfigureAwait(false);
-                return null;
-            }
-            catch (DbUpdateException e)
-            {
-                Logger.Error(e, "Exception thrown while removing entity of type {EntityType} with {EntityId}", typeof(TEntity), entity.Id);
                 return new[] { new FormError(Errors.Exception) };
             }
         }
@@ -90,6 +83,26 @@ namespace FlatRent.Repositories.Abstractions
             catch (DbUpdateException e)
             {
                 Logger.Error(e, "Exception thrown while removing entity of type {EntityType} with {EntityId}", typeof(TEntity), id);
+                return new[] { new FormError(Errors.Exception) };
+            }
+        }
+
+        protected async Task<IEnumerable<FormError>> DeleteAsync(TEntity entity)
+        {
+            try
+            {
+                using (var transaction = await Context.Database.BeginTransactionAsync())
+                {
+                    Context.Set<TEntity>().Delete(entity);
+                    await Context.SaveChangesAsync().ConfigureAwait(false);
+                    transaction.Commit();
+                }
+
+                return null;
+            }
+            catch (DbUpdateException e)
+            {
+                Logger.Error(e, "Exception thrown while removing entity of type {EntityType} with {EntityId}", typeof(TEntity), entity.Id);
                 return new[] { new FormError(Errors.Exception) };
             }
         }

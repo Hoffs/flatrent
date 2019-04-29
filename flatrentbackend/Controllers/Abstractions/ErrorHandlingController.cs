@@ -36,6 +36,12 @@ namespace FlatRent.Controllers.Abstractions
         }
 
         [NonAction]
+        public IActionResult OkOrBadRequest(IEnumerable<FormError> errors, IActionResult goodResult)
+        {
+            return errors != null ? BadRequest(errors) : goodResult;
+        }
+
+        [NonAction]
         public IActionResult HandleFormErrors(IEnumerable<FormError> errors, int successCode)
         {
             var formErrors = errors as FormError[] ?? errors?.ToArray() ?? new FormError[0];
