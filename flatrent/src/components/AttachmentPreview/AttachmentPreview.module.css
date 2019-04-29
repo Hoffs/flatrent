@@ -1,0 +1,44 @@
+.attachmentThumb {
+  font-size: 0.9em;
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--form-border-color);
+  border-style: dashed;
+  width: calc(100% / 2 - (2 * 2%) - 2px);
+  padding-top: 12%;
+  margin: 2%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  transition: opacity 0.2s;
+}
+
+.attachmentThumb:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.textThumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  word-break: break-all;
+  text-overflow: ellipsis;
+  padding: 10px;
+}
+
+
+.attachmentContainer {
+  font-family: var(--text-font-family);
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--form-border-color);
+  border-radius: 4px;
+  width: 100%;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  min-height: 110px;
+}
+
+.attachmentThumb {
+
+}

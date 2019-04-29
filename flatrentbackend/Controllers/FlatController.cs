@@ -51,7 +51,7 @@ namespace FlatRent.Controllers
             var (errors, flatId) = await _flatRepository.AddFlatAsync(form, HttpContext.User.GetUserId()).ConfigureAwait(false);
             if (errors != null) return BadRequest(errors);
 
-            var imageIds = (await _flatRepository.GetAsync(flatId)).Images.Select(i => new KeyValuePair<string,Guid>(i.Name, i.Id));
+            var imageIds = (await _flatRepository.GetAsync(flatId)).Images.Select(i => new KeyValuePair<Guid, string>(i.Id, i.Name));
             return StatusCode(201, new CreatedFlatResponse(flatId, imageIds));
         }
 
@@ -60,6 +60,8 @@ namespace FlatRent.Controllers
         [MustBeEntityAuthor]
         public async Task<IActionResult> DeleteFlat([FromRoute] Guid id)
         {
+            var flat = await _flatRepository.GetAsync(id);
+            if (flat.ActiveAgreement != null) return BadRequest(new FormError(Errors.CantDeleteWithActiveAgreements));
             var errors = await _flatRepository.DeleteAsync(id).ConfigureAwait(false);
             return HandleFormErrors(errors, 201);
         }
@@ -122,7 +124,7 @@ namespace FlatRent.Controllers
                 return BadRequest(operationErrors);
             }
 
-            var imageIds = (await _agreementRepository.GetAsync(agreementId)).Attachments.Select(i => new KeyValuePair<string, Guid>(i.Name, i.Id));
+            var imageIds = (await _agreementRepository.GetAsync(agreementId)).Attachments.Select(i => new KeyValuePair<Guid, string>(i.Id, i.Name));
             return StatusCode(201, new CreatedAgreementResponse(agreementId, imageIds));
         }
 

@@ -1,5 +1,6 @@
 import { IShortAddress, IShortFlatDetails } from "./FlatServiceInterfaces";
 import { IShortUserDetails } from "./UserInterfaces";
+import { IAttachment } from "./Common";
 
 export enum AgreementStatusesText {
     Requested = "Išsiųsta nuomotojui",
@@ -65,4 +66,5 @@ export interface IAgreementDetails {
     flat: IShortFlatDetails;
     tenant: IAgreementShortUserDetails;
     owner: IAgreementShortUserDetails;
+    attachments: IAttachment[];
 }

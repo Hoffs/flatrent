@@ -183,6 +183,20 @@
   align-self: center;
 }
 
+/*  */
+
+.editActions {
+  justify-content: flex-start;
+}
+
+.deleteLink {
+  color: var(--text-color);
+  font-family: var(--title-font-family);
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 12px;
+}
+
 .editLink {
   color: var(--text-color);
   font-family: var(--title-font-family);

@@ -6,12 +6,12 @@ namespace FlatRent.Models.Responses
     public class CreatedAgreementResponse
     {
         public Guid Id { get; set; }
-        public Dictionary<string, Guid> Attachments { get; set; }
+        public Dictionary<Guid, string> Attachments { get; set; }
 
-        public CreatedAgreementResponse(Guid id, IEnumerable<KeyValuePair<string, Guid>> files)
+        public CreatedAgreementResponse(Guid id, IEnumerable<KeyValuePair<Guid, string>> files)
         {
             Id = id;
-            Attachments = new Dictionary<string, Guid>(files);
+            Attachments = new Dictionary<Guid, string>(files);
         }
     }
 }

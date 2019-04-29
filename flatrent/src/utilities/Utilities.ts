@@ -16,3 +16,7 @@ export const flatUrl = (id: string): string => `/flat/${id}`;
 export const loginUrl = (): string => `/login`;
 
 export const stopPropogation = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => event.stopPropagation();
+
+export function uncapitalize(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}

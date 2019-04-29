@@ -55,8 +55,8 @@
     "@types/react-dates": "^17.1.5",
     "@types/react-inlinesvg": "^0.8.1",
     "tslint": "^5.16.0",
-    "tslint-react": "^4.0.0",
     "tslint-config-prettier": "^1.18.0",
+    "tslint-react": "^4.0.0",
     "typescript": "^3.4.5"
   }
 }

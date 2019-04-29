@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FlatRent.Entities;
 using FlatRent.Extensions;
+using FlatRent.Models.Dtos;
 using FlatRent.Models.Requests;
 using Microsoft.AspNetCore.Http;
 
@@ -26,6 +27,11 @@ namespace FlatRent.Profiles
                 .ForMember(i => i.Bytes, opt => opt.MapFrom(_ => new byte[0]));
             CreateMap<FileMetadata, Image>();
             CreateMap<FileMetadata, Attachment>();
+
+            CreateMap<File, FileInfo>()
+                .IncludeAllDerived();
+            CreateMap<Attachment, FileInfo>();
+            CreateMap<Image, FileInfo>();
         }
     }
 }

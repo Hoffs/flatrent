@@ -1,6 +1,8 @@
-import { apiFetch } from "./Helpers";
+import { apiFetch, apiFetchTyped, getGeneralError } from "./Helpers";
 import { IBasicResponse, IErrorResponse } from "./interfaces/Common";
 import UserService from "./UserService";
+import { saveAs } from 'file-saver';
+import { toast } from "react-toastify";
 
 class AttachmentService {
   public static async putAttachment(fileId: string, file: File): Promise<IBasicResponse> {
@@ -24,9 +26,20 @@ class AttachmentService {
       }
     } catch (e) {
       console.log(e);
-      data.errors = { General: ["Įvyko nežinoma klaida"] };
+      return getGeneralError<any>();
     }
     return data;
+  }
+
+  public static async downloadAttachment(id: string, name: string): Promise<void> {
+    try {
+      const result = await apiFetch(`/api/attachment/${id}`, undefined, true);
+      saveAs(await result.blob(), name);
+    } catch (e) {
+      console.log(e);
+      toast.error("Įvyko nežinoma klaida");
+    }
+    return;
   }
 }
 

@@ -37,14 +37,14 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
 
     const editNode =
       flat !== undefined && UserService.canEdit(flat.owner.id) ? (
-        <>
+        <FlexRow className={Styles.editActions}>
           <Link className={Styles.editLink} to={flatEditUrl(flat.id)}>
             Redaguoti
           </Link>
-          <a  className={Styles.editLink} onClick={this.deleteFlat}>
+          <a className={Styles.deleteLink} onClick={this.deleteFlat}>
             Ištrinti
           </a>
-        </>
+        </FlexRow>
       ) : (
         <></>
       );

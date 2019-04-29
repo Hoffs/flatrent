@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FlatRent.Entities;
 
 namespace FlatRent.Models.Dtos
@@ -18,6 +19,8 @@ namespace FlatRent.Models.Dtos
 
         public ShortAgreementUserInfo Tenant { get; set; }
         public ShortAgreementUserInfo Owner { get; set; }
+
+        public IEnumerable<FileInfo> Attachments { get; set; }
     }
 
     public class ShortAgreementUserInfo : ShortUserInfo

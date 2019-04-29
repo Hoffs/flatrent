@@ -112,16 +112,17 @@
 
 /* Comments */
 
-.comments {
+.section {
   margin-top: 12px;
+  width: 100%;
 }
 
-.commentsHeader {
+.sectionHeader {
   font-family: var(--title-font-family);
   font-size: 1.1em;
 }
 
-.commentsText {
+.sectionText {
   font-family: var(--text-font-family);
 }
 

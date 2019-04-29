@@ -2,6 +2,7 @@
 {
     public static class Errors
     {
+        public const string CantDeleteWithActiveAgreements = "Buto negalima panaikinti jeigu yra aktyvi nuomos sutartis.";
         public const string AlreadyRequested = "Jau egzistuoja Jūsų sukurta užklausa.";
         public const string BadRequest = "Neteisinga užklausa.";
         public const string NotFound = "Įrašas nerastas.";

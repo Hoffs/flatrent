@@ -18,6 +18,7 @@ import {
 } from "../../services/interfaces/AgreementInterfaces";
 import { flatUrl, userProfileUrl } from "../../utilities/Utilities";
 import { IBasicResponse } from "../../services/interfaces/Common";
+import AttachmentPreview from "../../components/AttachmentPreview";
 
 interface IAgreementDetailsRouteProps {
   id: string;
@@ -113,11 +114,15 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
               Parašyti žinutę
             </Link> */}
         </FlexRow>
-        <FlexRow className={Styles.buttons}>{actionButtons}</FlexRow>
-        <FlexColumn className={Styles.comments}>
-          <span className={Styles.commentsHeader}>Komentarai:</span>
-          <span className={Styles.commentsText}>{agreement.comments}</span>
+        <FlexColumn className={Styles.section}>
+          <span className={Styles.sectionHeader}>Komentarai:</span>
+          <span className={Styles.sectionText}>{agreement.comments}</span>
         </FlexColumn>
+        <FlexColumn className={Styles.section}>
+          <span className={Styles.sectionHeader}>Pridėti failai:</span>
+          <AttachmentPreview attachments={agreement.attachments} />
+        </FlexColumn>
+        <FlexRow className={Styles.buttons}>{actionButtons}</FlexRow>
         {/* Invoices */}
         {/* Faults */}
       </FlexColumn>

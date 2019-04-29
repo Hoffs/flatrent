@@ -15,6 +15,12 @@ export interface IFileMetadata {
   name: string;
 }
 
+export interface IAttachment {
+  id: string;
+  name: string;
+  mime: string;
+}
+
 export interface IApiResponse<T> extends IBasicResponse {
   data?: T;
 }
