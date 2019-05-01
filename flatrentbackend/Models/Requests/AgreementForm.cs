@@ -6,7 +6,7 @@ using FlatRent.Models.Attributes;
 
 namespace FlatRent.Models.Requests
 {
-    public class RentAgreementForm
+    public class AgreementForm
     {
         [Required(ErrorMessage = Errors.Required)]
         [DateAfter(DaysAfter = 7, ErrorMessage = Errors.DateAfter)]

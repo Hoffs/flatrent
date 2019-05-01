@@ -2,6 +2,8 @@
 {
     public static class Errors
     {
+        public const string CantCreateNonActive = "Negalima registruoti naujo gedimo neaktyviai nuomos sutarčiai.";
+        public const string CantDeleteRepaired = "Negalima ištrinti sutaisyto gedimo.";
         public const string InvoiceNotValid = "Sąskaita yra negaliojanti.";
         public const string CantDeleteWithActiveAgreements = "Buto negalima panaikinti jeigu yra aktyvi nuomos sutartis.";
         public const string AlreadyRequested = "Jau egzistuoja Jūsų sukurta užklausa.";
@@ -42,8 +44,8 @@
         public const string NotFlatOwner = "Naudotojas nėra buto savininkas.";
 
         public const string InvalidImage = "Netinkamo formato nuotrauka. Naudokite JPEG/PNG formatą.";
-        public const string MaxLengthImages = "Nuotraukų skaičius negali būti didesnis už {1}.";
-        public const string MinLengthImages = "Nuotraukų skaičius turi būti didesnis arba lygus {1}.";
+        public const string MaxLengthFiles = "Prisegtų failų skaičius negali būti didesnis už {1}.";
+        public const string MinLengthFiles = "Prisegtų failų skaičius turi būti didesnis arba lygus {1}.";
         public const string FileTooBig = "Failas per didelis.";
 
         public const string NotAuthor = "Naudotojas nėra įrašo autorius.";

@@ -19,27 +19,33 @@ namespace FlatRent.Repositories
         {
         }
 
-        public async Task<(IEnumerable<FormError>, Guid)> AddAgreementAsync(Guid flatId, Guid userId,
-            RentAgreementForm form)
+        public async Task<(IEnumerable<FormError>, Agreement)> AddAgreementAsync(Guid flatId, Guid userId,
+            AgreementForm form)
         {
             var agreement = Mapper.Map<Agreement>(form);
-
+            var flat = await Context.Flats.FindAsync(flatId);
             agreement.TenantId = userId;
             agreement.FlatId = flatId;
             agreement.StatusId = AgreementStatus.Statuses.Requested;
             agreement.Attachments.SetProperty(a => a.AuthorId, userId);
             agreement.Price = (await Context.Flats.FindAsync(flatId)).Price;
+            agreement.Conversation = new Conversation
+            {
+                AuthorId = userId,
+                RecipientId = agreement.Flat.AuthorId,
+                Subject = flat.Name,
+            };
 
             var errors = await AddAsync(agreement, userId);
-            return (errors, agreement.Id);
+            return (errors, agreement);
         }
 
-        public Task<IEnumerable<FormError>> DeleteAsync(Guid id)
+        public new Task<IEnumerable<FormError>> DeleteAsync(Guid id)
         {
             return base.DeleteAsync(id);
         }
 
-        public Task<IEnumerable<FormError>> UpdateAsync(Agreement agreement)
+        public new Task<IEnumerable<FormError>> UpdateAsync(Agreement agreement)
         {
             return base.UpdateAsync(agreement);
         }

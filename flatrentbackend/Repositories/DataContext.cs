@@ -40,16 +40,21 @@ namespace FlatRent.Repositories
 
             modelBuilder.Entity<Flat>().HasOne(e => e.Author).WithMany(e => e.Flats).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Flat>().HasOne(e => e.Address).WithOne(e => e.Flat).OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Image>().HasOne(e => e.Flat).WithMany(e => e.Images).OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Agreement>().HasOne(e => e.Flat).WithMany(e => e.Agreements).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Agreement>().HasOne(e => e.Tenant).WithMany(e => e.TenantAgreements).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Agreement>().HasOne(e => e.Conversation).WithOne(c => c.Agreement).OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Fault>().HasOne(e => e.Author).WithMany(e => e.RegisteredFaults).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Fault>().HasOne(e => e.Conversation).WithOne(c => c.Fault).OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Conversation>().HasOne(e => e.Author).WithMany(e => e.StartedConversations).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Conversation>().HasOne(e => e.Recipient).WithMany(e => e.RecipientConversations).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Conversation>().HasOne(e => e.AssociatedFlat).WithMany(e => e.Conversations).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Conversation>().HasOne(e => e.AssociatedAgreement).WithMany(e => e.Conversations).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Conversation>().HasOne(e => e.AssociatedFault).WithMany(e => e.Conversations).OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Attachment>().HasOne(e => e.Message).WithMany(e => e.Attachments).OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<User>().HasOne(e => e.Avatar).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<User>().Property(e => e.AvatarId).HasDefaultValue(Guid.Parse("00000000-0000-0000-0000-000000000001"));
 

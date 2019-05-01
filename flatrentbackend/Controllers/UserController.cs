@@ -50,9 +50,9 @@ namespace FlatRent.Controllers
         }
 
         [Authorize, HttpPost("refresh")]
-        public async Task<IActionResult> RefreshAsync()
+        public IActionResult RefreshAsync()
         {
-            var newToken = await _userService.RefreshAsync(HttpContext.User).ConfigureAwait(false);
+            var newToken = _userService.RefreshAsync(HttpContext.User);
             if (newToken == null)
             {
                 return BadRequest(new FormError(Errors.BadToken));

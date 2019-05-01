@@ -91,9 +91,5 @@ namespace FlatRent.Entities
 
         [InverseProperty("Flat")]
         public virtual ICollection<Image> Images { get; set; }
-
-        [JsonIgnore]
-        [InverseProperty("AssociatedFlat")]
-        public virtual ICollection<Conversation> Conversations { get; set; }
     }
 }

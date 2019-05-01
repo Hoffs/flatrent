@@ -31,12 +31,13 @@ namespace FlatRent.Entities
         public static Func<Fault, bool> NotInvoicedFaultsFunc =>
             (fault) => fault.Repaired && fault.InvoiceId == null;
 
-        [InverseProperty("AssociatedFault")]
-        public virtual ICollection<Conversation> Conversations { get; set; }
+        [ForeignKey("Conversation")]
+        public Guid ConversationId { get; set; }
+        public virtual Conversation Conversation { get; set; }
 
         // Assigned invoice
         [ForeignKey("Invoice")]
-        public virtual Guid? InvoiceId { get; set; }
+        public Guid? InvoiceId { get; set; }
         public virtual Invoice Invoice { get; set; }
     }
 }

@@ -40,7 +40,6 @@ namespace FlatRent
             services.AddAutoMapper();
             services.AddSingleton(Log.Logger);
 //            services.AddDbContext<DataContext>(opts => opts.UseNpgsql(Configuration.GetConnectionString("DataContext")).UseLazyLoadingProxies());
-//            services.AddDbContext<DataContext>(opts => opts.UseNpgsql(Configuration.GetConnectionString("DataContext")).UseLazyLoadingProxies());
             services.AddDbContext<DataContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("DataContext")).UseLazyLoadingProxies());
 
             services.AddAuthorization(options =>
@@ -79,10 +78,13 @@ namespace FlatRent
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IFlatRepository, FlatRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
-            services.AddScoped<IAgreementRepository, AgreementRepository>();
-            services.AddScoped<IUserService, UserService>();            
-            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+            services.AddScoped<IFaultRepository, FaultRepository>();
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            services.AddScoped<IAgreementRepository, AgreementRepository>();
+            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+            services.AddScoped<IConversationRepository, ConversationRepository>();
+
+            services.AddScoped<IUserService, UserService>();            
             services.AddScoped<IInvoiceService, InvoiceService>();
 
 
@@ -116,7 +118,6 @@ namespace FlatRent
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = ctx => new CustomModelErrorResponse();
-//                options.SuppressModelStateInvalidFilter = true;
             });
         }
 

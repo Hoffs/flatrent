@@ -52,7 +52,13 @@ namespace FlatRent.Controllers
         [EntityMustExist]
         public async Task<IActionResult> GetInvoiceAsync([FromRoute] Guid id, [FromRoute] Guid invoiceId)
         {
-            throw new NotImplementedException();
+            var agreement = await _repository.GetAsync(id);
+            var userId = User.GetUserId();
+            if (agreement.IsRenterOrTenant(userId)) return Forbid();
+            var invoice = agreement.Invoices.FirstOrDefault(i => i.Id == invoiceId);
+
+            var mapped = _mapper.Map<InvoiceDetails>(invoice);
+            return Ok(mapped);
         }
 
         [HttpGet("{invoiceId}/pdf")]
@@ -69,6 +75,7 @@ namespace FlatRent.Controllers
         public async Task<IActionResult> PayInvoiceAsync([FromRoute] Guid id, [FromRoute] Guid invoiceId)
         {
             var agreement = await _repository.GetAsync(id);
+            if (User.GetUserId() != agreement.TenantId) return Forbid();
             var invoice = agreement.Invoices.FirstOrDefault(inv => inv.Id == invoiceId);
             if (invoice == null) return NotFound();
             if (!invoice.IsValid) return BadRequest(new FormError(Errors.InvoiceNotValid));
@@ -77,5 +84,6 @@ namespace FlatRent.Controllers
             invoice.IsPaid = true;
             var errors = await _invoiceRepository.UpdateInvoiceTask(invoice);
             return OkOrBadRequest(errors, Ok());
+        }
     }
 }

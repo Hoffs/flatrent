@@ -11,6 +11,6 @@ namespace FlatRent.Repositories.Interfaces
     {
         Task<IEnumerable<FormError>> UpdateAsync(Agreement agreement);
         Task<IEnumerable<FormError>> DeleteAsync(Guid id);
-        Task<(IEnumerable<FormError>, Guid)> AddAgreementAsync(Guid id, Guid userId, RentAgreementForm form);
+        Task<(IEnumerable<FormError>, Agreement)> AddAgreementAsync(Guid id, Guid userId, AgreementForm form);
     }
 }

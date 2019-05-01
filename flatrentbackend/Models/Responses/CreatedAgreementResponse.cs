@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using FlatRent.Entities;
 
 namespace FlatRent.Models.Responses
 {
@@ -12,6 +14,12 @@ namespace FlatRent.Models.Responses
         {
             Id = id;
             Attachments = new Dictionary<Guid, string>(files);
+        }
+
+        public CreatedAgreementResponse(Guid id, IEnumerable<Attachment> files)
+        {
+            Id = id;
+            Attachments = new Dictionary<Guid, string>(files.Select(i => new KeyValuePair<Guid, string>(i.Id, i.Name)));
         }
     }
 }

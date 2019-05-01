@@ -15,7 +15,7 @@ namespace FlatRent.Profiles
             CreateMap<Agreement, AgreementDetails>()
                 .ForMember(dto => dto.Owner, opt => opt.MapFrom(o => o.Flat.Author));
 
-            CreateMap<RentAgreementForm, Agreement>()
+            CreateMap<AgreementForm, Agreement>()
                 .ForMember(a => a.From, opt => opt.MapFrom(o => o.From.Date))
                 .ForMember(a => a.To, opt => opt.MapFrom(o => o.To.Date));
         }

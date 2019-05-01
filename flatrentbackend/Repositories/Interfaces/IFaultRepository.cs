@@ -9,7 +9,7 @@ namespace FlatRent.Repositories.Interfaces
 {
     public interface IFaultRepository
     {
-        Task<IEnumerable<FormError>> CreateFaultAsync(Guid agreementId, FaultForm form);
+        Task<IEnumerable<FormError>> CreateFaultAsync(Guid agreementId, FaultForm form, Guid userId);
         Task<IEnumerable<FormError>> UpdateAsync(Fault entity);
         Task<IEnumerable<FormError>> DeleteAsync(Fault entity);
     }

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FlatRent.Constants;
 using FlatRent.Controllers.Abstractions;
 using FlatRent.Controllers.Filters;
 using FlatRent.Entities;
 using FlatRent.Extensions;
+using FlatRent.Models;
 using FlatRent.Models.Dtos;
 using FlatRent.Models.Requests;
 using FlatRent.Repositories.Interfaces;
@@ -40,8 +42,9 @@ namespace FlatRent.Controllers
         {
             var agreement = await _repository.GetAsync(id);
             if (User.GetUserId() != agreement.TenantId) return Forbid();
+            if (agreement.Status.Id != AgreementStatus.Statuses.Accepted) return BadRequest();
 
-            var errors = await _faultRepository.CreateFaultAsync(id, form);
+            var errors = await _faultRepository.CreateFaultAsync(id, form, User.GetUserId());
             return OkOrBadRequest(errors, Ok());
         }
 
@@ -101,6 +104,7 @@ namespace FlatRent.Controllers
             var agreement = await _repository.GetAsync(id);
             var fault = agreement.Faults.FirstOrDefault(x => x.Id == faultId);
             if (fault == null) return NotFound();
+            if (fault.Repaired) return BadRequest(new FormError(Errors.CantDeleteRepaired));
 
             var errors = await _faultRepository.DeleteAsync(fault);
             return OkOrBadRequest(errors, Ok());

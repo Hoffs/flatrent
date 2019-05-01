@@ -46,13 +46,13 @@ namespace FlatRent.Services
             return GenerateJwtToken(jwtPayload.GetAsClaims());
         }
 
-        public async Task<string> RefreshAsync(ClaimsPrincipal claim)
+        public string RefreshAsync(ClaimsPrincipal claim)
         {
             _logger.Information("Refreshing {ClaimIdentity}", claim.Identity.Name);
             return GenerateJwtToken(claim.Claims);
         } 
 
-        public async Task<ClaimsPrincipal> VerifyAsync(string token)
+        public ClaimsPrincipal VerifyAsync(string token)
         {
             _logger.Information("Verifying {Token}", token);
             var key = Encoding.UTF8.GetBytes(_configuration["ServiceConfig:JwtSecret"]);

@@ -18,21 +18,29 @@ namespace FlatRent.Repositories
         {
         }
 
-        public Task<IEnumerable<FormError>> CreateFaultAsync(Guid agreementId, FaultForm form)
+        public async Task<IEnumerable<FormError>> CreateFaultAsync(Guid agreementId, FaultForm form, Guid userId)
         {
+            var agreement = await Context.Agreements.FindAsync(agreementId);
             var fault = Mapper.Map<Fault>(form);
+            fault.AuthorId = userId;
             fault.AgreementId = agreementId;
             fault.Attachments.SetProperty(a => a.Fault, fault);
+            fault.Conversation = new Conversation
+            {
+                AuthorId = userId,
+                RecipientId = agreement.Flat.AuthorId,
+                Subject = fault.Name,
+            };
 
-            return base.AddAsync(fault);
+            return await base.AddAsync(fault);
         }
 
-        public Task<IEnumerable<FormError>> UpdateAsync(Fault entity)
+        public new Task<IEnumerable<FormError>> UpdateAsync(Fault entity)
         {
             return base.UpdateAsync(entity);
         }
 
-        public Task<IEnumerable<FormError>> DeleteAsync(Fault entity)
+        public new Task<IEnumerable<FormError>> DeleteAsync(Fault entity)
         {
             return base.DeleteAsync(entity);
         }

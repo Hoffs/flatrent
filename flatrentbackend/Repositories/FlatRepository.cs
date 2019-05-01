@@ -45,7 +45,7 @@ namespace FlatRent.Repositories
             return (await AddAsync(flat, userId), flat.Id);
         }
 
-        public async Task<IEnumerable<FormError>> DeleteAsync(Guid flatId)
+        public new async Task<IEnumerable<FormError>> DeleteAsync(Guid flatId)
         {
             var flat = await _context.Flats.FindAsync(flatId).ConfigureAwait(false);
             if (flat == null)

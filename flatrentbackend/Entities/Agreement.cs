@@ -52,8 +52,13 @@ namespace FlatRent.Entities
         [InverseProperty("Agreement")]
         public virtual ICollection<Fault> Faults { get; set; }
 
-        [JsonIgnore]
-        [InverseProperty("AssociatedAgreement")]
-        public virtual ICollection<Conversation> Conversations { get; set; }
+        [ForeignKey("Conversation")]
+        public Guid ConversationId { get; set; }
+        public virtual Conversation Conversation { get; set; }
+
+        public bool IsRenterOrTenant(Guid id)
+        {
+            return Flat.AuthorId == id || TenantId == id;
+        }
     }
 }

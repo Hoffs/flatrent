@@ -21,14 +21,14 @@ namespace FlatRent.Services.Interfaces
         /// </summary>
         /// <param name="token">existing JWT token</param>
         /// <returns>JWT Token</returns>
-        Task<string> RefreshAsync(ClaimsPrincipal claim);
+        string RefreshAsync(ClaimsPrincipal claim);
 
         /// <summary>
         /// Verifies validity of the token
         /// </summary>
         /// <param name="token">JWT Token</param>
         /// <returns>Is valid</returns>
-        Task<ClaimsPrincipal> VerifyAsync(string token);
+        ClaimsPrincipal VerifyAsync(string token);
 
         Task<IEnumerable<FormError>> RegisterAsync(RegistrationForm data);
     }

@@ -80,7 +80,7 @@ namespace FlatRent.Controllers
         [Authorize(Policy = "User")]
         [HttpPost("{id}/rent")]
         [EntityMustExist]
-        public async Task<IActionResult> ApplyForRent([FromRoute] Guid id, [FromBody] RentAgreementForm form)
+        public async Task<IActionResult> ApplyForRent([FromRoute] Guid id, [FromBody] AgreementForm form)
         {
             var flat = await _flatRepository.GetAsync(id);
 
@@ -118,14 +118,9 @@ namespace FlatRent.Controllers
                 return BadRequest(new FormError(Errors.AlreadyRequested));
             }
 
-            var (operationErrors, agreementId) = await _agreementRepository.AddAgreementAsync(id, HttpContext.User.GetUserId(), form).ConfigureAwait(false);
-            if (operationErrors != null)
-            {
-                return BadRequest(operationErrors);
-            }
-
-            var imageIds = (await _agreementRepository.GetAsync(agreementId)).Attachments.Select(i => new KeyValuePair<Guid, string>(i.Id, i.Name));
-            return StatusCode(201, new CreatedAgreementResponse(agreementId, imageIds));
+            var (operationErrors, agreement) = await _agreementRepository.AddAgreementAsync(id, HttpContext.User.GetUserId(), form).ConfigureAwait(false);
+            return OkOrBadRequest(operationErrors,
+                StatusCode(201, new CreatedAgreementResponse(agreement.Id, agreement.Attachments)));
         }
 
         [AllowAnonymous]

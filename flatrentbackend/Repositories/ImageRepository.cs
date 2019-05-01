@@ -31,7 +31,7 @@ namespace FlatRent.Repositories
             return base.UpdateAsync(image);
         }
 
-        public async Task<IEnumerable<FormError>> DeleteAsync(Guid id)
+        public new async Task<IEnumerable<FormError>> DeleteAsync(Guid id)
         {
             var image = await GetAsync(id);
             return await DeleteAsync(image);

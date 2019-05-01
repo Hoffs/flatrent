@@ -74,8 +74,8 @@ namespace FlatRent.Models.Requests.Flat
         [MaxLength(24, ErrorMessage = Errors.MaxLength)]
         public string PostCode { get; set; }
 
-        [MinLength(3, ErrorMessage = Errors.MinLengthImages)]
-        [MaxLength(32, ErrorMessage = Errors.MaxLengthImages)]
+        [MinLength(3, ErrorMessage = Errors.MinLengthFiles)]
+        [MaxLength(32, ErrorMessage = Errors.MaxLengthFiles)]
         public IEnumerable<FileMetadata> Images { get; set; }
     }
 }

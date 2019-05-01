@@ -4,14 +4,16 @@ using FlatRent.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FlatRent.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190501101727_MakeConversationSubjectRequired")]
+    partial class MakeConversationSubjectRequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,8 +73,6 @@ namespace FlatRent.Migrations
                     b.Property<string>("Comments")
                         .HasMaxLength(5000);
 
-                    b.Property<Guid>("ConversationId");
-
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<bool>("Deleted");
@@ -94,9 +94,6 @@ namespace FlatRent.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
-
-                    b.HasIndex("ConversationId")
-                        .IsUnique();
 
                     b.HasIndex("FlatId");
 
@@ -236,23 +233,34 @@ namespace FlatRent.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("AgreementId");
+
                     b.Property<Guid>("AuthorId");
 
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<bool>("Deleted");
 
+                    b.Property<Guid>("FaultId");
+
+                    b.Property<Guid>("FlatId");
+
                     b.Property<DateTime?>("ModifiedDate");
 
                     b.Property<Guid>("RecipientId");
 
                     b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasMaxLength(128);
+                        .IsRequired();
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AgreementId");
+
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("FaultId");
+
+                    b.HasIndex("FlatId");
 
                     b.HasIndex("RecipientId");
 
@@ -267,8 +275,6 @@ namespace FlatRent.Migrations
                     b.Property<Guid>("AgreementId");
 
                     b.Property<Guid>("AuthorId");
-
-                    b.Property<Guid>("ConversationId");
 
                     b.Property<DateTime>("CreatedDate");
 
@@ -293,9 +299,6 @@ namespace FlatRent.Migrations
                     b.HasIndex("AgreementId");
 
                     b.HasIndex("AuthorId");
-
-                    b.HasIndex("ConversationId")
-                        .IsUnique();
 
                     b.HasIndex("InvoiceId");
 
@@ -574,11 +577,6 @@ namespace FlatRent.Migrations
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("FlatRent.Entities.Conversation", "Conversation")
-                        .WithOne("Agreement")
-                        .HasForeignKey("FlatRent.Entities.Agreement", "ConversationId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("FlatRent.Entities.Flat", "Flat")
                         .WithMany("Agreements")
                         .HasForeignKey("FlatId")
@@ -618,9 +616,24 @@ namespace FlatRent.Migrations
 
             modelBuilder.Entity("FlatRent.Entities.Conversation", b =>
                 {
+                    b.HasOne("FlatRent.Entities.Agreement", "AssociatedAgreement")
+                        .WithMany("Conversations")
+                        .HasForeignKey("AgreementId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("FlatRent.Entities.User", "Author")
                         .WithMany("StartedConversations")
                         .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("FlatRent.Entities.Fault", "AssociatedFault")
+                        .WithMany("Conversations")
+                        .HasForeignKey("FaultId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("FlatRent.Entities.Flat", "AssociatedFlat")
+                        .WithMany("Conversations")
+                        .HasForeignKey("FlatId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FlatRent.Entities.User", "Recipient")
@@ -639,11 +652,6 @@ namespace FlatRent.Migrations
                     b.HasOne("FlatRent.Entities.User", "Author")
                         .WithMany("RegisteredFaults")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("FlatRent.Entities.Conversation", "Conversation")
-                        .WithOne("Fault")
-                        .HasForeignKey("FlatRent.Entities.Fault", "ConversationId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FlatRent.Entities.Invoice", "Invoice")

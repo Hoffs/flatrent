@@ -15,7 +15,7 @@ namespace FlatRent.Repositories
         {
         }
 
-        public Task<IEnumerable<FormError>> UpdateAsync(Attachment attachment)
+        public new Task<IEnumerable<FormError>> UpdateAsync(Attachment attachment)
         {
             return base.UpdateAsync(attachment);
         }
