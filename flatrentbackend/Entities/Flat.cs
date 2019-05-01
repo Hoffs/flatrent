@@ -31,6 +31,7 @@ namespace FlatRent.Entities
         public IEnumerable<string> Features { get; set; }
 
         [Required]
+        [MaxLength(10240)]
         public string Description { get; set; }
 
         [Required]
@@ -41,6 +42,7 @@ namespace FlatRent.Entities
         public int MinimumRentDays { get; set; }
 
         [Required]
+        [MaxLength(5120)]
         public string TenantRequirements { get; set; }
 
         // Is ready to be shown/rented to public

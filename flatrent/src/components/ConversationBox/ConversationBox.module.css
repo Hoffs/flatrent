@@ -1,0 +1,80 @@
+.conversationBox {
+  width: 100%;
+}
+
+.title {
+  font-size: 1.1em;
+  text-align: left;
+  font-family: var(--title-font-family);
+}
+
+.subject {
+  font-size: 0.9em;
+  text-align: left;
+  font-family: var(--title-font-family);
+}
+
+.messages {
+  margin-top: 4px;
+  border: 1px solid var(--form-border-color);
+  border-radius: 4px;
+  min-height: 240px;
+  max-height: 540px;
+  padding: 8px 0px;
+  position: relative;
+  overflow: auto;
+}
+
+.userMessage {
+  max-width: 70%;
+  border-radius: 4px;
+  margin: 4px 0;
+  padding: 10px;
+}
+
+.author {
+  composes: userMessage;
+  align-self: flex-end;
+  background: #e4e5e7;
+  border-top-right-radius: 0;
+}
+
+.recipient {
+  composes: userMessage;
+  align-self: flex-start;
+  background: var(--form-border-color);
+  border-top-left-radius: 0;
+}
+
+.send {
+  margin-top: 4px;
+  margin-bottom: 0px;
+}
+
+.messageInput {
+  resize: vertical;
+}
+
+.avatar {
+  position: absolute;
+  top: 6px;
+  width: 32px;
+  border: 1px solid var(--form-border-color);
+  border-radius: 50px;
+}
+
+.authorAvatar {
+  composes: avatar;
+  right: 8px;
+}
+
+.recipientAvatar {
+  composes: avatar;
+  left: 8px;
+}
+
+.messageContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 0 48px;
+}

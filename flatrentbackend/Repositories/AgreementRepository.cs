@@ -32,7 +32,7 @@ namespace FlatRent.Repositories
             agreement.Conversation = new Conversation
             {
                 AuthorId = userId,
-                RecipientId = agreement.Flat.AuthorId,
+                RecipientId = flat.AuthorId,
                 Subject = flat.Name,
             };
 

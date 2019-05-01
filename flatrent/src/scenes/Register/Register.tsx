@@ -115,6 +115,7 @@ class Register extends Component<RouteComponentProps, IRegisterState> {
           name="about"
           title="Apie"
           setValue={this.handleUpdate}
+          maxChars={1000}
         />
         <Button disabled={this.state.requesting} onClick={this.register}>
           Registruotis

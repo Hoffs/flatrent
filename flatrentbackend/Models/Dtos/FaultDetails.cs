@@ -14,6 +14,9 @@ namespace FlatRent.Models.Dtos
         public ShortFlatDetails Flat { get; set; }
 
         public ShortFaultUserInfo Tenant { get; set; }
+        public ShortFaultUserInfo Owner { get; set; }
+
+        public ConversationDetails Conversation { get; set; }
 
         public IEnumerable<FileInfo> Attachments { get; set; }
     }

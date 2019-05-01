@@ -15,6 +15,7 @@ namespace FlatRent.Profiles
 
             CreateMap<Fault, FaultDetails>()
                 .ForMember(f => f.Tenant, opt => opt.MapFrom(o => o.Author))
+                .ForMember(f => f.Owner, opt => opt.MapFrom(o => o.Agreement.Flat.Author))
                 .ForMember(f => f.Flat, opt => opt.MapFrom(o => o.Agreement.Flat));
         }
     }

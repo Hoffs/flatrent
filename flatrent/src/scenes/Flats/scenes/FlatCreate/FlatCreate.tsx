@@ -247,7 +247,8 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
           name="description"
           title="Aprašymas"
           setValue={this.handleUpdate}
-        />
+          maxChars={10240}
+          />
 
         <InputAreaForm
           className={Styles.requirementsArea}
@@ -255,6 +256,7 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
           name="tenantRequirements"
           title="Reikalavimai nuomininkui"
           setValue={this.handleUpdate}
+          maxChars={5120}
         />
 
         <InputForm errorsOnly={true} errors={errors.images} />

@@ -20,6 +20,8 @@ namespace FlatRent.Models.Dtos
         public ShortAgreementUserInfo Tenant { get; set; }
         public ShortAgreementUserInfo Owner { get; set; }
 
+        public ConversationDetails Conversation { get; set; }
+
         public IEnumerable<FileInfo> Attachments { get; set; }
     }
 

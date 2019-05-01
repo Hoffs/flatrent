@@ -46,9 +46,10 @@ namespace FlatRent.Repositories
             return (errors, mapped.Id);
         }
 
-        public async Task<(IEnumerable<FormError>, Message)> AddMessage(MessageForm message, Guid userId)
+        public async Task<(IEnumerable<FormError>, Message)> AddMessage(MessageForm message, Guid conversationId, Guid userId)
         {
             var mapped = Mapper.Map<Message>(message);
+            mapped.ConversationId = conversationId;
             mapped.Attachments.SetProperty(a => a.AuthorId, userId);
             var errors = await _messageRepository.AddAsync(mapped, userId);
             return (errors, mapped);

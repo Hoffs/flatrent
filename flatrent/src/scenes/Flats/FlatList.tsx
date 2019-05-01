@@ -4,10 +4,10 @@ import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import FlexRow from "../../components/FlexRow";
 import FlatService from "../../services/FlatService";
-import { IShortFlatDetails, IFlatListResponse } from "../../services/interfaces/FlatServiceInterfaces";
+import { IApiResponse } from "../../services/interfaces/Common";
+import { IFlatListResponse, IShortFlatDetails } from "../../services/interfaces/FlatServiceInterfaces";
 import FlatBox, { FlatBoxLoader } from "./FlatBox";
 import Styles from "./FlatList.module.css";
-import { IApiResponse } from "../../services/interfaces/Common";
 
 class FlatList extends Component<
   RouteComponentProps,
@@ -42,10 +42,12 @@ class FlatList extends Component<
     const flats = this.state.flats.map((flat) => <FlatBox key={flat.id} flat={flat} />);
     if (flats.length > 0) {
       return flats;
-    } else {
+    } else if (this.state.hasMore) {
       return Array(12)
         .fill(0)
         .map((_, idx) => <FlatBoxLoader key={idx} />);
+    } else {
+      return [<></>];
     }
   }
 
@@ -60,7 +62,7 @@ class FlatList extends Component<
     FlatService.getFlats(this.state.pageSize, this.state.pageSize * pageNumber)
       .then(this.handleFlatResult)
       .catch(this.handleFail);
-  };
+  }
 
   private handleFlatResult = (result: IApiResponse<IShortFlatDetails[]>) => {
     if (result.errors !== undefined) {
@@ -69,7 +71,7 @@ class FlatList extends Component<
     } else if (result.data !== undefined) {
       this.setState((state) => ({ flats: [...state.flats, ...result.data!], hasMore: result.data!.length !== 0 }));
     }
-  };
+  }
 
   private handleFail(e: any) {
     toast.error("Įvyko nežinoma klaida.");

@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from sys import argv
 import requests
 
-API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJiMmM5ZWNiMi1lZGE2LTRiMGYtOTIzNi1lZjA1ODNmMTFiYjQiLCJyb2xlIjoiMSIsIm5iZiI6MTU1NTYxNzM0NSwiZXhwIjoxNTU2MjIyMTQ1LCJpYXQiOjE1NTU1ODg1NDUsImlzcyI6ImZsYXRyZW50LmNvbSIsImF1ZCI6ImZsYXRyZW50In0.plERKzfISJyzlsyANPY_PRpZzbfUdZnsh3_lUst6utA'
+API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJiMmM5ZWNiMi1lZGE2LTRiMGYtOTIzNi1lZjA1ODNmMTFiYzgiLCJyb2xlIjoiMiIsIm5iZiI6MTU1NjczMDY3NiwiZXhwIjoxNTU3MzM1NDc2LCJpYXQiOjE1NTY3MDE4NzYsImlzcyI6ImZsYXRyZW50LmNvbSIsImF1ZCI6ImZsYXRyZW50In0.WY7q5N3KGyR0--fc6CCLC_lROosQ1YE57CNvt3VAYuo'
 API_CREATE_FLAT = 'https://localhost:5001/api/flat'
 API_PUT_IMAGE_FORMAT = 'https://localhost:5001/api/image/{}'
 
@@ -68,8 +68,8 @@ reqObject['area'] = reqObject['area'].replace(' ', '')
 
 
 reqObject['features'] = list(map(lambda f: f.get_text().strip(), details.find_all('span', class_='special-comma')))
-reqObject['minimumRentDays'] = 120
-reqObject['tenantRequirements'] = 'Geras ir tvarkingas žmogus'
+reqObject['minimumRentDays'] = 60
+reqObject['tenantRequirements'] = 'Geras ir tvarkingas žmogus, pastovios pajamos, be gyvūnų. Pateikti pajamas patvirtinančius dokumentus.'
 reqObject['isPublished'] = True
 
 longText = soup.find('div', id='collapsedText').get_text().strip()
@@ -118,7 +118,7 @@ import json
 createResponse = requests.post(API_CREATE_FLAT, json=reqObject, headers=apiAuth, verify=False)
 pprint.pprint(createResponse.json())
 
-for (idx, imageId) in enumerate(createResponse.json()['images'].values()):
+for (idx, imageId) in enumerate(createResponse.json()['images'].keys()):
     singleImageUrl = array[idx]
     singleImage = requests.get(singleImageUrl)
     payload = {'image': (array[idx].split('/').pop(), singleImage.content, 'image/{}'.format(array[idx].split('.').pop()))}

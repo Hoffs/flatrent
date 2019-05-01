@@ -19,6 +19,7 @@ import {
 import { flatUrl, userProfileUrl } from "../../utilities/Utilities";
 import { IBasicResponse } from "../../services/interfaces/Common";
 import AttachmentPreview from "../../components/AttachmentPreview";
+import ConversationBox from "../../components/ConversationBox";
 
 interface IAgreementDetailsRouteProps {
   id: string;
@@ -125,6 +126,7 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
         <FlexRow className={Styles.buttons}>{actionButtons}</FlexRow>
         {/* Invoices */}
         {/* Faults */}
+        <ConversationBox className={Styles.conversation} conversation={agreement.conversation} />
       </FlexColumn>
     );
   }

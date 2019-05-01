@@ -69,8 +69,8 @@ namespace FlatRent.Controllers
             var userId = User.GetUserId();
             if (!conversation.IsAuthorOrRecipient(userId)) return Forbid();
 
-            var (errors, message) = await _repository.AddMessage(form, userId);
-            return OkOrBadRequest(errors, Ok(new CreatedMessageResponse(message.Attachments)));
+            var (errors, message) = await _repository.AddMessage(form, id, userId);
+            return OkOrBadRequest(errors, Ok(new CreatedMessageResponse(message.Id, message.Attachments)));
         }
 
         [HttpGet("{id}/messages")]

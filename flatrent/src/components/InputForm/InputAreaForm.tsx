@@ -9,6 +9,7 @@ interface InputAreaFormProps {
   errors?: string[];
   name: string;
   title: string;
+  maxChars?: number;
   errorsOnly?: boolean;
   setValue: (name: string, value: string) => void;
   extraProps?: { [key: string]: string };
@@ -30,6 +31,9 @@ class InputAreaForm extends Component<InputAreaFormProps, { value: string; focus
   }
 
   private getContent() {
+    const charCounter = this.props.maxChars !== undefined
+      ? (<span className={Styles.charCounter}>{this.state.value.length} / {this.props.maxChars}</span>)
+      : undefined;
     if (!this.props.errorsOnly) {
       const style = this.props.className === undefined ? "" : this.props.className;
       return (
@@ -44,6 +48,7 @@ class InputAreaForm extends Component<InputAreaFormProps, { value: string; focus
             onBlur={this.onFocus}
             {...this.props.extraProps}
           />
+          {charCounter}
         </>
       );
     }

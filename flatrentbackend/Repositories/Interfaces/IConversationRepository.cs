@@ -12,6 +12,6 @@ namespace FlatRent.Repositories.Interfaces
         IEnumerable<Conversation> GetUserConversations(Guid userId, int offset);
         IEnumerable<Message> GetConversationMessages(Guid conversationId, int offset);
         Task<(IEnumerable<FormError>, Guid)> AddConversation(ConversationForm conversation, Guid userId);
-        Task<(IEnumerable<FormError>, Message)> AddMessage(MessageForm message, Guid userId);
+        Task<(IEnumerable<FormError>, Message)> AddMessage(MessageForm message, Guid conversationId, Guid userId);
     }
 }

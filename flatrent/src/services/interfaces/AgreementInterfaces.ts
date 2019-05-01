@@ -1,6 +1,7 @@
 import { IShortAddress, IShortFlatDetails } from "./FlatServiceInterfaces";
 import { IShortUserDetails } from "./UserInterfaces";
 import { IAttachment } from "./Common";
+import { IConversationDetails } from "./ConversationInterfaces";
 
 export enum AgreementStatusesText {
     Requested = "Išsiųsta nuomotojui",
@@ -67,4 +68,5 @@ export interface IAgreementDetails {
     tenant: IAgreementShortUserDetails;
     owner: IAgreementShortUserDetails;
     attachments: IAttachment[];
+    conversation: IConversationDetails;
 }

@@ -7,10 +7,12 @@ namespace FlatRent.Models.Responses
 {
     public class CreatedMessageResponse
     {
+        public Guid Id { get; set; }
         public Dictionary<Guid, string> Attachments { get; set; }
 
-        public CreatedMessageResponse(IEnumerable<Attachment> attachments)
+        public CreatedMessageResponse(Guid id, IEnumerable<Attachment> attachments)
         {
+            Id = id;
             var attachmentArray = attachments.ToArray();
             Attachments = attachmentArray.Any() 
                 ? new Dictionary<Guid, string>(

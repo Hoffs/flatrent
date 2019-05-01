@@ -106,6 +106,7 @@ class RentModal extends Component<RouteComponentProps<{ id: string }> & IRentMod
               name="comments"
               setValue={this.updateComments}
               title="Papildoma informacija"
+              maxChars={5000}
             />
             <FlexDropzone
               className={Styles.dropzone}
