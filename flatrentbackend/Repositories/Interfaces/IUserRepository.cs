@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using FlatRent.Entities;
 using FlatRent.Models;
-using FlatRent.Models.Dtos;
 
 namespace FlatRent.Repositories.Interfaces
 {

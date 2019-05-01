@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using FlatRent.Constants;
 using FlatRent.Models.Attributes;
-using Microsoft.AspNetCore.Http;
 
 namespace FlatRent.Models.Requests.Flat
 {

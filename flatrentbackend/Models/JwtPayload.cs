@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using FlatRent.Entities;
-using Microsoft.EntityFrameworkCore.Design;
-using Serilog;
 
 namespace FlatRent.Models
 {

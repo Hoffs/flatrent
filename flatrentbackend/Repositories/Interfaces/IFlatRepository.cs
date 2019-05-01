@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using FlatRent.Entities;
 using FlatRent.Models;
-using FlatRent.Models.Requests;
 using FlatRent.Models.Requests.Flat;
 
 namespace FlatRent.Repositories.Interfaces

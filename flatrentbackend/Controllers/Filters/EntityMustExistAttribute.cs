@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using FlatRent.Controllers.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.SqlServer.Server;
 using Serilog;
 
 namespace FlatRent.Controllers.Filters

@@ -2,13 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using FlatRent.Constants;
 using FlatRent.Controllers.Abstractions;
 using FlatRent.Controllers.Filters;
 using FlatRent.Entities;
 using FlatRent.Extensions;
 using FlatRent.Files;
-using FlatRent.Models;
 using FlatRent.Models.Dtos;
 using FlatRent.Repositories.Interfaces;
 using jsreport.Binary;

@@ -1,12 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using FlatRent.Constants;
-using FlatRent.Entities;
-using FlatRent.Extensions;
-using FlatRent.Models;
+﻿using FlatRent.Entities;
 using FlatRent.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FlatRent.Validators
 {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using FlatRent.Entities;
 
 namespace FlatRent.Models.Dtos
 {

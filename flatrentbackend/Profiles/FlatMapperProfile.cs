@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using FlatRent.Entities;
 using FlatRent.Models.Dtos;
-using FlatRent.Models.Requests;
 using FlatRent.Models.Requests.Flat;
-using FlatRent.Models.Responses;
 
 namespace FlatRent.Profiles
 {

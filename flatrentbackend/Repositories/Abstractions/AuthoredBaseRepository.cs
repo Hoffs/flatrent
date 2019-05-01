@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Models;
 using FlatRent.Repositories.Interfaces;

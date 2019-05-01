@@ -7,12 +7,10 @@ using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Extensions;
 using FlatRent.Models;
-using FlatRent.Models.Dtos;
 using FlatRent.Models.Requests;
 using FlatRent.Models.Requests.Flat;
 using FlatRent.Repositories.Abstractions;
 using FlatRent.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 

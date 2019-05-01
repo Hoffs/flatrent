@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using AutoMapper;
 using FlatRent.Entities;
 using FlatRent.Models.Dtos;

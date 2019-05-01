@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Models;
-using FlatRent.Models.Dtos;
 using FlatRent.Repositories.Abstractions;
 using FlatRent.Repositories.Interfaces;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
