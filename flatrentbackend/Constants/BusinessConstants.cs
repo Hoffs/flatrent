@@ -6,5 +6,6 @@
         public const int MaxRentPeriodDays = 3650;
 
         public const int RentMonthInDays = 30;
+        public const int PaymentDueInDays = 30;
     }
 }

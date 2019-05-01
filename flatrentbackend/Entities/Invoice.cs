@@ -9,18 +9,25 @@ namespace FlatRent.Entities
     {
         [Required]
         public float AmountToPay { get; set; }
+
         [Required]
         public DateTime DueDate { get; set; }
 
+        public DateTime? PaidDate { get; set; }
+
         [Required]
-        public float AmountPaid { get; set; }
+        public bool IsValid { get; set; }
+
         [Required]
-        public DateTime PaidDate { get; set; }
+        public bool IsPaid { get; set; }
+
+        [Required]
+        public DateTime InvoicedPeriodFrom { get; set; }
+        [Required]
+        public DateTime InvoicedPeriodTo { get; set; }
 
         [NotMapped]
-        public bool IsPaid => AmountPaid >= AmountToPay;
-        [NotMapped]
-        public bool IsOverdue => PaidDate == default(DateTime) && DateTime.UtcNow.Date > DueDate.Date;
+        public bool IsOverdue => PaidDate == null && DateTime.UtcNow.Date > DueDate.Date;
 
         [Required]
         [ForeignKey("Agreement")]

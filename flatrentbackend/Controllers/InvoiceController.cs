@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FlatRent.Constants;
 using FlatRent.Controllers.Abstractions;
 using FlatRent.Controllers.Filters;
 using FlatRent.Entities;
 using FlatRent.Extensions;
+using FlatRent.Models;
 using FlatRent.Models.Dtos;
 using FlatRent.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -20,12 +22,14 @@ namespace FlatRent.Controllers
     public class InvoiceController : AuthoredBaseEntityController<Agreement>
     {
         private readonly IAgreementRepository _repository;
+        private readonly IInvoiceRepository _invoiceRepository;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public InvoiceController(IAgreementRepository repository, IMapper mapper, ILogger logger) : base(repository)
+        public InvoiceController(IAgreementRepository repository, IInvoiceRepository invoiceRepository, IMapper mapper, ILogger logger) : base(repository)
         {
             _repository = repository;
+            _invoiceRepository = invoiceRepository;
             _mapper = mapper;
             _logger = logger;
         }
@@ -51,12 +55,27 @@ namespace FlatRent.Controllers
             throw new NotImplementedException();
         }
 
-        [HttpPost("{invoiceId}")]
+        [HttpGet("{invoiceId}/pdf")]
         [Authorize]
         [EntityMustExist]
-        public async Task<IActionResult> UpdateInvoiceAsync([FromRoute] Guid id, [FromRoute] Guid faultId)
+        public async Task<IActionResult> GetInvoicePDFAsync([FromRoute] Guid id)
         {
             throw new NotImplementedException();
         }
+
+        [HttpPost("{invoiceId}/pay")]
+        [Authorize]
+        [EntityMustExist]
+        public async Task<IActionResult> PayInvoiceAsync([FromRoute] Guid id, [FromRoute] Guid invoiceId)
+        {
+            var agreement = await _repository.GetAsync(id);
+            var invoice = agreement.Invoices.FirstOrDefault(inv => inv.Id == invoiceId);
+            if (invoice == null) return NotFound();
+            if (!invoice.IsValid) return BadRequest(new FormError(Errors.InvoiceNotValid));
+
+            // Just set it to paid, as no actual payment processing is done.
+            invoice.IsPaid = true;
+            var errors = await _invoiceRepository.UpdateInvoiceTask(invoice);
+            return OkOrBadRequest(errors, Ok());
     }
 }

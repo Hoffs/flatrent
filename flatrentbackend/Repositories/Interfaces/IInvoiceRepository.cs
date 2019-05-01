@@ -9,5 +9,6 @@ namespace FlatRent.Repositories.Interfaces
     {
         Task<IEnumerable<FormError>> AddInvoiceTask(Invoice invoice);
         Task<IEnumerable<FormError>> UpdateInvoiceTask(Invoice invoice);
+        Task<IEnumerable<FormError>> AddAndUpdateTask(Invoice toAdd, Invoice toUpdate);
     }
 }

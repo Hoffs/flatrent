@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Models;
 using FlatRent.Repositories.Abstractions;
@@ -23,6 +25,27 @@ namespace FlatRent.Repositories
         public Task<IEnumerable<FormError>> UpdateInvoiceTask(Invoice invoice)
         {
             return base.UpdateAsync(invoice);
+        }
+
+        public async Task<IEnumerable<FormError>> AddAndUpdateTask(Invoice toAdd, Invoice toUpdate)
+        {
+            using (var transaction = await Context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    Context.Invoices.Update(toUpdate);
+                    await Context.Invoices.AddAsync(toAdd);
+                    await Context.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    Logger.Error(e, "Exception occured while adding and updating invoices");
+                    return new[] { new FormError(Errors.Exception) };
+                }
+            }
+            return null;
         }
     }
 }

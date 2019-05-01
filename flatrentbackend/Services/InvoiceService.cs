@@ -23,6 +23,11 @@ namespace FlatRent.Services
             _logger = logger;
         }
 
+        /// <summary>
+        /// Generates initial invoice which has to be paid until the agreement starts.
+        /// </summary>
+        /// <param name="agreementId"></param>
+        /// <returns></returns>
         public async Task GenerateInitialInvoiceAsync(Guid agreementId)
         {
             var agreement = await _agreementRepository.GetAsync(agreementId);
@@ -35,7 +40,10 @@ namespace FlatRent.Services
             {
                 AgreementId = agreementId,
                 AmountToPay = agreement.Price,
-                DueDate = agreement.From,
+                DueDate = agreement.From.Date,
+                InvoicedPeriodFrom = agreement.From.Date,
+                InvoicedPeriodTo = new DateTime(Math.Min(agreement.From.AddDays(BusinessConstants.RentMonthInDays).Date.Ticks, agreement.To.Date.Ticks)).Date,
+                IsValid = true,
             };
 
             var errors = await _invoiceRepository.AddInvoiceTask(invoice);
@@ -45,6 +53,11 @@ namespace FlatRent.Services
             }
         }
 
+        /// <summary>
+        /// Generates invoices for agreement by including unpaid 
+        /// </summary>
+        /// <param name="agreementId"></param>
+        /// <returns></returns>
         public async Task GenerateInvoiceForAgreementAsync(Guid agreementId)
         {
             var agreement = await _agreementRepository.GetAsync(agreementId);
@@ -54,24 +67,36 @@ namespace FlatRent.Services
             }
 
             var lastInvoice = agreement.Invoices.OrderByDescending(i => i.CreatedDate).First();
-
-            if (lastInvoice.DueDate.Date == agreement.To.Date)
+            // Check if last invoice was last absolute last, if yes, don't generate another one.
+            if (lastInvoice.InvoicedPeriodTo.Date == agreement.To.Date)
             {
                 return;
             }
 
-            var dueDate = lastInvoice.DueDate.AddDays(BusinessConstants.RentMonthInDays);
+            var invoicedPeriodStart = lastInvoice.InvoicedPeriodTo.Date.AddDays(1).Date;
+            var invoicedPeriodEnd = invoicedPeriodStart.AddDays(BusinessConstants.RentMonthInDays).Date;
+            var dueDate = invoicedPeriodStart.AddDays(BusinessConstants.PaymentDueInDays).Date;
             var amountToPay = agreement.Price;
-            if (dueDate > agreement.To)
+
+            if (invoicedPeriodEnd > agreement.To.Date)
             {
-                dueDate = agreement.To;
-                var daysLeft = agreement.To.Subtract(lastInvoice.DueDate).Days;
-                amountToPay = (float) Math.Round(amountToPay * (BusinessConstants.RentMonthInDays / daysLeft), 2, MidpointRounding.AwayFromZero);
+                invoicedPeriodEnd = agreement.To.Date;
+                dueDate = agreement.To.Date;
+
+                var daysLeft = agreement.To.Subtract(invoicedPeriodStart.Date).Days;
+                amountToPay = (float) Math.Round(agreement.Price * (BusinessConstants.RentMonthInDays / daysLeft), 2, MidpointRounding.AwayFromZero);
             }
 
+            // Calculate and add faults to invoice
             var notInvoicedFaults = agreement.Faults.Where(Fault.NotInvoicedFaultsFunc).ToList();
-
             var faultPrice = notInvoicedFaults.Sum(f => f.Price);
+
+            // Add last invoice if it wasn't paid.
+            if (!lastInvoice.IsPaid)
+            {
+                amountToPay += lastInvoice.AmountToPay;
+            }
+            lastInvoice.IsValid = false;
 
             var invoice = new Invoice
             {
@@ -79,9 +104,12 @@ namespace FlatRent.Services
                 AmountToPay = faultPrice + amountToPay,
                 Faults = notInvoicedFaults,
                 DueDate = dueDate,
+                InvoicedPeriodFrom = invoicedPeriodStart,
+                InvoicedPeriodTo = invoicedPeriodEnd,
+                IsValid = true,
             };
 
-            var errors = await _invoiceRepository.AddInvoiceTask(invoice);
+            var errors = await _invoiceRepository.AddAndUpdateTask(invoice, lastInvoice);
             if (errors != null)
             {
                 _logger.Error($"Received errors when generating invoice for agreement {agreementId}: {errors.GetFormattedResponse()}");
