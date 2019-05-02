@@ -13,16 +13,24 @@
   --main-accent-alt-color-rgb: 0, 76, 117;
   --main-accent-alt-muted-color: #5e8193; */
   --main-accent-color: #203961;
+
   --main-accent-alt-color: #ff5a5f;
   --main-accent-alt-color-rgb: 255, 90, 95;
+
   --main-accent-alt-muted-color: #ff666ba1;
   /* --main-accent-alt-color: #456990; */
   /* --main-font-color: rgba(0, 0, 0, 0.9); */
+
+  --accent-1-color: #445965;
+  --accent-2-color: #BA4A61;
+
   --main-font-color: #1b1b1e;
   --main-font-blurred-color: rgba(27, 27, 30, 0.5);
 
   --title-font-family: "Roboto";
   --text-font-family: "Open Sans";
+
+  --text-color-white: #fafafa;
 
   --text-color: #484848;
   --text-faded-color: #767676;
@@ -46,4 +54,8 @@
   --red-color: #ff3b30;
 
   --link-color: #ff5a5f;
+
+
+  /* --message-tooltip: #579290; */
+  --message-tooltip: #D4A398;
 }

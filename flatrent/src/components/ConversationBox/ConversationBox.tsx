@@ -1,20 +1,19 @@
 import React, { Component, ReactNode } from "react";
+import ContentLoader from "react-content-loader";
+import InfiniteScroll from "react-infinite-scroller";
+import { toast } from "react-toastify";
+import ConversationService from "../../services/ConversationService";
 import { IConversationDetails, IMessageDetails } from "../../services/interfaces/ConversationInterfaces";
+import UserService from "../../services/UserService";
+import { joined } from "../../utilities/Utilities";
 import FlexColumn from "../FlexColumn";
 import Styles from "./ConversationBox.module.css";
-import { agreementUrl, joined } from "../../utilities/Utilities";
-import InfiniteScroll from "react-infinite-scroller";
-import ContentLoader from "react-content-loader";
-import ConversationService from "../../services/ConversationService";
-import { toast } from "react-toastify";
-import UserService from "../../services/UserService";
-
-import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { InputAreaForm } from "../InputForm";
+import "react-perfect-scrollbar/dist/css/styles.css";
 import Button from "../Button";
-import SmartImg from "../SmartImg";
-import { avatarUrl } from "../../services/ApiUtilities";
+import { InputAreaForm } from "../InputForm";
+import AttachmentPreview from "../AttachmentPreview";
+import Moment from "moment";
 
 interface IConversationBoxProps {
   className?: string;
@@ -31,13 +30,13 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
   constructor(props: IConversationBoxProps) {
     super(props);
     this.state = { writtenMessage: "", hasMore: true, messages: [] };
-    this.loadMessages(0);
+    this.loadMessages();
   }
 
   public render() {
     return (
     <FlexColumn className={joined(Styles.conversationBox, this.props.className)}>
-      <span className={Styles.title}>Pokalbis</span>
+      <span className={Styles.title}>Susirašinėjimas</span>
       <span className={Styles.subject}>{this.props.conversation.subject}</span>
       <InputAreaForm
         name="message"
@@ -60,8 +59,8 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
           >
               {this.getMessages()}
           </InfiniteScroll>
-          <SmartImg className={Styles.authorAvatar} src={avatarUrl(this.props.conversation.author.id)} />
-          <SmartImg className={Styles.recipientAvatar} src={avatarUrl(this.props.conversation.recipient.id)} />
+          {/* <SmartImg className={Styles.authorAvatar} src={avatarUrl(this.props.conversation.author.id)} />
+          <SmartImg className={Styles.recipientAvatar} src={avatarUrl(this.props.conversation.recipient.id)} /> */}
         </PerfectScrollbar>
       </FlexColumn>
     </FlexColumn>);
@@ -73,17 +72,25 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
     const userId = UserService.userId();
     const mapped = this.state.messages.map((message) => {
       const userMessageStyle = userId === message.authorId ? Styles.author : Styles.recipient;
+      const split = message.createdDate.split("T");
+      const label = `${split[0]} ${split[1].split(".")[0]}`;
       return (
-      <div key={message.id} className={userMessageStyle}>
+      <div aria-label={message.createdDate}  key={message.id} className={userMessageStyle}>
         <span className={Styles.messageText}>{message.content}</span>
-        {/* <span className={Styles.date}>{message.createdDate}</span> */}
+        {this.getAttachmentBox(message)}
+        <span className={Styles.messageLabel}>{label}</span>
       </div>);
     });
     return <div className={Styles.messageContainer}>{mapped}</div>;
   }
 
-  private loadMessages = async (pageNumber: number) => {
-    const response = await ConversationService.getMessages(this.props.conversation.id, pageNumber * 32);
+  private getAttachmentBox = (message: IMessageDetails): ReactNode => {
+    if (message.attachments === undefined || message.attachments.length === 0) { return (<></>); }
+    return <AttachmentPreview attachments={message.attachments} className={Styles.attachments} />;
+  }
+
+  private loadMessages = async () => {
+    const response = await ConversationService.getMessages(this.props.conversation.id, this.state.messages.length);
     if (response.errors !== undefined) {
       const errors = Object.keys(response.errors).map((key) => response.errors![key].join("\n"));
       errors.forEach((error) => toast.error(error));
@@ -111,7 +118,7 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
       attachments: [],
       authorId: UserService.userId(),
       content: toSend,
-      createdDate: "",
+      createdDate: Moment.utc().toISOString(),
       id: response.data!.id,
     };
 

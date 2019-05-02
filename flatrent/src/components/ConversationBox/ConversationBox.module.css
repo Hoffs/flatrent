@@ -30,19 +30,26 @@
   border-radius: 4px;
   margin: 4px 0;
   padding: 10px;
+  font-family: var(--text-font-family);
+  position: relative;
 }
 
 .author {
   composes: userMessage;
   align-self: flex-end;
-  background: #e4e5e7;
+  /* background: #F0D5BA80; */
+  background: #d6d6d680;
+  background: #4a4a4a;
+  color: var(--text-color-white);
   border-top-right-radius: 0;
 }
 
 .recipient {
   composes: userMessage;
   align-self: flex-start;
-  background: var(--form-border-color);
+  /* background: #E87E5D80; */
+  background: #D4A39880;
+  background: #d6d6d680;
   border-top-left-radius: 0;
 }
 
@@ -76,5 +83,60 @@
 .messageContainer {
   display: flex;
   flex-direction: column;
-  padding: 0 48px;
+  /* padding: 0 48px; */
+  padding: 0 12px;
+}
+
+.messageText {
+  cursor: default;
+}
+
+.messageLabel {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  max-width: fit-content;
+  padding: 4px 12px;
+  border-radius: 4px;
+  transform: translateX(-50%) translateY(100%);
+  font-size: 0.8em;
+  width: fit-content;
+  background-color: var(--message-tooltip);
+  color: var(--text-color-white);
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.messageLabel:before {
+  position: absolute;
+  content: '';
+  background: transparent;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+
+
+  border-bottom: 10px solid var(--message-tooltip);
+}
+
+.userMessage:hover > .messageLabel {
+  animation: delayAppear 1s;
+  opacity: 1;
+}
+
+@keyframes delayAppear {
+  0% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
