@@ -1,0 +1,30 @@
+.attachment {
+  font-size: 0.9em;
+  /* background-color: var(--message-tooltip); */
+  border: 1px solid var(--message-tooltip);
+  width: fit-content;
+  border-radius: 4px;
+  transition: opacity 0.2s;
+  padding: 3px 10px;
+  margin: 3px 0;
+}
+
+.attachment:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.textThumb {
+  /* color: var(--text-color-white); */
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.attachmentContainer {
+  font-family: var(--text-font-family);
+  width: auto;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}

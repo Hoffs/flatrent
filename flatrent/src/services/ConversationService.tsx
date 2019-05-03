@@ -1,7 +1,8 @@
 import { toast } from "react-toastify";
-import { apiFetch, apiFetchTyped, getGeneralError } from "./Helpers";
+import AttachmentService from "./AttachmentService";
+import { apiFetch, apiFetchTyped, getGeneralError, uploadEach } from "./Helpers";
 import { IApiResponse, IBasicResponse, IErrorResponse } from "./interfaces/Common";
-import { IMessageDetails, IConversationDetails, ICreatedMessageResponse } from "./interfaces/ConversationInterfaces";
+import { IConversationDetails, ICreatedMessageResponse, IMessageDetails } from "./interfaces/ConversationInterfaces";
 import UserService from "./UserService";
 
 class ConversationService {
@@ -33,12 +34,23 @@ class ConversationService {
     return getGeneralError<IMessageDetails[]>();
   }
 
-  public static async createMessage(conversationId: string, message: string): Promise<IApiResponse<ICreatedMessageResponse>> {
+  public static async createMessage(conversationId: string, message: string, files: File[]):
+      Promise<IApiResponse<ICreatedMessageResponse>> {
     try {
       const [result, parsed] = await apiFetchTyped<ICreatedMessageResponse>(
         `/api/conversation/${conversationId}`,
-        { method: "POST", body: JSON.stringify({ content: message }) },
-        true);
+        {
+          body: JSON.stringify({ content: message, attachments: files.map((f) => ({ name: f.name })) }),
+          method: "POST",
+        },
+        true,
+      );
+      if (parsed.data !== undefined) {
+        const errors = await uploadEach(parsed.data.attachments, files, AttachmentService.putAttachment);
+        if (errors !== undefined) {
+          return { errors };
+        }
+      }
       return parsed;
     } catch (e) {
       console.log(e);

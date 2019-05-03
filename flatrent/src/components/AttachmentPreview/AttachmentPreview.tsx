@@ -10,10 +10,6 @@ export interface IAttachmentPreview {
   attachments: IAttachment[];
 }
 
-export interface IPreviewFile extends File {
-  preview: string;
-}
-
 function AttachmentPreview({ className, attachments }: IAttachmentPreview) {
   const downloadLinkFactory = (id: string, name: string) => () => AttachmentService.downloadAttachment(id, name);
 

@@ -1,19 +1,23 @@
+import Moment from "moment";
 import React, { Component, ReactNode } from "react";
 import ContentLoader from "react-content-loader";
 import InfiniteScroll from "react-infinite-scroller";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import "react-perfect-scrollbar/dist/css/styles.css";
 import { toast } from "react-toastify";
 import ConversationService from "../../services/ConversationService";
 import { IConversationDetails, IMessageDetails } from "../../services/interfaces/ConversationInterfaces";
 import UserService from "../../services/UserService";
 import { joined } from "../../utilities/Utilities";
-import FlexColumn from "../FlexColumn";
-import Styles from "./ConversationBox.module.css";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
-import Button from "../Button";
-import { InputAreaForm } from "../InputForm";
 import AttachmentPreview from "../AttachmentPreview";
-import Moment from "moment";
+import Button from "../Button";
+import FlexColumn from "../FlexColumn";
+import FlexRow from "../FlexRow";
+import { InputAreaForm } from "../InputForm";
+import CompactDropzone from "./CompactDropzone";
+import Styles from "./ConversationBox.module.css";
+import { IAttachment } from "../../services/interfaces/Common";
+import CompactAttachmentPreview from "./CompactAttachmentPreview";
 
 interface IConversationBoxProps {
   className?: string;
@@ -24,70 +28,115 @@ interface IConversationBoxState {
   writtenMessage: string;
   messages: IMessageDetails[];
   hasMore: boolean;
+  scrollRef: HTMLDivElement | null;
+  firstLoadFinished: boolean;
+  files: File[];
 }
 
 class ConversationBox extends Component<IConversationBoxProps, IConversationBoxState> {
+  private scrollRef: HTMLDivElement | null = null;
+  private newMessage: boolean = false;
+
   constructor(props: IConversationBoxProps) {
     super(props);
-    this.state = { writtenMessage: "", hasMore: true, messages: [] };
-    this.loadMessages();
+    this.state = {
+      writtenMessage: "",
+      hasMore: true,
+      messages: [],
+      scrollRef: null,
+      firstLoadFinished: false,
+      files: [],
+    };
   }
 
   public render() {
     return (
-    <FlexColumn className={joined(Styles.conversationBox, this.props.className)}>
-      <span className={Styles.title}>Susirašinėjimas</span>
-      <span className={Styles.subject}>{this.props.conversation.subject}</span>
-      <InputAreaForm
-        name="message"
-        title="Žinutė"
-        maxChars={5000}
-        setValue={this.updateMessageContent}
-        className={Styles.messageInput}
-      />
-      <Button className={Styles.send} onClick={this.sendMessage}>Siųsti žinutę</Button>
-      <FlexColumn className={Styles.messages}>
-        <PerfectScrollbar>
-          <InfiniteScroll
-            className={Styles.scroller}
-            pageStart={0}
-            initialLoad={false}
-            loadMore={this.loadMessages}
-            hasMore={this.state.hasMore}
-            loader={<MessageLoader />}
-            useWindow={false}
-          >
+      <FlexColumn className={joined(Styles.conversationBox, this.props.className)}>
+        <span className={Styles.title}>Susirašinėjimas</span>
+        <span className={Styles.subject}>{this.props.conversation.subject}</span>
+        <FlexColumn className={Styles.messages}>
+          <PerfectScrollbar>
+            <InfiniteScroll
+              className={Styles.scroller}
+              pageStart={0}
+              initialLoad={true}
+              loadMore={this.loadMessages}
+              hasMore={this.state.hasMore}
+              loader={<MessageLoader />}
+              useWindow={false}
+              isReverse={true}
+            >
               {this.getMessages()}
-          </InfiniteScroll>
-          {/* <SmartImg className={Styles.authorAvatar} src={avatarUrl(this.props.conversation.author.id)} />
-          <SmartImg className={Styles.recipientAvatar} src={avatarUrl(this.props.conversation.recipient.id)} /> */}
-        </PerfectScrollbar>
+            </InfiniteScroll>
+          </PerfectScrollbar>
+          <FlexRow>
+            <InputAreaForm
+              name="message"
+              title="Žinutė"
+              maxChars={5000}
+              value={this.state.writtenMessage}
+              setValue={this.updateMessageContent}
+              className={Styles.messageInput}
+            />
+            <CompactDropzone
+              className={Styles.dropzone}
+              maxFiles={3}
+              maxSize={5000000}
+              files={this.state.files}
+              onDrop={this.updateMessageFiles}
+              text="Pridėti failus (3 maks.)"
+            />
+          </FlexRow>
+          <Button className={Styles.send} onClick={this.sendMessage}>
+            Siųsti žinutę
+          </Button>
+        </FlexColumn>
       </FlexColumn>
-    </FlexColumn>);
+    );
+  }
+
+  public componentDidUpdate() {
+    if (this.scrollRef !== null && this.newMessage) {
+      this.scrollRef.scrollIntoView();
+      this.newMessage = false;
+    }
   }
 
   private updateMessageContent = (_: string, writtenMessage: string) => this.setState({ writtenMessage });
+  private updateMessageFiles = (files: File[]) => this.setState({ files });
 
   private getMessages = (): ReactNode => {
     const userId = UserService.userId();
-    const mapped = this.state.messages.map((message) => {
-      const userMessageStyle = userId === message.authorId ? Styles.author : Styles.recipient;
-      const split = message.createdDate.split("T");
-      const label = `${split[0]} ${split[1].split(".")[0]}`;
-      return (
-      <div aria-label={message.createdDate}  key={message.id} className={userMessageStyle}>
-        <span className={Styles.messageText}>{message.content}</span>
-        {this.getAttachmentBox(message)}
-        <span className={Styles.messageLabel}>{label}</span>
-      </div>);
-    });
+    const { messages } = this.state;
+    const mapped = messages
+      .map((message, idx) => {
+        const userMessageStyle = userId === message.authorId ? Styles.authorMessage : Styles.recipientMessage;
+        const split = message.createdDate.split("T");
+        const label = `${split[0]} ${split[1].split(".")[0]}`;
+        const refOrNot =
+          idx === 0
+            ? (ref: HTMLDivElement | null) => {
+                this.scrollRef = ref;
+              }
+            : () => {};
+        return (
+          <div ref={refOrNot} key={message.id} className={userMessageStyle}>
+            <span className={Styles.messageText}>{message.content}</span>
+            {this.getAttachmentBox(message)}
+            <span className={Styles.messageLabel}>{label}</span>
+          </div>
+        );
+      })
+      .reverse();
     return <div className={Styles.messageContainer}>{mapped}</div>;
-  }
+  };
 
   private getAttachmentBox = (message: IMessageDetails): ReactNode => {
-    if (message.attachments === undefined || message.attachments.length === 0) { return (<></>); }
-    return <AttachmentPreview attachments={message.attachments} className={Styles.attachments} />;
-  }
+    if (message.attachments === undefined || message.attachments.length === 0) {
+      return <></>;
+    }
+    return <CompactAttachmentPreview attachments={message.attachments} className={Styles.attachments} />;
+  };
 
   private loadMessages = async () => {
     const response = await ConversationService.getMessages(this.props.conversation.id, this.state.messages.length);
@@ -103,32 +152,38 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
         messages: [...state.messages, ...response.data!],
       }));
     }
-  }
+  };
 
   private sendMessage = async () => {
-    const toSend = this.state.writtenMessage;
-    const response = await ConversationService.createMessage(this.props.conversation.id, toSend);
+    const { writtenMessage, files } = this.state;
+    const response = await ConversationService.createMessage(this.props.conversation.id, writtenMessage, files);
     if (response.errors !== undefined) {
       const errors = Object.keys(response.errors).map((key) => response.errors![key].join("\n"));
       errors.forEach((error) => toast.error(error));
       return;
     }
 
+    const remapped: IAttachment[] = Object.keys(response.data!.attachments).map((k) => ({
+      id: k,
+      mime: "",
+      name: response.data!.attachments[k],
+    }));
+
     const message: IMessageDetails = {
-      attachments: [],
+      attachments: remapped,
       authorId: UserService.userId(),
-      content: toSend,
+      content: writtenMessage,
       createdDate: Moment.utc().toISOString(),
       id: response.data!.id,
     };
 
+    this.newMessage = true;
     this.setState((state) => ({
-      messages: [
-        message,
-        ...state.messages,
-      ],
+      files: [],
+      messages: [message, ...state.messages],
+      writtenMessage: "",
     }));
-  }
+  };
 }
 
 const MessageLoader = () => (
@@ -136,6 +191,6 @@ const MessageLoader = () => (
     <rect x="248" y="4" rx="4" ry="4" width="260" height="38" />
     <rect x="12" y="46" rx="4" ry="4" width="230" height="38" />
   </ContentLoader>
-)
+);
 
 export default ConversationBox;

@@ -20,9 +20,8 @@
   border-radius: 4px;
   min-height: 240px;
   max-height: 540px;
-  padding: 8px 0px;
+  padding: 8px 0 0;
   position: relative;
-  overflow: auto;
 }
 
 .userMessage {
@@ -34,7 +33,7 @@
   position: relative;
 }
 
-.author {
+.authorMessage {
   composes: userMessage;
   align-self: flex-end;
   /* background: #F0D5BA80; */
@@ -44,7 +43,7 @@
   border-top-right-radius: 0;
 }
 
-.recipient {
+.recipientMessage {
   composes: userMessage;
   align-self: flex-start;
   /* background: #E87E5D80; */
@@ -54,41 +53,28 @@
 }
 
 .send {
-  margin-top: 4px;
-  margin-bottom: 0px;
+  margin: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .messageInput {
-  resize: vertical;
-}
-
-.avatar {
-  position: absolute;
-  top: 6px;
-  width: 32px;
-  border: 1px solid var(--form-border-color);
-  border-radius: 50px;
-}
-
-.authorAvatar {
-  composes: avatar;
-  right: 8px;
-}
-
-.recipientAvatar {
-  composes: avatar;
-  left: 8px;
+  height: 60px;
+  resize: none;
+  border: none;
+  border-radius: 0;
+  border-top: 1px solid var(--form-border-color);
 }
 
 .messageContainer {
   display: flex;
   flex-direction: column;
-  /* padding: 0 48px; */
-  padding: 0 12px;
+  padding: 0 20px;
 }
 
 .messageText {
   cursor: default;
+  word-break: break-all;
 }
 
 .messageLabel {
@@ -105,27 +91,28 @@
   color: var(--text-color-white);
   z-index: 10;
   opacity: 0;
+  display: none;
   pointer-events: none;
 }
 
 .messageLabel:before {
-  position: absolute;
   content: '';
-  background: transparent;
+  position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%) translateY(-100%);
+
   width: 0;
   height: 0;
+  background: transparent;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-
-
   border-bottom: 10px solid var(--message-tooltip);
 }
 
 .userMessage:hover > .messageLabel {
   animation: delayAppear 1s;
+  display: block;
   opacity: 1;
 }
 
@@ -134,9 +121,20 @@
     opacity: 0;
   }
   75% {
+    display: block;
     opacity: 0;
   }
   100% {
     opacity: 1;
   }
+}
+
+
+.dropzone {
+  max-width: 200px;
+  width: 100%;
+}
+
+.attachments {
+  width: 300px;
 }

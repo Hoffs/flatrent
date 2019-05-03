@@ -14,13 +14,11 @@ namespace FlatRent.Models.Responses
         {
             Id = id;
             var attachmentArray = attachments.ToArray();
-            Attachments = attachmentArray.Any() 
-                ? new Dictionary<Guid, string>(
-                    attachmentArray.Select(
-                        a => new KeyValuePair<Guid, string>(a.Id, a.Name)
-                        )
-                    ) 
-                : null;
+            Attachments = new Dictionary<Guid, string>(
+                attachmentArray.Select(
+                    a => new KeyValuePair<Guid, string>(a.Id, a.Name)
+                )
+            );
         }
     }
 }

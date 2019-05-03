@@ -1,4 +1,4 @@
-import { IErrorResponse, IFileMetadata, IBasicResponse } from "./Common";
+import { IErrorResponse, IFileMetadata, IBasicResponse, IFileResponse } from "./Common";
 import { IUserDetails, IShortUserDetails } from "./UserInterfaces";
 
 // FlatList interfaces
@@ -88,7 +88,7 @@ export interface IFlatCreateRequest {
 
 export interface IFlatCreateResponse {
   id: string;
-  images: { [key: string]: string };
+  images: IFileResponse;
 }
 
 export interface IRentRequest {
@@ -100,5 +100,5 @@ export interface IRentRequest {
 
 export interface IAgreementCreateResponse {
   id: string;
-  attachments: { [key: string]: string };
+  attachments: IFileResponse;
 }

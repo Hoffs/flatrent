@@ -21,6 +21,10 @@ export interface IAttachment {
   mime: string;
 }
 
+export interface IFileResponse {
+  [key: string]: string;
+}
+
 export interface IApiResponse<T> extends IBasicResponse {
   data?: T;
 }

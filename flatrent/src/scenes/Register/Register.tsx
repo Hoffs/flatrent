@@ -114,6 +114,7 @@ class Register extends Component<RouteComponentProps, IRegisterState> {
           errors={this.state.errors.about}
           name="about"
           title="Apie"
+          value={this.state.values.about}
           setValue={this.handleUpdate}
           maxChars={1000}
         />

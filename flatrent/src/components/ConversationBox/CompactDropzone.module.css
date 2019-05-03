@@ -1,0 +1,50 @@
+.dropzoneContainer {
+  font-family: var(--text-font-family);
+  margin-top: 12px;
+  /* padding: 10px; */
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--form-border-color);
+  border-radius: 0;
+  /* border: 1px solid dotted var(--form-border-color); */
+}
+
+.dropzone {
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--form-border-color);
+  border-radius: 0;
+  border-style: dashed;
+  /* padding: 10px; */
+  cursor: pointer;
+  transition: border-color 0.2s;
+  height: fit-content;
+  text-align: center;
+}
+
+.dropzone > p {
+  margin: 2px 4px;
+}
+
+.dropzone:hover {
+  border-color: var(--form-border-color-hover);
+}
+
+.thumbsContainer {
+  justify-content: flex-start;
+}
+
+.thumb {
+  width: 100%;
+  margin: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 4px;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+  font-size: 0.9em;
+  font-family: var(--title-font-family);
+}
+
+.thumb:hover {
+  cursor: pointer;
+  opacity: 0.5;
+}

@@ -104,6 +104,7 @@ class RentModal extends Component<RouteComponentProps<{ id: string }> & IRentMod
               errors={errors.comments}
               className={Styles.inputArea}
               name="comments"
+              value={this.state.comments}
               setValue={this.updateComments}
               title="Papildoma informacija"
               maxChars={5000}
