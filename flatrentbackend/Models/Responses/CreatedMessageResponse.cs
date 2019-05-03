@@ -13,7 +13,7 @@ namespace FlatRent.Models.Responses
         public CreatedMessageResponse(Guid id, IEnumerable<Attachment> attachments)
         {
             Id = id;
-            var attachmentArray = attachments.ToArray();
+            var attachmentArray = attachments == null ? new Attachment[0] : attachments.ToArray();
             Attachments = new Dictionary<Guid, string>(
                 attachmentArray.Select(
                     a => new KeyValuePair<Guid, string>(a.Id, a.Name)

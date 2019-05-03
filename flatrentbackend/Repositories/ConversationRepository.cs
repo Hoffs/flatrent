@@ -10,6 +10,7 @@ using FlatRent.Models;
 using FlatRent.Models.Requests;
 using FlatRent.Repositories.Abstractions;
 using FlatRent.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace FlatRent.Repositories
@@ -48,6 +49,11 @@ namespace FlatRent.Repositories
 
         public async Task<(IEnumerable<FormError>, Message)> AddMessage(MessageForm message, Guid conversationId, Guid userId)
         {
+            var agreement = await Context.Agreements.FirstOrDefaultAsync(a => a.ConversationId == conversationId);
+            if (agreement.Status.Id == AgreementStatus.Statuses.Rejected || agreement.Deleted)
+            {
+                return (new[] { new FormError(Errors.MessageAgreementDeletedOrRejected) }, null);
+            }
             var mapped = Mapper.Map<Message>(message);
             mapped.ConversationId = conversationId;
             mapped.Attachments.SetProperty(a => a.AuthorId, userId);

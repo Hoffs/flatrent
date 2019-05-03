@@ -2,6 +2,7 @@
 {
     public static class Errors
     {
+        public const string MessageAgreementDeletedOrRejected = "Negalima siųsti žinutės jeigu sutartis neaktyvi.";
         public const string CantCreateNonActive = "Negalima registruoti naujo gedimo neaktyviai nuomos sutarčiai.";
         public const string CantDeleteRepaired = "Negalima ištrinti sutaisyto gedimo.";
         public const string InvoiceNotValid = "Sąskaita yra negaliojanti.";
