@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import InputForm from "./InputForm";
-import Styles from "./InputForm.module.css";
 
 interface INumberInputFormProps {
   className?: string;

@@ -1,5 +1,5 @@
-import { IErrorResponse, IFileMetadata, IBasicResponse, IFileResponse } from "./Common";
-import { IUserDetails, IShortUserDetails } from "./UserInterfaces";
+import { IErrorResponse, IFileMetadata, IFileResponse } from "./Common";
+import { IShortUserDetails } from "./UserInterfaces";
 
 // FlatList interfaces
 export interface IShortFlatDetails {

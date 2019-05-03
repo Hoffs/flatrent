@@ -1,6 +1,7 @@
+// tslint:disable-next-line: no-implicit-dependencies
 import { createBrowserHistory } from "history";
 import React from "react";
-import { BrowserRouter, Redirect, Router, Switch } from "react-router-dom";
+import { Redirect, Router, Switch } from "react-router-dom";
 import Footer from "./components/Footer";
 import Navigation from "./components/NavBar";
 import { getAsRoleRoutes } from "./Routes";

@@ -1,13 +1,13 @@
 import { saveAs } from "file-saver";
-import { apiFetch, getGeneralError, apiFetchTyped } from "./Helpers";
-import UserService from "./UserService";
-import { IErrorResponse, IApiResponse, IBasicResponse } from "./interfaces/Common";
+import { apiFetch, apiFetchTyped, getGeneralError } from "./Helpers";
 import { IAgreementDetails } from "./interfaces/AgreementInterfaces";
+import { IApiResponse, IBasicResponse, IErrorResponse } from "./interfaces/Common";
+import UserService from "./UserService";
 
 class AgreementsService {
   public static getDetails = async (id: string): Promise<IApiResponse<IAgreementDetails>> => {
     try {
-      const [result, parsed] = await apiFetchTyped<IAgreementDetails>(`/api/agreement/${id}`, undefined, true);
+      const [, parsed] = await apiFetchTyped<IAgreementDetails>(`/api/agreement/${id}`, undefined, true);
       return parsed;
     } catch (e) {
       console.log(e);

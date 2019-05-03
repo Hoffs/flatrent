@@ -40,14 +40,14 @@
   background: #d6d6d680;
   background: #4a4a4a;
   color: var(--text-color-white);
-  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .recipientMessage {
   composes: userMessage;
   align-self: flex-start;
   /* background: #E87E5D80; */
-  background: #D4A39880;
+  background: #d4a39880;
   background: #d6d6d680;
   border-top-left-radius: 0;
 }
@@ -96,7 +96,7 @@
 }
 
 .messageLabel:before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 50%;
@@ -129,12 +129,7 @@
   }
 }
 
-
 .dropzone {
   max-width: 200px;
   width: 100%;
-}
-
-.attachments {
-  width: 300px;
 }

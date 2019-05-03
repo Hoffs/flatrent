@@ -1,8 +1,8 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React from "react";
 import { useDropzone } from "react-dropzone";
-import Styles from "./CompactDropzone.module.css";
 import { joined } from "../../utilities/Utilities";
 import FlexColumn from "../FlexColumn";
+import Styles from "./CompactDropzone.module.css";
 
 export interface ICompactDropzone {
   onDrop: (acceptedFiles: File[]) => void;
@@ -61,9 +61,7 @@ function CompactDropzone({ files, text, className, onDrop, minSize, maxSize, max
         <input {...getInputProps()} />
         <p>{text}</p>
       </div>
-      <FlexColumn className={Styles.thumbsContainer}>
-        {thumbs}
-      </FlexColumn>
+      <FlexColumn className={Styles.thumbsContainer}>{thumbs}</FlexColumn>
     </section>
   );
 }

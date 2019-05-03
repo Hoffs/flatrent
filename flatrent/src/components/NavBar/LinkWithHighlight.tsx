@@ -1,4 +1,4 @@
-import React, { Children, Component, ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import Styles from "./NavBar.module.css";
 

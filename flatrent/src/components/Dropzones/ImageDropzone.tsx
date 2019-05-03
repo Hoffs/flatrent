@@ -1,9 +1,9 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import Styles from "./FlexDropzone.module.css";
 import { joined } from "../../utilities/Utilities";
+import Styles from "./ImageDropzone.module.css";
 
-export interface IFlexDropzone {
+export interface IImageDropzone {
   onDrop: (acceptedFiles: IPreviewFile[]) => void;
   minSize?: number;
   maxSize?: number;
@@ -17,7 +17,7 @@ export interface IPreviewFile extends File {
   preview: string;
 }
 
-function FlexDropzone({ text, className, onDrop, minSize, maxSize, maxFiles = 8, accept }: IFlexDropzone) {
+function ImageDropzone({ text, className, onDrop, minSize, maxSize, maxFiles = 8, accept }: IImageDropzone) {
   const [files, setFiles] = useState<IPreviewFile[]>([]);
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -59,7 +59,7 @@ function FlexDropzone({ text, className, onDrop, minSize, maxSize, maxFiles = 8,
     [files]
   );
 
-  const removeItem = (name: string, size: number) => () => {
+  const removeItem = (name: string) => () => {
     const leftFiles = files.filter((f) => f.name !== name);
     setFiles(leftFiles);
     onDrop(leftFiles);
@@ -67,14 +67,14 @@ function FlexDropzone({ text, className, onDrop, minSize, maxSize, maxFiles = 8,
 
   const getThumbContent = (file: IPreviewFile) => {
     if (file.type.startsWith("image")) {
-      return <img src={file.preview} className={Styles.img} key={file.name} />;
+      return <img alt={file.name} src={file.preview} className={Styles.img} key={file.name} />;
     } else {
       return <span className={Styles.textThumb}>{file.name}</span>;
     }
   };
 
   const thumbs = files.map((file) => (
-    <div onClick={removeItem(file.name, file.size)} className={Styles.thumb} key={file.name}>
+    <div onClick={removeItem(file.name)} className={Styles.thumb} key={file.name}>
       {getThumbContent(file)}
     </div>
   ));
@@ -83,11 +83,11 @@ function FlexDropzone({ text, className, onDrop, minSize, maxSize, maxFiles = 8,
     <section className={joined(Styles.dropzoneContainer, className)}>
       <div {...getRootProps({ className: Styles.dropzone })}>
         <input {...getInputProps()} />
-        <p>{text}</p>
+        <p className={Styles.pText}>{text}</p>
       </div>
       <aside className={Styles.thumbsContainer}>{thumbs}</aside>
     </section>
   );
 }
 
-export default FlexDropzone;
+export default ImageDropzone;

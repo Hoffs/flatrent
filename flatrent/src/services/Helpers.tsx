@@ -1,10 +1,9 @@
 import { toast } from "react-toastify";
+import { history } from "../MainRouter";
+import { loginUrl } from "../utilities/Utilities";
+import { IApiResponse, IBasicResponse, IErrorResponse } from "./interfaces/Common";
 import { ApiHostname, DefaultHeaders } from "./Settings";
 import UserService from "./UserService";
-import { IErrorResponse, IBasicResponse, IApiResponse } from "./interfaces/Common";
-import { withRouter } from "react-router";
-import { history } from "../MainRouter";
-import { loginUrl, uncapitalize } from "../utilities/Utilities";
 
 export const makeUrl = (base: string, path: string): string => {
   if (base.endsWith("/") && path.startsWith("/")) {
@@ -108,11 +107,11 @@ export const uploadEach = async (
   files: File[],
   func: (id: string, file: File) => Promise<IBasicResponse>
 ): Promise<IErrorResponse | undefined> => {
-  console.log(toUpload)
-  console.log(files)
+  console.log(toUpload);
+  console.log(files);
   const promises = Object.keys(toUpload).map((apiFileId) => {
     const file = files.find((f) => f.name === toUpload[apiFileId]);
-    console.log(file, apiFileId)
+    console.log(file, apiFileId);
     return func(apiFileId, file!);
   });
 

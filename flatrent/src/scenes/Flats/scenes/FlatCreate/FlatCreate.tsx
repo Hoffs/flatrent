@@ -2,17 +2,17 @@ import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "../../../../components/Button";
+import { ImageDropzone } from "../../../../components/Dropzones";
+import { IPreviewFile } from "../../../../components/Dropzones/ImageDropzone";
 import FlexColumn from "../../../../components/FlexColumn";
 import FlexRow from "../../../../components/FlexRow";
-import { InputForm, NumberInputForm, InputAreaForm } from "../../../../components/InputForm";
+import { InputAreaForm, InputForm, NumberInputForm } from "../../../../components/InputForm";
 import SimpleCheckbox from "../../../../components/SimpleCheckbox";
 import FlatService from "../../../../services/FlatService";
-import Styles from "./FlatCreate.module.css";
-import { joined, flatUrl } from "../../../../utilities/Utilities";
-import FlexDropzone from "../../../../components/FlexDropzone";
-import { IPreviewFile } from "../../../../components/FlexDropzone/FlexDropzone";
-import { IFlatCreateResponse } from "../../../../services/interfaces/FlatServiceInterfaces";
 import { IBasicResponse } from "../../../../services/interfaces/Common";
+import { IFlatCreateResponse } from "../../../../services/interfaces/FlatServiceInterfaces";
+import { flatUrl, joined } from "../../../../utilities/Utilities";
+import Styles from "./FlatCreate.module.css";
 
 interface ICreateFlatState {
   values: {
@@ -262,14 +262,14 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
         />
 
         <InputForm errorsOnly={true} errors={errors.images} />
-        <FlexDropzone
+        <ImageDropzone
           className={Styles.dropzone}
           accept={["image/png", "image/jpg", "image/jpeg"]}
           maxSize={5000000}
           text="Norint pridėti nuotraukas nutempkitę jas į šį kvadratą arba jį paspauskite.
           Leistini formatai: png, jpg, jpeg.
           Maksimalus vienos nuotraukos dydis: 5 MB.
-          Leistinos 32 nuotraukos."
+          (32 maks.)"
           maxFiles={32}
           onDrop={this.handleImageUpdate}
         />

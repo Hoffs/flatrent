@@ -1,4 +1,3 @@
-import { apiFetch } from "./Helpers";
 import { IBasicResponse, IErrorResponse } from "./interfaces/Common";
 import UserService from "./UserService";
 

@@ -1,14 +1,12 @@
-import React, { Component, ReactNode, ReactElement } from "react";
+import React, { Component, ReactNode } from "react";
 import InfiniteScroll from "react-infinite-scroller";
-import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import FlexRow from "../../components/FlexRow";
-import FlatService from "../../services/FlatService";
-import { IShortFlatDetails } from "../../services/interfaces/FlatServiceInterfaces";
-import Styles from "./UserFlatList.module.css";
 import { IApiResponse } from "../../services/interfaces/Common";
-import FlatBox, { FlatBoxLoader } from "../Flats/FlatBox";
+import { IShortFlatDetails } from "../../services/interfaces/FlatServiceInterfaces";
 import UserService from "../../services/UserService";
+import FlatBox, { FlatBoxLoader } from "../Flats/FlatBox";
+import Styles from "./UserFlatList.module.css";
 
 interface IUserFlatListProps {
   userId: string;
@@ -31,7 +29,7 @@ class UserFlatList extends Component<IUserFlatListProps, IUserFlatlistState> {
     this.loadFlats(this.state.page);
   }
 
-  componentWillReceiveProps(newProps: IUserFlatListProps) {
+  public componentWillReceiveProps(newProps: IUserFlatListProps) {
     this.setState({ flats: undefined });
     this.loadFlatsFunc = this.getLoadFlats(newProps.userId);
     this.loadFlatsFunc(0);
@@ -47,7 +45,7 @@ class UserFlatList extends Component<IUserFlatListProps, IUserFlatlistState> {
           initialLoad={false}
           loadMore={this.loadFlatsFunc}
           hasMore={this.state.hasMore}
-          loader={this.getLoaderItems(4)}
+          loader={this.getLoaderItems()}
           useWindow={true}
         >
           {this.getFlatItems()}
@@ -67,7 +65,7 @@ class UserFlatList extends Component<IUserFlatListProps, IUserFlatlistState> {
     }
   }
 
-  private getLoaderItems(count: number) {
+  private getLoaderItems() {
     // return Array(count).fill(0).map((_, idx) => <FlatBoxLoader key={idx} />);
     return <FlatBoxLoader key={0} />;
   }
@@ -104,7 +102,7 @@ class UserFlatList extends Component<IUserFlatListProps, IUserFlatlistState> {
     }
   };
 
-  private handleFail(e: any) {
+  private handleFail() {
     toast.error("Įvyko nežinoma klaida.");
   }
 }

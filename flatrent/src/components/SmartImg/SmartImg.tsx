@@ -1,4 +1,4 @@
-import React, { HTMLProps, ImgHTMLAttributes, DetailedHTMLProps, SyntheticEvent } from "react";
+import React, { DetailedHTMLProps, ImgHTMLAttributes, SyntheticEvent } from "react";
 
 const setImageToDefault = (evt: SyntheticEvent<HTMLImageElement, Event>) => {
   evt.currentTarget.setAttribute("src", "/placeholder.svg");
@@ -6,7 +6,7 @@ const setImageToDefault = (evt: SyntheticEvent<HTMLImageElement, Event>) => {
 };
 
 const SmartImg = <P extends DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>>(props: P) => {
-  return <img {...props} onError={setImageToDefault} />;
+  return <img alt="" {...props} onError={setImageToDefault} />;
 };
 
 export default SmartImg;

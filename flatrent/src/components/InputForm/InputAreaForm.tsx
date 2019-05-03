@@ -1,6 +1,5 @@
 import React, { ChangeEvent, Component } from "react";
 import Styles from "./InputForm.module.css";
-import { joined } from "../../utilities/Utilities";
 
 interface InputAreaFormProps {
   className?: string;
@@ -31,9 +30,14 @@ class InputAreaForm extends Component<InputAreaFormProps, { focused: boolean }> 
   }
 
   private getContent() {
-    const charCounter = this.props.maxChars !== undefined
-      ? (<span className={Styles.charCounter}>{this.props.value.length} / {this.props.maxChars}</span>)
-      : undefined;
+    const charCounter =
+      this.props.maxChars !== undefined ? (
+        <span className={Styles.charCounter}>
+          {this.props.value.length} / {this.props.maxChars}
+        </span>
+      ) : (
+        undefined
+      );
     if (!this.props.errorsOnly) {
       const style = this.props.className === undefined ? "" : this.props.className;
       return (

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using AutoMapper;
 using FlatRent.Controllers.Abstractions;
@@ -82,6 +83,18 @@ namespace FlatRent.Controllers
             if (!conversation.IsAuthorOrRecipient(User.GetUserId())) return Forbid();
 
             var messages = _repository.GetConversationMessages(id, offset);
+            var mapped = _mapper.Map<IEnumerable<MessageDetails>>(messages);
+            return Ok(mapped);
+        }
+
+        [HttpGet("{id}/new")]
+        [Authorize]
+        [EntityMustExist]
+        public async Task<IActionResult> GetNewConversationMessagesAsync([FromRoute] Guid id, [FromQuery, Required] Guid lastMessageId)
+        {
+            var conversation = await _repository.GetAsync(id);
+            if (!conversation.IsAuthorOrRecipient(User.GetUserId())) return Forbid();
+            var messages = await _repository.GetNewConversationMessages(id, lastMessageId);
             var mapped = _mapper.Map<IEnumerable<MessageDetails>>(messages);
             return Ok(mapped);
         }

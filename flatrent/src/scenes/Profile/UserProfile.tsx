@@ -1,11 +1,11 @@
-import React, { Component, ReactNode } from "react";
+import React, { Component } from "react";
 import ContentLoader from "react-content-loader";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import FlexColumn from "../../components/FlexColumn";
 import FlexRow from "../../components/FlexRow";
 import SmartImg from "../../components/SmartImg";
-import { avatarUrl, getImageUrl } from "../../services/ApiUtilities";
+import { avatarUrl } from "../../services/ApiUtilities";
 import { IUserDetails } from "../../services/interfaces/UserInterfaces";
 import UserService from "../../services/UserService";
 import { conversationWithUserUrl, userProfileEditUrl } from "../../utilities/Utilities";

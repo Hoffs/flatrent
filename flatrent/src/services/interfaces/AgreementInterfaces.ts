@@ -1,7 +1,7 @@
-import { IShortAddress, IShortFlatDetails } from "./FlatServiceInterfaces";
-import { IShortUserDetails } from "./UserInterfaces";
 import { IAttachment } from "./Common";
 import { IConversationDetails } from "./ConversationInterfaces";
+import { IShortAddress, IShortFlatDetails } from "./FlatServiceInterfaces";
+import { IShortUserDetails } from "./UserInterfaces";
 
 export enum AgreementStatusesText {
     Requested = "Išsiųsta nuomotojui",

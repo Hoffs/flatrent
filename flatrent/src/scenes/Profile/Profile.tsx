@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ContentLoader from "react-content-loader";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import FlexColumn from "../../components/FlexColumn";
 import FlexRow from "../../components/FlexRow";
@@ -10,10 +9,6 @@ import UserFlatList from "./UserFlatList";
 import UserProfile from "./UserProfile";
 
 class Profile extends Component<RouteComponentProps<{ id: string }>> {
-  constructor(props: RouteComponentProps<{ id: string }>) {
-    super(props);
-  }
-
   public render() {
     const { id } = this.props.match.params;
 

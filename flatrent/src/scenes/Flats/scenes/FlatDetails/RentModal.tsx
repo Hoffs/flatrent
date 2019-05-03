@@ -8,17 +8,20 @@ import { flatUrl, stopPropogation } from "../../../../utilities/Utilities";
 import Styles from "./RentModal.module.css";
 
 import Moment from "moment";
+// tslint:disable-next-line: no-submodule-imports
 import "moment/locale/lt";
 import { DateRangePicker, FocusedInputShape } from "react-dates";
+// tslint:disable-next-line: no-submodule-imports
 import "react-dates/initialize";
+// tslint:disable-next-line: no-submodule-imports
 import "react-dates/lib/css/_datepicker.css";
 import Button from "../../../../components/Button";
+import { ImageDropzone } from "../../../../components/Dropzones";
+import { IPreviewFile } from "../../../../components/Dropzones/ImageDropzone";
 import FlexColumn from "../../../../components/FlexColumn";
-import FlexDropzone from "../../../../components/FlexDropzone";
-import { IPreviewFile } from "../../../../components/FlexDropzone/FlexDropzone";
 import { InputAreaForm, InputForm } from "../../../../components/InputForm";
-import { IFlatDetails, IAgreementCreateResponse } from "../../../../services/interfaces/FlatServiceInterfaces";
-import { IBasicResponse, IApiResponse } from "../../../../services/interfaces/Common";
+import { IApiResponse } from "../../../../services/interfaces/Common";
+import { IAgreementCreateResponse, IFlatDetails } from "../../../../services/interfaces/FlatServiceInterfaces";
 
 Moment.locale("lt");
 
@@ -41,13 +44,13 @@ class RentModal extends Component<RouteComponentProps<{ id: string }> & IRentMod
     super(props);
     console.log("construct", props);
     this.state = {
-      requesting: false,
-      errors: {},
       comments: "",
-      startDate: null,
       endDate: null,
-      focusedInput: null,
+      errors: {},
       files: [],
+      focusedInput: null,
+      requesting: false,
+      startDate: null,
     };
   }
 
@@ -109,11 +112,12 @@ class RentModal extends Component<RouteComponentProps<{ id: string }> & IRentMod
               title="Papildoma informacija"
               maxChars={5000}
             />
-            <FlexDropzone
+            <ImageDropzone
               className={Styles.dropzone}
               onDrop={this.updateFiles}
               text="Pridėti papildomus failus nurodytus pageidavimuose,
-              bei patvirtinančius Jūsų nuomos sutarties prašymą."
+              bei papildančius Jūsų nuomos sutarties prašymą.
+              (8 maks.)"
               maxSize={5000000}
               maxFiles={8}
             />

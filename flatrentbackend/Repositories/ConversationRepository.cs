@@ -55,6 +55,17 @@ namespace FlatRent.Repositories
             return (errors, mapped);
         }
 
+        public async Task<IEnumerable<Message>> GetNewConversationMessages(Guid conversationId, Guid lastMessageId)
+        {
+            var lastMessage = await _messageRepository.GetAsync(lastMessageId);
+            var lastMessageTime = lastMessage?.CreatedDate ?? DateTime.MaxValue;
+            return Context.Messages
+                .Where(m => m.ConversationId == conversationId)
+                .Where(m => m.CreatedDate > lastMessageTime)
+                .OrderByDescending(m => m.CreatedDate)
+                .Take(200); // Limit to 200 new messages
+        }
+
         private class MessageRepository : AuthoredBaseRepository<Message>
         {
             public MessageRepository(DataContext context, IMapper mapper, ILogger logger) : base(context, mapper, logger)

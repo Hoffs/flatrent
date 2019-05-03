@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import FlexRow from "../../components/FlexRow";
 import FlatService from "../../services/FlatService";
 import { IApiResponse } from "../../services/interfaces/Common";
-import { IFlatListResponse, IShortFlatDetails } from "../../services/interfaces/FlatServiceInterfaces";
+import { IShortFlatDetails } from "../../services/interfaces/FlatServiceInterfaces";
 import FlatBox, { FlatBoxLoader } from "./FlatBox";
 import Styles from "./FlatList.module.css";
 
@@ -62,7 +62,7 @@ class FlatList extends Component<
     FlatService.getFlats(this.state.pageSize, this.state.pageSize * pageNumber)
       .then(this.handleFlatResult)
       .catch(this.handleFail);
-  }
+  };
 
   private handleFlatResult = (result: IApiResponse<IShortFlatDetails[]>) => {
     if (result.errors !== undefined) {
@@ -71,9 +71,9 @@ class FlatList extends Component<
     } else if (result.data !== undefined) {
       this.setState((state) => ({ flats: [...state.flats, ...result.data!], hasMore: result.data!.length !== 0 }));
     }
-  }
+  };
 
-  private handleFail(e: any) {
+  private handleFail() {
     toast.error("Įvyko nežinoma klaida.");
   }
 }

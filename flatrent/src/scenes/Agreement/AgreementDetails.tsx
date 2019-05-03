@@ -1,25 +1,24 @@
-import React, { Component, ReactNode } from "react";
+import React, { Component } from "react";
 import ContentLoader from "react-content-loader";
 import { Link, RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
+import { CompactAttachmentPreview } from "../../components/AttachmentPreview";
+import Button from "../../components/Button";
+import ConversationBox from "../../components/ConversationBox";
 import FlexColumn from "../../components/FlexColumn";
 import FlexRow from "../../components/FlexRow";
 import SmartImg from "../../components/SmartImg";
-import { avatarUrl, getImageUrl } from "../../services/ApiUtilities";
-import { IUserDetails } from "../../services/interfaces/UserInterfaces";
-import UserService from "../../services/UserService";
-import Styles from "./AgreementDetails.module.css";
-import Button from "../../components/Button";
 import AgreementsService from "../../services/AgreementsService";
+import { avatarUrl } from "../../services/ApiUtilities";
 import {
-  IAgreementDetails,
-  getAgreementStatusText,
   AgreementStatuses,
+  getAgreementStatusText,
+  IAgreementDetails,
 } from "../../services/interfaces/AgreementInterfaces";
-import { flatUrl, userProfileUrl } from "../../utilities/Utilities";
 import { IBasicResponse } from "../../services/interfaces/Common";
-import AttachmentPreview from "../../components/AttachmentPreview";
-import ConversationBox from "../../components/ConversationBox";
+import UserService from "../../services/UserService";
+import { flatUrl, userProfileUrl } from "../../utilities/Utilities";
+import Styles from "./AgreementDetails.module.css";
 
 interface IAgreementDetailsRouteProps {
   id: string;
@@ -121,7 +120,7 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
         </FlexColumn>
         <FlexColumn className={Styles.section}>
           <span className={Styles.sectionHeader}>Pridėti failai:</span>
-          <AttachmentPreview attachments={agreement.attachments} />
+          <CompactAttachmentPreview className={Styles.attachmentsBox} attachments={agreement.attachments} />
         </FlexColumn>
         <FlexRow className={Styles.buttons}>{actionButtons}</FlexRow>
         {/* Invoices */}

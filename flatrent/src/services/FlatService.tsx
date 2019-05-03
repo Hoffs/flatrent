@@ -1,18 +1,18 @@
-import { apiFetch, uploadEach, apiFetchTyped, getGeneralError } from "./Helpers";
+import AttachmentService from "./AttachmentService";
+import { apiFetchTyped, getGeneralError, uploadEach } from "./Helpers";
 import ImageService from "./ImageService";
-import { IBasicResponse, IErrorResponse, IApiResponse } from "./interfaces/Common";
+import { IApiResponse } from "./interfaces/Common";
 import {
+  IAddress,
+  IAgreementCreateResponse,
   IFlatCreateRequest,
   IFlatCreateResponse,
   IFlatDetails,
-  IShortFlatDetails,
   IFlatListResponse,
   IRentRequest,
-  IAgreementCreateResponse,
-  IAddress,
+  IShortFlatDetails,
 } from "./interfaces/FlatServiceInterfaces";
 import UserService from "./UserService";
-import AttachmentService from "./AttachmentService";
 
 export const getAddressString = (address: IAddress) => {
   console.log(address);
@@ -23,7 +23,7 @@ class FlatService {
   public static async getFlats(count: number, offset: number): Promise<IFlatListResponse> {
     try {
       // const rentedQuery = rented ? "&rented=true" : "";
-      const [result, parsed] = await apiFetchTyped<IShortFlatDetails[]>(
+      const [, parsed] = await apiFetchTyped<IShortFlatDetails[]>(
         `/api/flat?count=${count}&offset=${offset}`,
         undefined,
         true
@@ -37,7 +37,7 @@ class FlatService {
 
   public static async getFlat(id: string): Promise<IApiResponse<IFlatDetails>> {
     try {
-      const [response, parsed] = await apiFetchTyped<IFlatDetails>(`/api/flat/${id}`, {
+      const [, parsed] = await apiFetchTyped<IFlatDetails>(`/api/flat/${id}`, {
         headers: UserService.authorizationHeaders(),
       });
       return parsed;
@@ -49,9 +49,13 @@ class FlatService {
 
   public static async deleteFlat(id: string): Promise<IApiResponse<any>> {
     try {
-      const [response, parsed] = await apiFetchTyped<any>(`/api/flat/${id}`, {
-        method: "DELETE",
-      }, true);
+      const [, parsed] = await apiFetchTyped<any>(
+        `/api/flat/${id}`,
+        {
+          method: "DELETE",
+        },
+        true
+      );
       return parsed;
     } catch (e) {
       console.log(e);
@@ -99,7 +103,7 @@ class FlatService {
     }
     request.images = images.map((i) => ({ name: i.name }));
     try {
-      const [response, parsed] = await apiFetchTyped<IFlatCreateResponse>(`/api/flat/`, {
+      const [, parsed] = await apiFetchTyped<IFlatCreateResponse>(`/api/flat/`, {
         body: JSON.stringify(requestData),
         headers: UserService.authorizationHeaders(),
         method: "POST",

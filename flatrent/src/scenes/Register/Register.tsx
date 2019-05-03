@@ -2,14 +2,12 @@ import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "../../components/Button";
-import Card from "../../components/Card";
 import FlexColumn from "../../components/FlexColumn";
 import FlexRow from "../../components/FlexRow";
-import { InputForm, InputAreaForm } from "../../components/InputForm";
-import UserService from "../../services/UserService";
-import { register } from "../../serviceWorker";
-import Styles from "./Register.module.css";
+import { InputAreaForm, InputForm } from "../../components/InputForm";
 import { IRegisterRequest } from "../../services/interfaces/UserInterfaces";
+import UserService from "../../services/UserService";
+import Styles from "./Register.module.css";
 
 interface IRegisterState {
   values: {

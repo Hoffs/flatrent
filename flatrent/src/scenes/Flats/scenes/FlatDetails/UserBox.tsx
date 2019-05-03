@@ -3,9 +3,9 @@ import ContentLoader from "react-content-loader";
 import { Link } from "react-router-dom";
 import FlexColumn from "../../../../components/FlexColumn";
 import { avatarUrl } from "../../../../services/ApiUtilities";
+import { IShortUserDetails } from "../../../../services/interfaces/UserInterfaces";
 import { conversationWithUserUrl, userProfileUrl } from "../../../../utilities/Utilities";
 import Styles from "./UserBox.module.css";
-import { IUserDetails, IShortUserDetails } from "../../../../services/interfaces/UserInterfaces";
 
 const UserBox = ({ user }: { user?: IShortUserDetails }) => {
   if (user === undefined) {
@@ -17,7 +17,7 @@ const UserBox = ({ user }: { user?: IShortUserDetails }) => {
       <Link className={Styles.contactLink} to={userProfileUrl(user.id)}>
         <span className={Styles.avatarName}>{user.firstName}</span>
         <div className={Styles.avatarWrapper}>
-          <img className={Styles.avatar} src={avatarUrl(user.id)} />
+          <img alt="User avatar" className={Styles.avatar} src={avatarUrl(user.id)} />
         </div>
       </Link>
       <Link className={Styles.contactLink} to={conversationWithUserUrl(user.id)}>

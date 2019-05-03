@@ -7,12 +7,10 @@ import { InputForm } from "../../components/InputForm";
 import UserService from "../../services/UserService";
 import Styles from "./Login.module.css";
 
-const fields = ["Email", "Password"];
-
 interface ILoginState {
-  Values: { [key: string]: string };
+  values: { [key: string]: string };
   errors: { [key: string]: string[] };
-  Requesting: boolean;
+  requesting: boolean;
 }
 
 class Login extends Component<RouteComponentProps, ILoginState> {
@@ -20,8 +18,8 @@ class Login extends Component<RouteComponentProps, ILoginState> {
     super(props);
     this.state = {
       errors: {},
-      Requesting: false,
-      Values: { Email: "", Password: "" },
+      requesting: false,
+      values: { email: "", password: "" },
     };
   }
 
@@ -30,16 +28,16 @@ class Login extends Component<RouteComponentProps, ILoginState> {
       <Card className={Styles.customCard}>
         <span className={Styles.title}>Prisijungimas</span>
         <InputForm
-          value={this.state.Values.Email}
+          value={this.state.values.email}
           errors={this.state.errors.email}
-          name="Email"
+          name="email"
           title="El. Paštas"
           setValue={this.handleChange}
         />
         <InputForm
-          value={this.state.Values.Password}
+          value={this.state.values.password}
           errors={this.state.errors.password}
-          name="Password"
+          name="password"
           type="password"
           title="Slaptažodis"
           setValue={this.handleChange}
@@ -52,7 +50,7 @@ class Login extends Component<RouteComponentProps, ILoginState> {
           title=""
           setValue={this.handleChange}
         />
-        <Button disabled={this.state.Requesting} onClick={this.authenticate}>
+        <Button disabled={this.state.requesting} onClick={this.authenticate}>
           Prisijungti
         </Button>
       </Card>
@@ -60,12 +58,12 @@ class Login extends Component<RouteComponentProps, ILoginState> {
   }
 
   private handleChange = (name: string, value: string) =>
-    this.setState({ Values: { ...this.state.Values, [name]: value } });
+    this.setState({ values: { ...this.state.values, [name]: value } });
 
   private authenticate = async () => {
-    this.setState({ Requesting: true });
+    this.setState({ requesting: true });
     try {
-      const response = await UserService.authenticate(this.state.Values.Email, this.state.Values.Password);
+      const response = await UserService.authenticate(this.state.values.email, this.state.values.password);
       console.log(response);
       if (response.errors === undefined) {
         toast.success("Sėkmingai prisijugėte!", {
@@ -74,11 +72,11 @@ class Login extends Component<RouteComponentProps, ILoginState> {
         this.props.history.push("/");
         console.log("success");
       } else {
-        this.setState({ errors: response.errors, Requesting: false });
+        this.setState({ errors: response.errors, requesting: false });
         console.log("error");
       }
     } catch {
-      this.setState({ Requesting: false });
+      this.setState({ requesting: false });
     }
   };
 }

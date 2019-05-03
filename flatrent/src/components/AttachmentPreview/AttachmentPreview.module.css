@@ -26,7 +26,6 @@
   padding: 10px;
 }
 
-
 .attachmentContainer {
   font-family: var(--text-font-family);
   padding: 5px;
@@ -37,8 +36,4 @@
   justify-content: flex-start;
   flex-wrap: wrap;
   min-height: 110px;
-}
-
-.attachmentThumb {
-
 }

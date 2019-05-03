@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Models;
 using FlatRent.Models.Requests;
@@ -13,5 +14,6 @@ namespace FlatRent.Repositories.Interfaces
         IEnumerable<Message> GetConversationMessages(Guid conversationId, int offset);
         Task<(IEnumerable<FormError>, Guid)> AddConversation(ConversationForm conversation, Guid userId);
         Task<(IEnumerable<FormError>, Message)> AddMessage(MessageForm message, Guid conversationId, Guid userId);
+        Task<IEnumerable<Message>> GetNewConversationMessages(Guid id, Guid lastMessageId);
     }
 }

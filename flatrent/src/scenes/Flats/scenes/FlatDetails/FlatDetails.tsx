@@ -7,6 +7,7 @@ import Styles from "./FlatDetails.module.css";
 import FlexColumn from "../../../../components/FlexColumn";
 import ImageCarousel from "../../../../components/ImageCarousel";
 import FlatService from "../../../../services/FlatService";
+import { IApiResponse } from "../../../../services/interfaces/Common";
 import { IFlatDetails } from "../../../../services/interfaces/FlatServiceInterfaces";
 import UserService from "../../../../services/UserService";
 import { flatEditUrl, userProfileUrl } from "../../../../utilities/Utilities";
@@ -15,7 +16,6 @@ import FlatShortInfo from "./FlatShortInfo";
 import RentModal from "./RentModal";
 import RentPanel from "./RentPanel";
 import UserBox from "./UserBox";
-import { IApiResponse } from "../../../../services/interfaces/Common";
 
 interface IFlatDetailsState {
   loading: boolean;
@@ -26,8 +26,8 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
   constructor(props: RouteComponentProps<{ id: string }>) {
     super(props);
     this.state = {
-      loading: true,
       flat: undefined,
+      loading: true,
     };
     this.fetchFlat(props.match.params.id);
   }
@@ -88,7 +88,7 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
   private deleteFlat = async () => {
     await FlatService.deleteFlat(this.props.match.params.id);
     this.props.history.push(userProfileUrl(UserService.userId()));
-  }
+  };
 
   private fetchFlat = (id: string) => {
     FlatService.getFlat(id)

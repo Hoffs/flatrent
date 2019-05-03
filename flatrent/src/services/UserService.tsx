@@ -5,13 +5,7 @@ import { apiFetch, apiFetchTyped, getGeneralError } from "./Helpers";
 import { IShortAgreementDetails } from "./interfaces/AgreementInterfaces";
 import { IApiResponse, IBasicResponse, IErrorResponse } from "./interfaces/Common";
 import { IShortFlatDetails } from "./interfaces/FlatServiceInterfaces";
-import {
-  ILoginResponse,
-  IRegisterRequest,
-  ITokenPayload,
-  IUserAgreements,
-  IUserDetails,
-} from "./interfaces/UserInterfaces";
+import { ILoginResponse, IRegisterRequest, ITokenPayload, IUserDetails } from "./interfaces/UserInterfaces";
 
 export enum Roles {
   Administrator = 1,
@@ -26,7 +20,7 @@ export const Policies = {
 class UserService {
   public static async getUserData(userId: string): Promise<IApiResponse<IUserDetails>> {
     try {
-      const [result, parsed] = await apiFetchTyped<IUserDetails>(
+      const [, parsed] = await apiFetchTyped<IUserDetails>(
         `/api/user/${userId}`,
         {
           method: "GET",
@@ -43,7 +37,7 @@ class UserService {
 
   public static async getUserAgreementsTenant(userId: string): Promise<IApiResponse<IShortAgreementDetails[]>> {
     try {
-      const [result, parsed] = await apiFetchTyped<IShortAgreementDetails[]>(
+      const [, parsed] = await apiFetchTyped<IShortAgreementDetails[]>(
         `/api/user/${userId}/agreements/tenant`,
         {
           method: "GET",
@@ -60,7 +54,7 @@ class UserService {
 
   public static async getUserAgreementsOwner(userId: string): Promise<IApiResponse<IShortAgreementDetails[]>> {
     try {
-      const [result, parsed] = await apiFetchTyped<IShortAgreementDetails[]>(
+      const [, parsed] = await apiFetchTyped<IShortAgreementDetails[]>(
         `/api/user/${userId}/agreements/owner`,
         {
           method: "GET",
@@ -77,7 +71,7 @@ class UserService {
 
   public static async getUserFlats(userId: string, offset: number): Promise<IApiResponse<IShortFlatDetails[]>> {
     try {
-      const [result, parsed] = await apiFetchTyped<IShortFlatDetails[]>(
+      const [, parsed] = await apiFetchTyped<IShortFlatDetails[]>(
         `/api/user/${userId}/flats?offset=${offset}`,
         {
           method: "GET",
@@ -94,7 +88,7 @@ class UserService {
 
   public static async authenticate(email: string, password: string): Promise<IApiResponse<ILoginResponse>> {
     try {
-      const [result, parsed] = await apiFetchTyped<ILoginResponse>("/api/user/login", {
+      const [, parsed] = await apiFetchTyped<ILoginResponse>("/api/user/login", {
         body: JSON.stringify({ email, password }),
         method: "POST",
       });

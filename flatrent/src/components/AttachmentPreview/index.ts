@@ -1,2 +1,3 @@
 import AttachmentPreview from "./AttachmentPreview";
-export default AttachmentPreview;
+import CompactAttachmentPreview from "./CompactAttachmentPreview";
+export { AttachmentPreview, CompactAttachmentPreview };

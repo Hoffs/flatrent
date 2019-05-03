@@ -1,8 +1,8 @@
-import { apiFetch, apiFetchTyped, getGeneralError } from "./Helpers";
+import { saveAs } from "file-saver";
+import { toast } from "react-toastify";
+import { apiFetch, getGeneralError } from "./Helpers";
 import { IBasicResponse, IErrorResponse } from "./interfaces/Common";
 import UserService from "./UserService";
-import { saveAs } from 'file-saver';
-import { toast } from "react-toastify";
 
 class AttachmentService {
   public static async putAttachment(fileId: string, file: File): Promise<IBasicResponse> {

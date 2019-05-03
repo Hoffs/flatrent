@@ -1,17 +1,14 @@
 import React, { ComponentClass, FunctionComponent } from "react";
 import RoleRoute from "./components/RoleRoute";
-import CreateFlat from "./scenes/Flats/scenes/FlatCreate";
+import AgreementDetails from "./scenes/Agreement";
 import FlatList from "./scenes/Flats";
+import CreateFlat from "./scenes/Flats/scenes/FlatCreate";
+import FlatDetails from "./scenes/Flats/scenes/FlatDetails";
 import Login from "./scenes/Login";
 import Logout from "./scenes/Logout";
-import UserService, { Policies, Roles } from "./services/UserService";
-import Register from "./scenes/Register";
-import { number } from "prop-types";
-import FlatDetails from "./scenes/Flats/scenes/FlatDetails";
 import Profile from "./scenes/Profile";
-import { Redirect } from "react-router-dom";
-import { fLocalStorage } from "./utilities/LocalStorageWrapper";
-import AgreementDetails from "./scenes/Agreement";
+import Register from "./scenes/Register";
+import UserService, { Policies } from "./services/UserService";
 
 export enum Authentication {
   Anonymous = 0,

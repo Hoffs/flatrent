@@ -22,7 +22,7 @@
   /* --main-font-color: rgba(0, 0, 0, 0.9); */
 
   --accent-1-color: #445965;
-  --accent-2-color: #BA4A61;
+  --accent-2-color: #ba4a61;
 
   --main-font-color: #1b1b1e;
   --main-font-blurred-color: rgba(27, 27, 30, 0.5);
@@ -55,7 +55,6 @@
 
   --link-color: #ff5a5f;
 
-
   /* --message-tooltip: #579290; */
-  --message-tooltip: #D4A398;
+  --message-tooltip: #d4a398;
 }

@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from "react";
+import React, { ReactNode } from "react";
 import Styles from "./Dimmer.module.css";
 
 const Dimmer = ({

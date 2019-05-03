@@ -6,18 +6,17 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { toast } from "react-toastify";
 import ConversationService from "../../services/ConversationService";
+import { IAttachment } from "../../services/interfaces/Common";
 import { IConversationDetails, IMessageDetails } from "../../services/interfaces/ConversationInterfaces";
 import UserService from "../../services/UserService";
 import { joined } from "../../utilities/Utilities";
-import AttachmentPreview from "../AttachmentPreview";
+import CompactAttachmentPreview from "../AttachmentPreview/CompactAttachmentPreview";
 import Button from "../Button";
+import { CompactDropzone } from "../Dropzones";
 import FlexColumn from "../FlexColumn";
 import FlexRow from "../FlexRow";
 import { InputAreaForm } from "../InputForm";
-import CompactDropzone from "./CompactDropzone";
 import Styles from "./ConversationBox.module.css";
-import { IAttachment } from "../../services/interfaces/Common";
-import CompactAttachmentPreview from "./CompactAttachmentPreview";
 
 interface IConversationBoxProps {
   className?: string;
@@ -33,9 +32,20 @@ interface IConversationBoxState {
   files: File[];
 }
 
+const messageCompare = (a: IMessageDetails, b: IMessageDetails) => {
+  if (a.createdDate < b.createdDate) {
+    return 1;
+  }
+  if (a.createdDate > b.createdDate) {
+    return -1;
+  }
+  return 0;
+};
+
 class ConversationBox extends Component<IConversationBoxProps, IConversationBoxState> {
   private scrollRef: HTMLDivElement | null = null;
   private newMessage: boolean = false;
+  private shouldCheckForMessages: boolean = false;
 
   constructor(props: IConversationBoxProps) {
     super(props);
@@ -47,6 +57,15 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
       firstLoadFinished: false,
       files: [],
     };
+  }
+
+  public componentDidMount() {
+    this.shouldCheckForMessages = true;
+    this.loadNewMessages();
+  }
+
+  public componentWillUnmount() {
+    this.shouldCheckForMessages = false;
   }
 
   public render() {
@@ -62,7 +81,7 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
               initialLoad={true}
               loadMore={this.loadMessages}
               hasMore={this.state.hasMore}
-              loader={<MessageLoader />}
+              loader={<MessageLoader key={0} />}
               useWindow={false}
               isReverse={true}
             >
@@ -100,6 +119,12 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
       this.scrollRef.scrollIntoView();
       this.newMessage = false;
     }
+    if (this.scrollRef !== null && this.scrollRef!.parentElement!.parentElement!.parentElement !== null) {
+      const parel = this.scrollRef!.parentElement!.parentElement!.parentElement;
+      if (parel.scrollHeight - parel.scrollTop - parel.offsetHeight <= parel.clientHeight) {
+        this.scrollRef.scrollIntoView();
+      }
+    }
   }
 
   private updateMessageContent = (_: string, writtenMessage: string) => this.setState({ writtenMessage });
@@ -109,6 +134,7 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
     const userId = UserService.userId();
     const { messages } = this.state;
     const mapped = messages
+      .sort(messageCompare)
       .map((message, idx) => {
         const userMessageStyle = userId === message.authorId ? Styles.authorMessage : Styles.recipientMessage;
         const split = message.createdDate.split("T");
@@ -154,6 +180,28 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
     }
   };
 
+  private loadNewMessages = async () => {
+    if (!this.shouldCheckForMessages) {
+      return;
+    }
+    const sorted = this.state.messages.sort(messageCompare);
+    if (this.state.messages.length !== 0) {
+      const response = await ConversationService.getNewMessages(this.props.conversation.id, sorted[0].id);
+      if (response.errors !== undefined) {
+        const errors = Object.keys(response.errors).map((key) => response.errors![key].join("\n"));
+        errors.forEach((error) => toast.error(error));
+        return;
+      }
+
+      if (response.data !== undefined && response.data.length > 0) {
+        this.setState((state) => ({
+          messages: [...response.data!, ...state.messages],
+        }));
+      }
+    }
+    setTimeout(() => this.loadNewMessages(), 5000);
+  };
+
   private sendMessage = async () => {
     const { writtenMessage, files } = this.state;
     const response = await ConversationService.createMessage(this.props.conversation.id, writtenMessage, files);
@@ -187,7 +235,7 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
 }
 
 const MessageLoader = () => (
-  <ContentLoader speed={2} height={92} width={520} primaryColor="#f3f3f3" secondaryColor="#ecebeb">
+  <ContentLoader key={0} speed={2} height={92} width={520} primaryColor="#f3f3f3" secondaryColor="#ecebeb">
     <rect x="248" y="4" rx="4" ry="4" width="260" height="38" />
     <rect x="12" y="46" rx="4" ry="4" width="230" height="38" />
   </ContentLoader>

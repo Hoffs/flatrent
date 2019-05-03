@@ -1,4 +1,4 @@
-import React, { ReactNode, SyntheticEvent, useState, useCallback } from "react";
+import React, { ReactNode, SyntheticEvent, useState } from "react";
 import ContentLoader from "react-content-loader";
 import { Carousel } from "react-responsive-carousel";
 // tslint:disable-next-line: no-submodule-imports
@@ -33,7 +33,7 @@ const ImageCarousel = (props: IImageCarousel) => {
       showThumbs={false}
     >
       {props.imageIds === undefined ? (
-        <ImageLoader className={props.wrapperClassName} />
+        <ImageLoader />
       ) : (
         getCarouselImages(props.imageIds, props.wrapperClassName, clicked, onClick)
       )}
@@ -65,6 +65,7 @@ const getCarouselImages = (
         className={Styles.imageWrapper.concat(" ", wrapperClassName)}
       >
         <img
+          alt="Flat preview"
           x-clicked={clicked.toString()}
           key={ids[idx]}
           className={Styles.image}
@@ -75,7 +76,7 @@ const getCarouselImages = (
     ));
 };
 
-const ImageLoader = (props: { className: string }) => (
+const ImageLoader = () => (
   <ContentLoader
     style={{ width: "100%", height: "100%" }}
     height={100}

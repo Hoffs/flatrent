@@ -1,5 +1,5 @@
+import { IAttachment, IFileResponse } from "./Common";
 import { IShortUserDetails } from "./UserInterfaces";
-import { IAttachment, IFileMetadata, IFileResponse } from "./Common";
 
 export interface IConversationDetails {
     id: string;
@@ -17,6 +17,6 @@ export interface IMessageDetails {
 }
 
 export interface ICreatedMessageResponse {
-  id: string;
-  attachments: IFileResponse;
+    id: string;
+    attachments: IFileResponse;
 }

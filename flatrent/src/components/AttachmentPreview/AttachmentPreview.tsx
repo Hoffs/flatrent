@@ -1,9 +1,9 @@
-import React, { useCallback, useState, useEffect } from "react";
-import Styles from "./AttachmentPreview.module.css";
-import { joined } from "../../utilities/Utilities";
-import { IAttachment } from "../../services/interfaces/Common";
-import FlexRow from "../FlexRow";
+import React from "react";
 import AttachmentService from "../../services/AttachmentService";
+import { IAttachment } from "../../services/interfaces/Common";
+import { joined } from "../../utilities/Utilities";
+import FlexRow from "../FlexRow";
+import Styles from "./AttachmentPreview.module.css";
 
 export interface IAttachmentPreview {
   className?: string;
@@ -23,11 +23,7 @@ function AttachmentPreview({ className, attachments }: IAttachmentPreview) {
     </div>
   ));
 
-  return (
-    <FlexRow className={joined(Styles.attachmentContainer, className)}>
-      {thumbs}
-    </FlexRow>
-  );
+  return <FlexRow className={joined(Styles.attachmentContainer, className)}>{thumbs}</FlexRow>;
 }
 
 export default AttachmentPreview;
