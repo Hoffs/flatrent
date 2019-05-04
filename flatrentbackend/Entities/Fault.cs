@@ -10,7 +10,7 @@ namespace FlatRent.Entities
     {
         [Required]
         public string Name { get; set; }
-        [Required]
+        [Required, MaxLength(2000)]
         public string Description { get; set; }
         [Required]
         public bool Repaired { get; set; }

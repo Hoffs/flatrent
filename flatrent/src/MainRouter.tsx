@@ -9,18 +9,18 @@ import { getAsRoleRoutes } from "./Routes";
 export const history = createBrowserHistory();
 
 const MainRouter = () => (
-  <Router history={history}>
-    <div className="layout">
-      <Navigation />
-      <div className="content-wrapper">
-        <Switch>
-          {getAsRoleRoutes()}
-          <Redirect path="*" to="/" />
-        </Switch>
-      </div>
-      <Footer />
-    </div>
-  </Router>
+    <Router history={history}>
+        <div className="layout">
+            <Navigation />
+            <div className="content-wrapper">
+                <Switch>
+                    {getAsRoleRoutes()}
+                    <Redirect path="*" to="/" />
+                </Switch>
+            </div>
+            <Footer />
+        </div>
+    </Router>
 );
 
 export default MainRouter;

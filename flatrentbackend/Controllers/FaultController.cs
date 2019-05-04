@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -11,6 +12,7 @@ using FlatRent.Extensions;
 using FlatRent.Models;
 using FlatRent.Models.Dtos;
 using FlatRent.Models.Requests;
+using FlatRent.Models.Responses;
 using FlatRent.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,20 +46,20 @@ namespace FlatRent.Controllers
             if (User.GetUserId() != agreement.TenantId) return Forbid();
             if (agreement.Status.Id != AgreementStatus.Statuses.Accepted) return BadRequest();
 
-            var errors = await _faultRepository.CreateFaultAsync(id, form, User.GetUserId());
-            return OkOrBadRequest(errors, Ok());
+            var (errors, fault) = await _faultRepository.CreateFaultAsync(id, form, User.GetUserId());
+            return OkOrBadRequest(errors, Ok(new CreatedFaultResponse(fault.Id, fault.Attachments)));
         }
 
         [HttpGet]
         [Authorize]
         [EntityMustExist]
-        public async Task<IActionResult> GetFaultsAsync([FromRoute] Guid id)
+        public async Task<IActionResult> GetFaultsAsync([FromRoute] Guid id, [Required] int offset)
         {
             var agreement = await _repository.GetAsync(id);
             var userId = User.GetUserId();
             if (userId != agreement.TenantId && userId != agreement.Flat.AuthorId) return Forbid();
 
-            var mapped = _mapper.Map<IEnumerable<ShortFaultDetails>>(agreement.Faults);
+            var mapped = _mapper.Map<IEnumerable<ShortFaultDetails>>(agreement.Faults.Where(f => !f.Deleted).Paginate(offset));
             return Ok(mapped);
         }
 
@@ -80,7 +82,7 @@ namespace FlatRent.Controllers
         [HttpPost("{faultId}/fixed")]
         [Authorize]
         [EntityMustExist]
-        public async Task<IActionResult> UpdateFaultAsync([FromRoute] Guid id, [FromRoute] Guid faultId, [FromBody] float price)
+        public async Task<IActionResult> UpdateFaultAsync([FromRoute] Guid id, [FromRoute] Guid faultId, [FromBody] FaultFixForm form)
         {
             var agreement = await _repository.GetAsync(id);
 
@@ -90,10 +92,10 @@ namespace FlatRent.Controllers
             if (fault == null) return NotFound();
 
             fault.Repaired = true;
-            fault.Price = price;
+            fault.Price = form.Price;
 
             var errors = await _faultRepository.UpdateAsync(fault);
-            return OkOrBadRequest(errors, Ok());
+            return OkOrBadRequest(errors, Ok(new { Id = faultId }));
         }
 
         [HttpDelete("{faultId}")]
@@ -107,7 +109,7 @@ namespace FlatRent.Controllers
             if (fault.Repaired) return BadRequest(new FormError(Errors.CantDeleteRepaired));
 
             var errors = await _faultRepository.DeleteAsync(fault);
-            return OkOrBadRequest(errors, Ok());
+            return OkOrBadRequest(errors, Ok(new { Id = faultId }));
         }
     }
 }

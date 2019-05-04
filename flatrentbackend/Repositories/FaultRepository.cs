@@ -18,13 +18,14 @@ namespace FlatRent.Repositories
         {
         }
 
-        public async Task<IEnumerable<FormError>> CreateFaultAsync(Guid agreementId, FaultForm form, Guid userId)
+        public async Task<(IEnumerable<FormError>, Fault)> CreateFaultAsync(Guid agreementId, FaultForm form, Guid userId)
         {
             var agreement = await Context.Agreements.FindAsync(agreementId);
             var fault = Mapper.Map<Fault>(form);
             fault.AuthorId = userId;
             fault.AgreementId = agreementId;
             fault.Attachments.SetProperty(a => a.Fault, fault);
+            fault.Attachments.SetProperty(a => a.AuthorId, userId);
             fault.Conversation = new Conversation
             {
                 AuthorId = userId,
@@ -32,7 +33,7 @@ namespace FlatRent.Repositories
                 Subject = fault.Name,
             };
 
-            return await base.AddAsync(fault);
+            return (await base.AddAsync(fault), fault);
         }
 
         public new Task<IEnumerable<FormError>> UpdateAsync(Fault entity)

@@ -1,6 +1,6 @@
 .content {
   margin: 20px;
-  max-width: var(--main-max-width);
+  max-width: var(--wide-max-width);
   width: var(--main-width);
   text-align: left;
   align-items: flex-start;
@@ -158,4 +158,37 @@
 
 .attachmentsBox > div {
   margin-right: 4px;
+}
+
+.listRow {
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0 20px;
+}
+
+.list:first-of-type {
+  margin-right: 12px;
+}
+
+.list {
+  max-width: calc((var(--wide-max-width) - 12px) / 2);
+}
+
+.loaderRow {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.usersLoader {
+  height: 200px;
+}
+
+.titleLoader {
+  height: 90px;
+  width: 100%;
+}
+
+.commentsLoader {
+  height: 140px;
+  width: 100%;
 }

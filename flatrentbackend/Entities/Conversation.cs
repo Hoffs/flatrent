@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FlatRent.Entities
 {
     public class Conversation : AuthoredBaseEntity
     {
-        [Required]
-        [MaxLength(128)]
         public string Subject { get; set; }
 
         [ForeignKey("Recipient")]

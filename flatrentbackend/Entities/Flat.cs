@@ -42,7 +42,7 @@ namespace FlatRent.Entities
         public int MinimumRentDays { get; set; }
 
         [Required]
-        [MaxLength(5120)]
+        [MaxLength(2000)]
         public string TenantRequirements { get; set; }
 
         // Is ready to be shown/rented to public

@@ -42,18 +42,45 @@ namespace FlatRent.Repositories
 
         public async Task<(IEnumerable<FormError>, Guid)> AddConversation(ConversationForm conversation, Guid userId)
         {
+            var recipient = await Context.Users.FindAsync(conversation.RecipientId);
+            if (recipient == null || recipient.Deleted)
+            {
+                return (new [] { new FormError(Errors.RecipientDoesNotExist) }, default(Guid));
+            }
+
+            var existingConversation = await Context.Conversations.FirstOrDefaultAsync(c =>
+                (c.AuthorId == userId || c.AuthorId == conversation.RecipientId) &&
+                (c.RecipientId == userId ||
+                 c.RecipientId ==
+                 conversation.RecipientId));
+
+            if (existingConversation != null)
+            {
+                return (null, existingConversation.Id);
+            }
+
             var mapped = Mapper.Map<Conversation>(conversation);
+            var author = await Context.Users.FindAsync(userId);
+            mapped.Subject = $"{recipient.FirstName} {recipient.LastName}, {author.FirstName} {author.LastName}";
             var errors = await base.AddAsync(mapped, userId);
             return (errors, mapped.Id);
         }
 
         public async Task<(IEnumerable<FormError>, Message)> AddMessage(MessageForm message, Guid conversationId, Guid userId)
         {
+            // 2 checks for message sending is expensive
             var agreement = await Context.Agreements.FirstOrDefaultAsync(a => a.ConversationId == conversationId);
-            if (agreement.Status.Id == AgreementStatus.Statuses.Rejected || agreement.Deleted)
+            if (agreement != null && (!agreement.Deleted && agreement.StatusId != AgreementStatus.Statuses.Rejected))
             {
                 return (new[] { new FormError(Errors.MessageAgreementDeletedOrRejected) }, null);
             }
+
+            var fault = await Context.Faults.FirstOrDefaultAsync(a => a.ConversationId == conversationId);
+            if (fault != null && (fault.Deleted || fault.Repaired))
+            {
+                return (new[] { new FormError(Errors.MessageFaultDeletedOrRepaired) }, null);
+            }
+
             var mapped = Mapper.Map<Message>(message);
             mapped.ConversationId = conversationId;
             mapped.Attachments.SetProperty(a => a.AuthorId, userId);

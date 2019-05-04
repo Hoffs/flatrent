@@ -11,7 +11,14 @@ namespace FlatRent.Extensions
         {
             return queryable.Skip(skip).Take(take);
         }
+
         public static IEnumerable<T> Paginate<T>(this ICollection<T> collection, int skip = 0,
+            int take = PaginationConstants.StandardPageSize)
+        {
+            return collection.Skip(skip).Take(take);
+        }
+
+        public static IEnumerable<T> Paginate<T>(this IEnumerable<T> collection, int skip = 0,
             int take = PaginationConstants.StandardPageSize)
         {
             return collection.Skip(skip).Take(take);

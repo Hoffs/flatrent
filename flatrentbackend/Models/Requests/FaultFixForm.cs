@@ -3,9 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlatRent.Models.Requests
 {
-    public class ConversationForm
+    public class FaultFixForm
     {
         [Required]
-        public Guid RecipientId { get; set; }
+        [Range(0, double.MaxValue)]
+        public float Price { get; set; }
     }
 }

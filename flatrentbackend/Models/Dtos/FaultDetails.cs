@@ -6,6 +6,7 @@ namespace FlatRent.Models.Dtos
     public class FaultDetails
     {
         public Guid Id { get; set; }
+        public string Name { get; set; }
 
         public string Description { get; set; }
         public bool Repaired { get; set; }

@@ -9,7 +9,7 @@ namespace FlatRent.Models.Requests
         [MaxLength(128, ErrorMessage = Errors.MaxLength)]
         public string Name { get; set; }
 
-        [MaxLength(5120, ErrorMessage = Errors.MaxLength)]
+        [MaxLength(2000, ErrorMessage = Errors.MaxLength)]
         public string Description { get; set; }
 
         [MaxLength(8, ErrorMessage = Errors.MaxLength)]

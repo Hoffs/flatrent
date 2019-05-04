@@ -6,24 +6,24 @@ import FlexRow from "../FlexRow";
 import Styles from "./AttachmentPreview.module.css";
 
 export interface IAttachmentPreview {
-  className?: string;
-  attachments: IAttachment[];
+    className?: string;
+    attachments: IAttachment[];
 }
 
 function AttachmentPreview({ className, attachments }: IAttachmentPreview) {
-  const downloadLinkFactory = (id: string, name: string) => () => AttachmentService.downloadAttachment(id, name);
+    const downloadLinkFactory = (id: string, name: string) => () => AttachmentService.downloadAttachment(id, name);
 
-  const getThumbContent = (file: IAttachment) => {
-    return <span className={Styles.textThumb}>{file.name}</span>;
-  };
+    const getThumbContent = (file: IAttachment) => {
+        return <span className={Styles.textThumb}>{file.name}</span>;
+    };
 
-  const thumbs = attachments.map((file) => (
-    <div onClick={downloadLinkFactory(file.id, file.name)} className={Styles.attachmentThumb} key={file.name}>
-      {getThumbContent(file)}
-    </div>
-  ));
+    const thumbs = attachments.map((file) => (
+        <div onClick={downloadLinkFactory(file.id, file.name)} className={Styles.attachmentThumb} key={file.name}>
+            {getThumbContent(file)}
+        </div>
+    ));
 
-  return <FlexRow className={joined(Styles.attachmentContainer, className)}>{thumbs}</FlexRow>;
+    return <FlexRow className={joined(Styles.attachmentContainer, className)}>{thumbs}</FlexRow>;
 }
 
 export default AttachmentPreview;

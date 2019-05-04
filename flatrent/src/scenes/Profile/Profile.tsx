@@ -9,28 +9,36 @@ import UserFlatList from "./UserFlatList";
 import UserProfile from "./UserProfile";
 
 class Profile extends Component<RouteComponentProps<{ id: string }>> {
-  public render() {
-    const { id } = this.props.match.params;
+    public render() {
+        const { id } = this.props.match.params;
 
-    return (
-      <FlexColumn className={Styles.content}>
-        <UserProfile userId={id} />
+        return (
+            <FlexColumn className={Styles.content}>
+                <UserProfile userId={id} />
 
-        <FlexRow className={Styles.agreements}>
-          <UserAgreements title="Nuomotojo sutartys" fetchData={UserService.getUserAgreementsOwner} userId={id} />
-          <UserAgreements title="Nuomininko sutartys" fetchData={UserService.getUserAgreementsTenant} userId={id} />
-        </FlexRow>
-        <span className={Styles.flatsTitle}>Nuomojami butai</span>
-        <UserFlatList userId={id} />
-      </FlexColumn>
-    );
-  }
-
-  public componentWillReceiveProps(newProps: RouteComponentProps<{ id: string }>) {
-    if (this.props.match.params.id !== newProps.match.params.id) {
-      this.forceUpdate();
+                <FlexRow className={Styles.agreements}>
+                    <UserAgreements
+                        title="Nuomotojo sutartys"
+                        fetchData={UserService.getUserAgreementsOwner}
+                        userId={id}
+                    />
+                    <UserAgreements
+                        title="Nuomininko sutartys"
+                        fetchData={UserService.getUserAgreementsTenant}
+                        userId={id}
+                    />
+                </FlexRow>
+                <span className={Styles.flatsTitle}>Nuomojami butai</span>
+                <UserFlatList userId={id} />
+            </FlexColumn>
+        );
     }
-  }
+
+    public componentWillReceiveProps(newProps: RouteComponentProps<{ id: string }>) {
+        if (this.props.match.params.id !== newProps.match.params.id) {
+            this.forceUpdate();
+        }
+    }
 }
 
 export default withRouter(Profile);

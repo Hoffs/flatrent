@@ -60,3 +60,9 @@
 .buttonOutline:disabled {
   border-color: rgba(var(--main-accent-alt-color-rgb), 0.1);
 }
+
+.link {
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}

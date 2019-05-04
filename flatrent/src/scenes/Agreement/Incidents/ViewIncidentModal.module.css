@@ -17,36 +17,29 @@
   padding: 20px;
   border-radius: 4px;
   margin: auto;
+  text-align: left;
 }
 
 .title {
   font-family: var(--title-font-family);
   font-size: 1.6em;
-  margin-bottom: 8px;
 }
 
-.subTitle {
+.subTitle,
+.sectionTitle {
   font-family: var(--title-font-family);
   text-align: left;
-  margin-bottom: 8px;
-}
-
-.biggerFont {
+  margin: 4px 0;
   font-size: 1.1em;
 }
 
-.incidentItem {
-  margin: 0 10px 6px;
+.subTitle {
+  margin-bottom: 24px;
 }
 
-.incidentTitle {
-  margin-top: 8px;
-  margin-bottom: 6px;
-}
-
-.price {
-  margin-top: 32px;
-  font-size: 1.2em;
+.description {
+  font-family: var(--text-font-family);
+  margin-bottom: 12px;
 }
 
 .errors {
@@ -58,15 +51,42 @@
   padding: 0;
 }
 
-.payButton {
+.createButton {
   background-color: var(--green-color);
 }
 
-.payButton:hover {
+.createButton:hover {
   box-shadow: 0 1px 2px 0 rgba(var(--green-color-rgb), 0.5), 0 1px 3px 1px rgba(var(--green-color-rgb), 0.4);
 }
 
-.payButton,
-.pdfButton {
+.createButton {
   margin-right: 8px;
+}
+
+.deleteButton {
+  margin-right: 8px;
+}
+
+.preview {
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.preview > div {
+  margin-right: 8px;
+}
+
+.status,
+.price {
+  font-family: var(--text-font-family);
+  font-size: 1.1em;
+}
+
+.price {
+  margin-bottom: 12px;
+}
+
+.conversation {
+  margin-top: 24px;
 }

@@ -26,6 +26,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
+  overflow-y: hidden;
 }
 
 .thumb {
@@ -67,4 +68,5 @@
 
 .pText {
   white-space: pre-wrap;
+  text-align: center;
 }

@@ -3,102 +3,102 @@ import { IShortUserDetails } from "./UserInterfaces";
 
 // FlatList interfaces
 export interface IShortFlatDetails {
-  id: string;
-  imageId: string;
-  name: string;
-  area: number;
-  floor: number;
-  roomCount: number;
-  price: number;
-  address: IShortAddress;
+    id: string;
+    imageId: string;
+    name: string;
+    area: number;
+    floor: number;
+    roomCount: number;
+    price: number;
+    address: IShortAddress;
 }
 
 export interface IShortAddress {
-  street: string;
-  city: string;
-  country: string;
+    street: string;
+    city: string;
+    country: string;
 }
 
 export interface IAddress {
-  street: string;
-  houseNumber: string;
-  flatNumber: string;
-  city: string;
-  country: string;
-  postCode: string;
+    street: string;
+    houseNumber: string;
+    flatNumber: string;
+    city: string;
+    country: string;
+    postCode: string;
 }
 
 export interface IFlatListResponse {
-  flats?: IShortFlatDetails[];
-  errors?: IErrorResponse;
+    flats?: IShortFlatDetails[];
+    errors?: IErrorResponse;
 }
 
 // Flat Detail intertfaces
 export interface IFlatDetails {
-  id: string;
-  name: string;
-  area: number;
-  floor: number;
-  roomCount: number;
-  price: number;
-  yearOfConstruction: number;
-  isFurnished: boolean;
-  features: string[];
-  description: string;
-  address: IAddress;
-  owner: IShortUserDetails;
-  tenantRequirements: string;
-  minimumRentDays: number;
-  isPublished: boolean;
-  isPublic: boolean;
-  isRented: boolean;
-  images: IImageDetails[];
+    id: string;
+    name: string;
+    area: number;
+    floor: number;
+    roomCount: number;
+    price: number;
+    yearOfConstruction: number;
+    isFurnished: boolean;
+    features: string[];
+    description: string;
+    address: IAddress;
+    owner: IShortUserDetails;
+    tenantRequirements: string;
+    minimumRentDays: number;
+    isPublished: boolean;
+    isPublic: boolean;
+    isRented: boolean;
+    images: IImageDetails[];
 }
 
 export interface IImageDetails {
-  name: string;
-  id: string;
+    name: string;
+    id: string;
 }
 
 // Create Flat interfaces
 
 export interface IFlatCreateRequest {
-  name: string;
-  area: string;
-  floor: string;
-  totalFloors: string;
-  roomCount: string;
-  price: string;
-  yearOfConstruction: string;
-  minimumRentDays: number;
-  isFurnished: boolean;
-  description: string;
-  tenantRequirements: string;
+    name: string;
+    area: string;
+    floor: string;
+    totalFloors: string;
+    roomCount: string;
+    price: string;
+    yearOfConstruction: string;
+    minimumRentDays: number;
+    isFurnished: boolean;
+    description: string;
+    tenantRequirements: string;
 
-  street: string;
-  houseNumber: string;
-  flatNumber: string;
-  city: string;
-  country: string;
-  postCode: string;
+    street: string;
+    houseNumber: string;
+    flatNumber: string;
+    city: string;
+    country: string;
+    postCode: string;
 
-  features: string[];
-  images: IFileMetadata[];
+    features: string[];
+    images: IFileMetadata[];
 }
 
 export interface IFlatCreateResponse {
-  id: string;
-  images: IFileResponse;
+    id: string;
+    images: IFileResponse;
 }
 
 export interface IRentRequest {
-  from: string;
-  to: string;
-  comments: string;
-  attachments: IFileMetadata[];
+    from: string;
+    to: string;
+    comments: string;
+    attachments: IFileMetadata[];
 }
 
 export interface IAgreementCreateResponse {
-  id: string;
-  attachments: IFileResponse;
+    id: string;
+    attachments: IFileResponse;
 }

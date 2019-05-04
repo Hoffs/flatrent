@@ -31,22 +31,9 @@
   margin-bottom: 8px;
 }
 
-.biggerFont {
-  font-size: 1.1em;
-}
-
-.incidentItem {
-  margin: 0 10px 6px;
-}
-
-.incidentTitle {
-  margin-top: 8px;
-  margin-bottom: 6px;
-}
-
-.price {
-  margin-top: 32px;
-  font-size: 1.2em;
+.description {
+  resize: vertical;
+  min-height: 120px;
 }
 
 .errors {
@@ -58,15 +45,18 @@
   padding: 0;
 }
 
-.payButton {
+.createButton {
   background-color: var(--green-color);
 }
 
-.payButton:hover {
+.createButton:hover {
   box-shadow: 0 1px 2px 0 rgba(var(--green-color-rgb), 0.5), 0 1px 3px 1px rgba(var(--green-color-rgb), 0.4);
 }
 
-.payButton,
-.pdfButton {
+.createButton {
   margin-right: 8px;
+}
+
+.dropzone {
+  margin-top: 12px;
 }
