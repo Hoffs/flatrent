@@ -92,10 +92,12 @@ export async function apiFetchTyped<T>(
   } else {
     const bresponse = json as IBasicResponse;
     console.log(bresponse.errors);
-    if (bresponse.errors === undefined) {
-      bresponse.errors = { general: ["Įvyko nežinoma klaida"] };
+    if (bresponse.errors === undefined && bresponse.message !== undefined) {
+      bresponse.errors = { general: [bresponse.message] };
+    } else if (bresponse.errors === undefined && bresponse.message === undefined) {
+        bresponse.errors = { general: ["Įvyko nežinoma klaida."] };
     } else {
-      apiResponse.errors = bresponse.errors;
+        apiResponse.errors = bresponse.errors;
     }
   }
 

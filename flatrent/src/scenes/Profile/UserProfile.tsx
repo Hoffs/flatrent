@@ -50,6 +50,13 @@ class UserProfile extends Component<IUserProfileProps, IUserProfileState> {
         <></>
       );
 
+    const sendMessageNode =
+      UserService.userId() !== this.props.userId ? (
+        <Link to={conversationWithUserUrl(this.props.userId)} className={Styles.message}>
+          Parašyti žinutę
+        </Link>
+      ) : <></>;
+
     return (
       <FlexColumn className={Styles.content}>
         <FlexRow>
@@ -67,13 +74,11 @@ class UserProfile extends Component<IUserProfileProps, IUserProfileState> {
             <span className={Styles.joined}>Prisijungė {user.createdDate.split("T")[0].split("-")[0]} metais</span>
             <span className={Styles.stats}>Nuomuotojo sutarčių: {user.ownerAgreementCount}</span>
             <span className={Styles.stats}>Nuominiko sutarčių: {user.tenantAgreementCount}</span>
-            <Link to={conversationWithUserUrl(this.props.userId)} className={Styles.message}>
-              Parašyti žinutę
-            </Link>
+            {sendMessageNode}
           </FlexColumn>
         </FlexRow>
         <FlexColumn className={Styles.about}>
-          <span className={Styles.aboutHeader}>Apie:</span>
+          <span className={Styles.aboutHeader}>Apie mane:</span>
           <span className={Styles.aboutText}>{user.about}</span>
         </FlexColumn>
       </FlexColumn>

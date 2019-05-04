@@ -4,6 +4,7 @@ import { IConversationDetails } from "./ConversationInterfaces";
 import { IAttachment } from "./Common";
 
 export interface IShortFaultDetails {
+    id: string;
     name: string;
     repaired: boolean;
     price: number;

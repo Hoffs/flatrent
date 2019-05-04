@@ -11,6 +11,7 @@ export const conversationWithUserUrl = (id: string): string => `/conversation/ne
 export const flatEditUrl = (id: string): string => `/flat/${id}/edit`;
 export const flatRentUrl = (id: string): string => `/flat/${id}/rent`;
 export const agreementUrl = (id: string): string => `/agreement/${id}`;
+export const invoiceUrl = (agreementId: string, id: string): string => `${agreementUrl(agreementId)}/invoice/${id}`;
 
 export const flatUrl = (id: string): string => `/flat/${id}`;
 export const loginUrl = (): string => `/login`;

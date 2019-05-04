@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ContentLoader from "react-content-loader";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { Link, RouteComponentProps, Route } from "react-router-dom";
 import { toast } from "react-toastify";
 import { CompactAttachmentPreview } from "../../components/AttachmentPreview";
 import Button from "../../components/Button";
@@ -19,6 +19,10 @@ import { IBasicResponse } from "../../services/interfaces/Common";
 import UserService from "../../services/UserService";
 import { flatUrl, userProfileUrl } from "../../utilities/Utilities";
 import Styles from "./AgreementDetails.module.css";
+import InvoiceList from "./Invoice/InvoiceList";
+import RoleRoute from "../../components/RoleRoute";
+import { Authentication } from "../../Routes";
+import InvoiceModal from "./Invoice/InvoiceModal";
 
 interface IAgreementDetailsRouteProps {
   id: string;
@@ -40,7 +44,9 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
     if (agreement === undefined) {
       return (
         <FlexColumn className={Styles.content}>
-          <UserDataLoader />
+          <TitleLoader />
+          <UsersLoader />
+          <CommentsLoader />
         </FlexColumn>
       );
     }
@@ -56,6 +62,10 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
     } else if (agreement.tenant.id === UserService.userId() && agreement.status.id === AgreementStatuses.Requested) {
       actionButtons.push(<Button onClick={this.cancelAgreement}>Atšaukti</Button>);
     }
+
+    const invoiceList = agreement.status.id === AgreementStatuses.Accepted
+      ? <InvoiceList title="Sąskaitos" agreement={agreement} />
+      : <></>;
 
     return (
       <FlexColumn className={Styles.content}>
@@ -73,13 +83,12 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
                 </div>
                 <FlexColumn className={Styles.userDetails}>
                   <span className={Styles.userTitle}>Nuomotojas</span>
-                  <span className={Styles.name}>
+                  <span className={Styles.userData}>
                     {agreement.owner.firstName} {agreement.owner.lastName}
                   </span>
-                  <span className={Styles.name}>
+                  <span className={Styles.userData}>
                     {agreement.owner.phoneNumber} {agreement.owner.email}
                   </span>
-                  {/* <span className={Styles.contact}>Siųsti žinutę</span> */}
                 </FlexColumn>
               </FlexRow>
             </Link>
@@ -90,13 +99,12 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
                 </div>
                 <FlexColumn className={Styles.userDetails}>
                   <span className={Styles.userTitle}>Nuomininkas</span>
-                  <span className={Styles.name}>
+                  <span className={Styles.userData}>
                     {agreement.tenant.firstName} {agreement.tenant.lastName}
                   </span>
-                  <span className={Styles.name}>
+                  <span className={Styles.userData}>
                     {agreement.tenant.phoneNumber} {agreement.tenant.email}
                   </span>
-                  {/* <span className={Styles.contact}>Siųsti žinutę</span> */}
                 </FlexColumn>
               </FlexRow>
             </Link>
@@ -118,6 +126,7 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
           <span className={Styles.sectionHeader}>Komentarai:</span>
           <span className={Styles.sectionText}>{agreement.comments}</span>
         </FlexColumn>
+        {invoiceList}
         <FlexColumn className={Styles.section}>
           <span className={Styles.sectionHeader}>Pridėti failai:</span>
           <CompactAttachmentPreview className={Styles.attachmentsBox} attachments={agreement.attachments} />
@@ -187,13 +196,45 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
 
 export default AgreementDetails;
 
-const UserDataLoader = () => (
-  <ContentLoader height={130} width={380} speed={2} primaryColor="#f3f3f3" secondaryColor="#ecebeb">
-    <rect x="70" y="15" rx="4" ry="4" width="117" height="6" />
-    <rect x="70" y="35" rx="3" ry="3" width="85" height="6" />
-    <rect x="0" y="80" rx="3" ry="3" width="350" height="6" />
-    <rect x="0" y="100" rx="3" ry="3" width="380" height="6" />
-    <rect x="0" y="120" rx="3" ry="3" width="201" height="6" />
-    <circle cx="30" cy="30" r="30" />
+const UsersLoader = () => (
+  <ContentLoader height={200} width={600} speed={2} primaryColor="#f3f3f3" secondaryColor="#ecebeb">
+    <circle cx="40" cy="40" r="40" />
+    <rect x="90" y="25" rx="4" ry="4" width="117" height="6" />
+    <rect x="90" y="45" rx="3" ry="3" width="85" height="6" />
+    <circle cx="40" cy="140" r="40" />
+    <rect x="90" y="125" rx="4" ry="4" width="117" height="6" />
+    <rect x="90" y="145" rx="3" ry="3" width="85" height="6" />
+
+    <rect x="420" y="20" rx="3" ry="3" width="180" height="10" />
+    <rect x="480" y="45" rx="3" ry="3" width="120" height="8" />
+    <rect x="490" y="70" rx="3" ry="3" width="110" height="8" />
+
+    <rect x="460" y="95" rx="3" ry="3" width="140" height="10" />
+    <rect x="530" y="120" rx="3" ry="3" width="70" height="8" />
+    <rect x="520" y="145" rx="3" ry="3" width="80" height="10" />
+    <rect x="420" y="170" rx="3" ry="3" width="180" height="8" />
+    {/* <rect x="490" y="55" rx="3" ry="3" width="110" height="6" /> */}
+  </ContentLoader>
+);
+
+const TitleLoader = () => (
+  <ContentLoader height={90} width={600} speed={2} primaryColor="#f3f3f3" secondaryColor="#ecebeb">
+    <rect x="0" y="10" rx="3" ry="3" width="240" height="20" />
+    <rect x="0" y="40" rx="3" ry="3" width="180" height="10" />
+    <rect x="0" y="60" rx="3" ry="3" width="320" height="15" />
+    {/* <rect x="490" y="55" rx="3" ry="3" width="110" height="6" /> */}
+  </ContentLoader>
+);
+
+const CommentsLoader = () => (
+  <ContentLoader height={140} width={600} speed={2} primaryColor="#f3f3f3" secondaryColor="#ecebeb">
+    <rect x="0" y="10" rx="3" ry="3" width="110" height="8" />
+    <rect x="0" y="30" rx="3" ry="3" width="540" height="6" />
+    <rect x="0" y="50" rx="3" ry="3" width="520" height="6" />
+    <rect x="0" y="70" rx="3" ry="3" width="430" height="6" />
+    <rect x="0" y="90" rx="3" ry="3" width="570" height="6" />
+    <rect x="0" y="110" rx="3" ry="3" width="490" height="6" />
+    <rect x="0" y="130" rx="3" ry="3" width="360" height="6" />
+    {/* <rect x="490" y="55" rx="3" ry="3" width="110" height="6" /> */}
   </ContentLoader>
 );

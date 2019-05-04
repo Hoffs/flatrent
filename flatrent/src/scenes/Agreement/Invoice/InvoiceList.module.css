@@ -1,0 +1,112 @@
+.content {
+  min-height: 40px;
+  max-height: 640px;
+  flex-grow: 1;
+  overflow-y: auto;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.title {
+  font-family: var(--title-font-family);
+  font-size: 1.5em;
+  margin-bottom: 12px;
+}
+
+.flatName {
+  text-align: left;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: var(--title-font-family);
+}
+
+.agreement {
+  position: relative;
+  font-family: var(--text-font-family);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  margin-right: 15px;
+}
+
+.agreement::after {
+  content: " ";
+  width: 75%;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 1px;
+  background: #dadce0;
+}
+
+.period {
+  /* font-size: 0.9em; */
+}
+
+.agreementContent {
+  /* flex-grow: 2; */
+}
+
+.moreButton {
+  width: fit-content;
+  margin: 0;
+}
+
+.moreLink {
+  margin-left: 8px;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.separator {
+  width: 60%;
+  justify-self: center;
+  content: " ";
+  height: 1px;
+  border-bottom: 1px solid #dadce0;
+}
+
+
+/* Invoice list item */
+
+.invoice {
+  position: relative;
+  padding: 12px 0;
+}
+
+.invoice::after {
+  position: absolute;
+  content: " ";
+  width: 75%;
+  border-bottom: 1px solid #dadce0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Add top separator for first item in the list */
+.invoice:first-of-type::before {
+  position: absolute;
+  content: " ";
+  width: 75%;
+  border-bottom: 1px solid #dadce0;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.invoiceTitle {
+  font-family: var(--title-font-family);
+  font-size: 1.1em;
+}
+
+.invoiceData {
+  font-family: var(--title-font-family);
+  font-size: 0.9em;
+}
+
+.invoiceStatus {
+  font-family: var(--title-font-family);
+  font-size: 1.0em;
+}

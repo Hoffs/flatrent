@@ -45,6 +45,7 @@ const messageCompare = (a: IMessageDetails, b: IMessageDetails) => {
 class ConversationBox extends Component<IConversationBoxProps, IConversationBoxState> {
   private scrollRef: HTMLDivElement | null = null;
   private newMessage: boolean = false;
+  private newUpdateMessage: boolean = false;
   private shouldCheckForMessages: boolean = false;
 
   constructor(props: IConversationBoxProps) {
@@ -119,7 +120,7 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
       this.scrollRef.scrollIntoView();
       this.newMessage = false;
     }
-    if (this.scrollRef !== null && this.scrollRef!.parentElement!.parentElement!.parentElement !== null) {
+    if (this.scrollRef !== null && this.newUpdateMessage && this.scrollRef!.parentElement!.parentElement!.parentElement !== null) {
       const parel = this.scrollRef!.parentElement!.parentElement!.parentElement;
       if (parel.scrollHeight - parel.scrollTop - parel.offsetHeight <= parel.clientHeight) {
         this.scrollRef.scrollIntoView();
@@ -137,8 +138,7 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
       .sort(messageCompare)
       .map((message, idx) => {
         const userMessageStyle = userId === message.authorId ? Styles.authorMessage : Styles.recipientMessage;
-        const split = message.createdDate.split("T");
-        const label = `${split[0]} ${split[1].split(".")[0]}`;
+        const messageTime = Moment.utc(message.createdDate).local().format("YYYY-MM-DD HH:mm:ss");
         const refOrNot =
           idx === 0
             ? (ref: HTMLDivElement | null) => {
@@ -149,7 +149,7 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
           <div ref={refOrNot} key={message.id} className={userMessageStyle}>
             <span className={Styles.messageText}>{message.content}</span>
             {this.getAttachmentBox(message)}
-            <span className={Styles.messageLabel}>{label}</span>
+            <span className={Styles.messageLabel}>{messageTime}</span>
           </div>
         );
       })
@@ -194,6 +194,7 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
       }
 
       if (response.data !== undefined && response.data.length > 0) {
+        this.newUpdateMessage = true;
         this.setState((state) => ({
           messages: [...response.data!, ...state.messages],
         }));

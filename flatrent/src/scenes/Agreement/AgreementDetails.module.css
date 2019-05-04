@@ -58,7 +58,7 @@
   font-family: var(--title-font-family);
 }
 
-.name {
+.userData {
   font-family: var(--text-font-family);
 }
 
@@ -123,6 +123,7 @@
 }
 
 .sectionText {
+  white-space: pre-wrap;
   font-family: var(--text-font-family);
 }
 
@@ -136,6 +137,7 @@
 
 .accept {
   background-color: var(--green-color);
+  margin-right: 8px;
 }
 
 .accept:hover {

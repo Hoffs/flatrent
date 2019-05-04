@@ -1,0 +1,71 @@
+.modalWrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  overflow-y: auto;
+}
+
+.modal {
+  pointer-events: all;
+  width: var(--main-width);
+  max-width: var(--main-max-width);
+  height: fit-content;
+  max-height: calc(100% - 40px);
+  overflow-y: auto;
+  background: white;
+  align-self: center;
+  padding: 20px;
+  border-radius: 4px;
+  margin: auto;
+}
+
+.title {
+  font-family: var(--title-font-family);
+  font-size: 1.6em;
+  margin-bottom: 8px;
+}
+
+.subTitle {
+  font-family: var(--title-font-family);
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+.biggerFont {
+  font-size: 1.1em;
+}
+
+.incidentItem {
+  margin: 0 10px 6px;
+}
+
+.incidentTitle {
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+
+.price {
+  margin-top: 32px;
+  font-size: 1.2em;
+}
+
+.errors {
+  font-size: 1.1em;
+  text-align: center;
+}
+
+.errors > span {
+  padding: 0;
+}
+
+.payButton {
+  background-color: var(--green-color);
+}
+
+.payButton:hover {
+  box-shadow: 0 1px 2px 0 rgba(var(--green-color-rgb), 0.5), 0 1px 3px 1px rgba(var(--green-color-rgb), 0.4);
+}
+
+.payButton, .pdfButton {
+  margin-right: 8px;
+}

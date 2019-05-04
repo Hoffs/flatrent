@@ -34,7 +34,9 @@
 
 .title {
   position: absolute;
+  overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: var(--title-font-family);
   font-size: 1.1em;
   margin-left: 13px;
@@ -45,6 +47,7 @@
   /* transform: scale(1.1) translateY(35px); */
   background-color: transparent;
   color: var(--main-font-blurred-color);
+  max-width: calc(100% - 20px);
   width: fit-content;
   pointer-events: none;
 }
