@@ -83,8 +83,8 @@ namespace FlatRent.Services
                 invoicedPeriodEnd = agreement.To.Date;
                 dueDate = agreement.To.Date;
 
-                var daysLeft = agreement.To.Subtract(invoicedPeriodStart.Date).Days;
-                amountToPay = (float) Math.Round(agreement.Price * (BusinessConstants.RentMonthInDays / daysLeft), 2, MidpointRounding.AwayFromZero);
+                var daysLeft = invoicedPeriodEnd.Subtract(invoicedPeriodStart.Date).Days;
+                amountToPay = (float) Math.Round(agreement.Price * ((float) daysLeft / BusinessConstants.RentMonthInDays), 2, MidpointRounding.AwayFromZero);
             }
 
             // Calculate and add faults to invoice

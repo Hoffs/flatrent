@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Serilog;
 
 namespace FlatRent.Extensions
@@ -28,7 +29,7 @@ namespace FlatRent.Extensions
                         {
                             context.Response.StatusCode,
                             Message = Errors.Exception
-                        })).ConfigureAwait(false);
+                        }, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() })).ConfigureAwait(false);
                     }
                 });
             });

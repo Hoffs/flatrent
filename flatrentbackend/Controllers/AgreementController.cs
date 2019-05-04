@@ -9,6 +9,7 @@ using FlatRent.Extensions;
 using FlatRent.Files;
 using FlatRent.Models.Dtos;
 using FlatRent.Repositories.Interfaces;
+using FlatRent.Services.Interfaces;
 using jsreport.Binary;
 using jsreport.Local;
 using jsreport.Types;
@@ -23,12 +24,14 @@ namespace FlatRent.Controllers
     public class AgreementController : AuthoredBaseEntityController<Agreement>
     {
         private readonly IAgreementRepository _repository;
+        private readonly IInvoiceService _invoiceService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public AgreementController(IAgreementRepository repository, IMapper mapper, ILogger logger) : base(repository)
+        public AgreementController(IAgreementRepository repository, IInvoiceService invoiceService, IMapper mapper, ILogger logger) : base(repository)
         {
             _repository = repository;
+            _invoiceService = invoiceService;
             _mapper = mapper;
             _logger = logger;
         }
@@ -93,6 +96,7 @@ namespace FlatRent.Controllers
             {
                 var requestedAgreements =
                     agreement.Flat.Agreements.Where(a => a.StatusId == AgreementStatus.Statuses.Requested).ToList();
+                await _invoiceService.GenerateInitialInvoiceAsync(id);
                 requestedAgreements.SetProperty(ra => ra.StatusId, AgreementStatus.Statuses.Rejected);
                 foreach (var ra in requestedAgreements)
                 {
@@ -167,6 +171,15 @@ namespace FlatRent.Controllers
             }).ConfigureAwait(false);
 
             return File(report.Content, "application/pdf", "agreement.pdf");
+        }
+
+        [HttpPost("{id}/generate")]
+        [Authorize(Policy = "Administrator")]
+        [EntityMustExist]
+        public async Task<IActionResult> GenerateNewInvoiceAsync([FromRoute] Guid id)
+        {
+            await _invoiceService.GenerateInvoiceForAgreementAsync(id);
+            return Ok(new { Id = id });
         }
     }
 }

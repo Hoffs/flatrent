@@ -9,10 +9,9 @@ namespace FlatRent.Profiles
     {
         public FaultMapperProfile()
         {
-            CreateMap<Fault, ShortFaultDetails>();
-
             CreateMap<FaultForm, Fault>();
 
+            CreateMap<Fault, ShortFaultDetails>();
             CreateMap<Fault, FaultDetails>()
                 .ForMember(f => f.Tenant, opt => opt.MapFrom(o => o.Author))
                 .ForMember(f => f.Owner, opt => opt.MapFrom(o => o.Agreement.Flat.Author))

@@ -9,8 +9,8 @@ namespace FlatRent.Models.Requests
         [MaxLength(128, ErrorMessage = Errors.MaxLength)]
         public string Name { get; set; }
 
-        [MaxLength(5000, ErrorMessage = Errors.MaxLength)]
-        public string Comments { get; set; }
+        [MaxLength(5120, ErrorMessage = Errors.MaxLength)]
+        public string Description { get; set; }
 
         [MaxLength(8, ErrorMessage = Errors.MaxLength)]
         public IEnumerable<FileMetadata> Attachments { get; set; }
