@@ -9,6 +9,7 @@ import Logout from "./scenes/Logout";
 import Profile from "./scenes/Profile";
 import Register from "./scenes/Register";
 import UserService, { Policies } from "./services/UserService";
+import FlatEdit from "./scenes/Flats/scenes/FlatEdit";
 
 export enum Authentication {
     Anonymous = 0,
@@ -107,11 +108,12 @@ const FlatRoutes: IRouteInfo[] = [
         redirect: "/login",
         roles: [],
         text: "Butas",
+        exact: true,
     },
     {
         addToNav: false,
         authentication: Authentication.Authenticated,
-        component: CreateFlat,
+        component: FlatEdit,
         link: "/flat/:id/edit",
         order: 100,
         redirect: "/login",

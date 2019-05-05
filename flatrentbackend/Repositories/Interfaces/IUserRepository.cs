@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using FlatRent.Entities;
 using FlatRent.Models;
+using FlatRent.Models.Requests;
 
 namespace FlatRent.Repositories.Interfaces
 {
@@ -15,5 +16,6 @@ namespace FlatRent.Repositories.Interfaces
         Task<IEnumerable<FormError>> AddUserAsync(User client);
         Task<User> GetUserForCredentialsAsync(string email, string password);
         Task<IEnumerable<FormError>> UpdateAsync(User user);
+        Task<IEnumerable<FormError>> UpdateAsync(Guid user, UserUpdateForm form);
     }
 }

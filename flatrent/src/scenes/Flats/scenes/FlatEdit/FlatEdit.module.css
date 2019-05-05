@@ -1,0 +1,50 @@
+.content {
+  justify-content: space-between;
+  max-width: 500px;
+  width: var(--main-width);
+  padding: 20px;
+  align-self: center;
+  margin-top: 36px;
+}
+
+.title {
+  font-size: 1.3em;
+  font-family: var(--title-font-family);
+}
+
+.section {
+  font-family: var(--title-font-family);
+  margin-top: 12px;
+  font-size: 1.1em;
+}
+
+.descriptionArea {
+  height: 240px;
+  max-width: 470px;
+  min-height: 4em;
+}
+
+.requirementsArea {
+  height: 120px;
+  max-width: 470px;
+  min-height: 4em;
+}
+
+.furnishedCheckbox {
+  flex-grow: 0;
+  display: flex;
+  margin-top: 12px;
+  align-items: center;
+}
+
+.dropzone {
+  margin-top: 24px;
+}
+
+.input,
+.requirementsArea,
+.descriptionArea,
+.button {
+  margin-left: 4px;
+  margin-right: 4px;
+}

@@ -83,5 +83,37 @@ namespace FlatRent.Repositories
             }
             return query.AsTracking().CountAsync();
         }
+
+        public async Task<(IEnumerable<FormError>, IEnumerable<Image>)> UpdateAsync(Guid flatId,
+            FlatUpdateForm form)
+        {
+            var flat = await GetAsync(flatId);
+            flat.Name = form.Name;
+            flat.Description = form.Description;
+            flat.TenantRequirements = form.TenantRequirements;
+            flat.Features = form.Features;
+            flat.IsFurnished = form.IsFurnished;
+            flat.Price = form.Price;
+            flat.MinimumRentDays = form.MinimumRentDays;
+
+            var missingImages = flat.Images.Where(i => form.Images.All(fi => fi.Name != i.Name)).ToList();
+            foreach (var missingImage in missingImages)
+            {
+                flat.Images.Remove(missingImage);
+            }
+            Context.RemoveRange(missingImages);
+
+            var mappedImages = _mapper.Map<IEnumerable<Image>>(form.Images).ToList();
+            mappedImages.SetProperty(i => i.AuthorId, flat.AuthorId);
+            mappedImages.SetProperty(i => i.Flat, flat);
+            var newImages = mappedImages.Where(fi => flat.Images.All(f => f.Name != fi.Name)).ToList();
+
+            foreach (var image in newImages)
+            {
+                flat.Images.Add(image);
+            }
+
+            return (await UpdateAsync(flat), newImages);
+        }
     }
 }

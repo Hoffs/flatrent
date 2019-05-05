@@ -69,12 +69,13 @@ namespace FlatRent.Controllers
         [Authorize(Policy = "User")]
         [HttpPut("{id}")]
         [MustBeEntityAuthor]
-        public async Task<IActionResult> UpdateFlat([FromRoute] Guid id, FlatForm form)
+        public async Task<IActionResult> UpdateFlat([FromRoute] Guid id, FlatUpdateForm form)
         {
-            var actionResult = await IsEntityAuthor(id, "FlatId");
-            if (actionResult != null) return actionResult;
+            var (errors, newImages) = await _flatRepository.UpdateAsync(id, form);
+            if (errors != null) return BadRequest(errors);
 
-            throw new NotImplementedException();
+            var imageIds = newImages.Select(i => new KeyValuePair<Guid, string>(i.Id, i.Name));
+            return StatusCode(201, new CreatedFlatResponse(id, imageIds));
         }
 
         [Authorize(Policy = "User")]

@@ -7,6 +7,7 @@ using AutoMapper;
 using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Models;
+using FlatRent.Models.Requests;
 using FlatRent.Repositories.Abstractions;
 using FlatRent.Repositories.Interfaces;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -89,6 +90,15 @@ namespace FlatRent.Repositories
         public new async Task<IEnumerable<FormError>> UpdateAsync(User user)
         {
             return await base.UpdateAsync(user);
+        }
+
+        public async Task<IEnumerable<FormError>> UpdateAsync(Guid userId, UserUpdateForm form)
+        {
+            var user = await GetAsync(userId);
+            user.About = form.About;
+            user.BankAccount = form.BankAccount;
+            user.PhoneNumber = form.PhoneNumber;
+            return await UpdateAsync(user);
         }
 
         public async Task<IEnumerable<FormError>> AddUserAsync(User user)

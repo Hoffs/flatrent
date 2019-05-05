@@ -11,6 +11,7 @@ import {
     IFlatListResponse,
     IRentRequest,
     IShortFlatDetails,
+    IImageDetails,
 } from "./interfaces/FlatServiceInterfaces";
 import UserService from "./UserService";
 
@@ -107,6 +108,40 @@ class FlatService {
                 body: JSON.stringify(requestData),
                 headers: UserService.authorizationHeaders(),
                 method: "POST",
+            });
+
+            if (parsed.errors !== undefined) {
+                return parsed;
+            }
+
+            if (parsed.data !== undefined) {
+                const uploadResult = await uploadEach(parsed.data.images, images, ImageService.putFlatImage);
+                parsed.errors = uploadResult;
+            }
+            return parsed;
+        } catch (e) {
+            console.log(e);
+            return getGeneralError<IFlatCreateResponse>();
+        }
+    }
+
+    public static async updateFlat(
+        id: string,
+        requestData: { [key: string]: string | boolean },
+        images: File[],
+        oldImages: IImageDetails[],
+    ): Promise<IApiResponse<IFlatCreateResponse>> {
+        const request = (requestData as unknown) as IFlatCreateRequest;
+        const featuresString = requestData.features as string;
+        if (featuresString.split !== undefined) {
+            request.features = (requestData.features as string).split(",");
+        }
+        request.images = images.map((i) => ({ name: i.name }));
+        try {
+            const [, parsed] = await apiFetchTyped<IFlatCreateResponse>(`/api/flat/${id}`, {
+                body: JSON.stringify(requestData),
+                headers: UserService.authorizationHeaders(),
+                method: "PUT",
             });
 
             if (parsed.errors !== undefined) {

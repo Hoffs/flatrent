@@ -91,6 +91,9 @@ export interface IFlatCreateResponse {
     images: IFileResponse;
 }
 
+export interface IFlatUpdateResponse extends IFlatCreateResponse {
+}
+
 export interface IRentRequest {
     from: string;
     to: string;

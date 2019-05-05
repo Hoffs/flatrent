@@ -147,6 +147,15 @@ namespace FlatRent.Controllers
             }
         }
 
+        [HttpPut("{id}"), EntityMustExist]
+        public async Task<IActionResult> UpdateUserAsync(Guid id, UserUpdateForm form)
+        {
+            _logger.Debug("Updating user with {Id}", id);
+            if (User.GetUserId() != id) return Forbid();
+            var errors = await _repository.UpdateAsync(id, form);
+            return OkOrBadRequest(errors, Ok(new { Id = id }));
+        }
+
         [NonAction]
         public async Task<IActionResult> DoesEntityExistAsync(Guid id, string fieldId)
         {

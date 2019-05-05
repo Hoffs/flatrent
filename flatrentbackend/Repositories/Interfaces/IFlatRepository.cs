@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FlatRent.Entities;
 using FlatRent.Models;
+using FlatRent.Models.Requests;
 using FlatRent.Models.Requests.Flat;
 
 namespace FlatRent.Repositories.Interfaces
@@ -15,5 +16,6 @@ namespace FlatRent.Repositories.Interfaces
         Task<IEnumerable<FormError>> UpdateAsync(Flat flat);
         IQueryable<Flat> GetListAsync(bool includeRented = false, int count = 20, int offset = 0);
         Task<int> GetCountAsync(bool includeRented = false);
+        Task<(IEnumerable<FormError>, IEnumerable<Image>)> UpdateAsync(Guid flatId, FlatUpdateForm form);
     }
 }
