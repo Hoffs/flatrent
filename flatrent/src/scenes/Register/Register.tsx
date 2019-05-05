@@ -116,7 +116,7 @@ class Register extends Component<RouteComponentProps, IRegisterState> {
                     setValue={this.handleUpdate}
                     maxChars={1000}
                 />
-                <Button disabled={this.state.requesting} onClick={this.register}>
+                <Button className={Styles.button} disabled={this.state.requesting} onClick={this.register}>
                     Registruotis
                 </Button>
             </FlexColumn>
@@ -128,10 +128,10 @@ class Register extends Component<RouteComponentProps, IRegisterState> {
 
         const errors: { [key: string]: string[] } = {};
         if (password !== passwordConfirm) {
-            errors.Password = ["Slaptažodžiai turi būti vienodi."];
+            errors.password = ["Slaptažodžiai turi būti vienodi."];
         }
         if (email !== emailConfirm) {
-            errors.Email = ["El. pašto adresai turi būti vienodi."];
+            errors.email = ["El. pašto adresai turi būti vienodi."];
         }
         if (Object.keys(errors).length > 0) {
             this.setState({ errors });

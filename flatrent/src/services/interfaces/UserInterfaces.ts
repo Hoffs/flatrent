@@ -20,11 +20,18 @@ export interface IRegisterRequest {
     bankAccount: string;
 }
 
+export interface IUpdateUserRequest {
+    phoneNumber: string;
+    about: string;
+    bankAccount: string;
+}
+
 export interface IUserDetails {
     id: string;
     firstName: string;
     lastName: string;
     phoneNumber: string;
+    bankAccount: string;
     avatarId: string;
     about: string;
     tenantAgreementCount: number;

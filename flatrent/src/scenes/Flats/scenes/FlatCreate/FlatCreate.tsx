@@ -285,8 +285,8 @@ class CreateFlat extends Component<RouteComponentProps, ICreateFlatState> {
                     <Button className={Styles.button} disabled={this.state.requesting} onClick={this.publishFlat}>
                         Publikuoti
                     </Button>
-                    <Button className={Styles.button} disabled={this.state.requesting} onClick={this.saveFlat}>
-                        Išsaugoti
+                    <Button className={Styles.button} disabled={this.state.requesting} to={"/"}>
+                        Atšaukti
                     </Button>
                 </FlexRow>
             </FlexColumn>

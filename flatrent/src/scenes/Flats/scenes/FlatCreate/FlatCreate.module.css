@@ -48,3 +48,11 @@
   margin-left: 4px;
   margin-right: 4px;
 }
+
+.button, .button > button {
+  flex-grow: 1;
+}
+
+.button:first-of-type {
+  margin-right: 8px;
+}

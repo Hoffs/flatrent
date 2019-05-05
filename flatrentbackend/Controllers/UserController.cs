@@ -75,6 +75,11 @@ namespace FlatRent.Controllers
             var userId = id == Guid.Empty ? User.GetUserId() : id;
             var userData = await _repository.GetUser(userId).ConfigureAwait(false);
             var mappedProfile = _mapper.Map<User, UserProfile>(userData);
+            if (User.GetUserId() != id)
+            {
+                mappedProfile.BankAccount = null;
+                mappedProfile.PhoneNumber = null;
+            }
             return Ok(mappedProfile);
         }
 

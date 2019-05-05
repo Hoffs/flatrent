@@ -5,7 +5,7 @@ import { apiFetch, apiFetchTyped, getGeneralError } from "./Helpers";
 import { IShortAgreementDetails } from "./interfaces/AgreementInterfaces";
 import { IApiResponse, IBasicResponse, IErrorResponse } from "./interfaces/Common";
 import { IShortFlatDetails } from "./interfaces/FlatServiceInterfaces";
-import { ILoginResponse, IRegisterRequest, ITokenPayload, IUserDetails } from "./interfaces/UserInterfaces";
+import { ILoginResponse, IRegisterRequest, ITokenPayload, IUserDetails, IUpdateUserRequest } from "./interfaces/UserInterfaces";
 
 export enum Roles {
     Administrator = 1,
@@ -83,6 +83,19 @@ class UserService {
         } catch (e) {
             console.log(e);
             return getGeneralError<IShortFlatDetails[]>();
+        }
+    }
+
+    public static async updateUser(userId: string, request: IUpdateUserRequest): Promise<IApiResponse<any>> {
+        try {
+            const [, parsed] = await apiFetchTyped<IShortFlatDetails[]>(
+                `/api/user/${userId}`, { method: "PUT", body: JSON.stringify(request) }, true,
+            );
+
+            return parsed;
+        } catch (e) {
+            console.log(e);
+            return getGeneralError<any>();
         }
     }
 

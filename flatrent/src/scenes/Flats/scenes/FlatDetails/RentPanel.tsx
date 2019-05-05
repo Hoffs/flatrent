@@ -17,8 +17,6 @@ const RentPanel = ({ history, flat }: { flat?: IFlatDetails } & RouteComponentPr
         );
     }
 
-    const goToRent = () => history.push(flatRentUrl(flat.id));
-
     return (
         <FlexColumn className={Styles.panel}>
             <span className={Styles.sectionTitle}>Buto nuoma</span>
@@ -34,7 +32,7 @@ const RentPanel = ({ history, flat }: { flat?: IFlatDetails } & RouteComponentPr
                 <span className={joined(Styles.rentPrice, Styles.rightHand)}>{flat.price} Eur</span>
             </FlexRow>
 
-            <Button disabled={flat.isRented} onClick={goToRent}>
+            <Button className={Styles.button} to={flatRentUrl(flat.id)} disabled={flat.isRented}>
                 Nuomotis
             </Button>
         </FlexColumn>

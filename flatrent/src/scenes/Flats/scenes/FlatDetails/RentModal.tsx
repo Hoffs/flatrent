@@ -121,9 +121,14 @@ class RentModal extends Component<RouteComponentProps<{ id: string }> & IRentMod
                             maxSize={5000000}
                             maxFiles={8}
                         />
-                        <Button disabled={this.isDisabled()} className={Styles.button} onClick={this.submitRentRequest}>
-                            Pasirašyti
-                        </Button>
+                        <FlexRow>
+                            <Button disabled={this.isDisabled()} className={Styles.button} onClick={this.submitRentRequest}>
+                                Pasirašyti
+                            </Button>
+                            <Button className={Styles.button} onClick={this.exitModal}>
+                                Atšaukti
+                            </Button>
+                        </FlexRow>
                     </FlexColumn>
                 </div>
             </Dimmer>

@@ -6,6 +6,7 @@ import Card from "../../components/Card";
 import { InputForm } from "../../components/InputForm";
 import UserService from "../../services/UserService";
 import Styles from "./Login.module.css";
+import FlexColumn from "../../components/FlexColumn";
 
 interface ILoginState {
     values: { [key: string]: string };
@@ -25,7 +26,7 @@ class Login extends Component<RouteComponentProps, ILoginState> {
 
     public render() {
         return (
-            <Card className={Styles.customCard}>
+            <FlexColumn className={Styles.content}>
                 <span className={Styles.title}>Prisijungimas</span>
                 <InputForm
                     value={this.state.values.email}
@@ -50,10 +51,10 @@ class Login extends Component<RouteComponentProps, ILoginState> {
                     title=""
                     setValue={this.handleChange}
                 />
-                <Button disabled={this.state.requesting} onClick={this.authenticate}>
+                <Button className={Styles.button} disabled={this.state.requesting} onClick={this.authenticate}>
                     Prisijungti
                 </Button>
-            </Card>
+            </FlexColumn>
         );
     }
 

@@ -51,20 +51,12 @@
   padding: 0;
 }
 
-.createButton {
-  background-color: var(--green-color);
-}
-
-.createButton:hover {
-  box-shadow: 0 1px 2px 0 rgba(var(--green-color-rgb), 0.5), 0 1px 3px 1px rgba(var(--green-color-rgb), 0.4);
-}
-
-.createButton {
-  margin-right: 8px;
-}
-
 .deleteButton {
   margin-right: 8px;
+}
+
+.deleteButton, .closeButton {
+  flex-grow: 1;
 }
 
 .preview {

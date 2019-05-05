@@ -49,8 +49,8 @@
 }
 
 .moreButton {
-  width: fit-content;
   margin: 0;
+  width: auto;
 }
 
 .moreLink {

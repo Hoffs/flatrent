@@ -46,6 +46,10 @@
 }
 
 .button {
+  flex-grow: 1;
+}
+.button:first-of-type {
+  margin-right: 8px;
 }
 
 .title {

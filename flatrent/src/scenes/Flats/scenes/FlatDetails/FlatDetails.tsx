@@ -10,12 +10,14 @@ import FlatService from "../../../../services/FlatService";
 import { IApiResponse } from "../../../../services/interfaces/Common";
 import { IFlatDetails } from "../../../../services/interfaces/FlatServiceInterfaces";
 import UserService from "../../../../services/UserService";
-import { flatEditUrl, userProfileUrl } from "../../../../utilities/Utilities";
+import { flatEditUrl, userProfileUrl, loginUrl, flatRentUrl } from "../../../../utilities/Utilities";
 import FlatDescription from "./FlatDescription";
 import FlatShortInfo from "./FlatShortInfo";
 import RentModal from "./RentModal";
 import RentPanel from "./RentPanel";
 import UserBox from "./UserBox";
+import RoleRoute from "../../../../components/RoleRoute";
+import { Authentication } from "../../../../Routes";
 
 interface IFlatDetailsState {
     loading: boolean;
@@ -76,7 +78,13 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
 
     private getRentRoute = () => {
         return this.state.flat !== undefined ? (
-            <Route exact={true} path={`${this.props.match.path}/rent`} render={this.getRentModal} />
+            <RoleRoute
+                authenticated={Authentication.Authenticated}
+                redirect={loginUrl()}
+                exact={true}
+                path={flatRentUrl(this.state.flat.id)}
+                render={this.getRentModal}
+            />
         ) : (
             <></>
         );

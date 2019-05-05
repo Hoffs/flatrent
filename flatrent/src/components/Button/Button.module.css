@@ -15,7 +15,7 @@
 
 .button {
   composes: buttonBase;
-  width: 100%;
+  /* width: 100%; */
   background-color: var(--main-accent-alt-color);
   border: none;
   color: var(--main-bg-color);
@@ -65,5 +65,5 @@
   display: flex;
   justify-content: center;
   text-decoration: none;
-  width: 100%;
+  /* width: 100%; */
 }

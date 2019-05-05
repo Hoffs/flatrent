@@ -27,6 +27,18 @@
   resize: vertical;
 }
 
-.button {
-  width: 100%;
+.buttonRow > button, .buttonRow > a {
+  width: 50%;
+}
+
+.buttonRow > button {
+  margin-right: 4px;
+}
+
+.buttonRow > a  {
+  margin-left: 4px;
+}
+
+.buttonRow > a > button {
+  flex-grow: 1;
 }

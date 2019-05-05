@@ -156,6 +156,10 @@
   font-size: 1em;
 }
 
+.button > button {
+  flex-grow: 1;
+}
+
 /*  */
 
 .contentWrapper {

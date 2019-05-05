@@ -8,8 +8,9 @@ import Login from "./scenes/Login";
 import Logout from "./scenes/Logout";
 import Profile from "./scenes/Profile";
 import Register from "./scenes/Register";
-import UserService, { Policies } from "./services/UserService";
+import UserService, { Policies, Roles } from "./services/UserService";
 import FlatEdit from "./scenes/Flats/scenes/FlatEdit";
+import EditProfile from "./scenes/Profile/EditProfile/EditProfile";
 
 export enum Authentication {
     Anonymous = 0,
@@ -101,20 +102,20 @@ const FlatRoutes: IRouteInfo[] = [
     },
     {
         addToNav: false,
-        authentication: Authentication.Either,
-        component: FlatDetails,
-        link: "/flat/:id",
-        order: 100,
-        redirect: "/login",
-        roles: [],
-        text: "Butas",
-        exact: true,
-    },
-    {
-        addToNav: false,
         authentication: Authentication.Authenticated,
         component: FlatEdit,
         link: "/flat/:id/edit",
+        order: 99,
+        redirect: "/login",
+        roles: Policies.User,
+        exact: true,
+        text: "Butas",
+    },
+    {
+        addToNav: false,
+        authentication: Authentication.Either,
+        component: FlatDetails,
+        link: "/flat/:id",
         order: 100,
         redirect: "/login",
         roles: [],
@@ -147,6 +148,15 @@ const UserRoutes: IRouteInfo[] = [
         redirect: "/",
         roles: [],
         text: "Paskyra",
+    },
+    {
+        addToNav: false,
+        authentication: Authentication.Authenticated,
+        component: EditProfile,
+        link: "/user/:id/edit",
+        order: 89,
+        redirect: "/",
+        roles: Policies.User,
     },
     {
         addToNav: false,
