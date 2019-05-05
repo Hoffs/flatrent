@@ -1,23 +1,23 @@
 import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
-import Styles from "./EditProfile.module.css";
-import { IUpdateUserRequest, IUserDetails } from "../../../services/interfaces/UserInterfaces";
+import Button from "../../../components/Button";
+import { CompactDropzone } from "../../../components/Dropzones";
 import FlexColumn from "../../../components/FlexColumn";
 import FlexRow from "../../../components/FlexRow";
-import { InputForm, InputAreaForm } from "../../../components/InputForm";
-import Button from "../../../components/Button";
+import { InputAreaForm, InputForm } from "../../../components/InputForm";
+import { IUpdateUserRequest, IUserDetails } from "../../../services/interfaces/UserInterfaces";
 import UserService from "../../../services/UserService";
 import { userProfileUrl } from "../../../utilities/Utilities";
-import { CompactDropzone } from "../../../components/Dropzones";
+import Styles from "./EditProfile.module.css";
 
 interface IEditProfileState {
     values: {
         [key: string]: string;
     } & IUpdateUserRequest;
     requesting: boolean;
-    files: File[],
-    oldData?: IUserDetails,
+    files: File[];
+    oldData?: IUserDetails;
     errors: { [key: string]: string[] };
 }
 
@@ -110,7 +110,7 @@ class EditProfile extends Component<RouteComponentProps<{ id: string }>, IEditPr
             });
             this.props.history.push(userProfileUrl(this.props.match.params.id));
         }
-    };
+    }
 
     private updateUser = async () => {
         const { password, passwordConfirm, email, emailConfirm } = this.state.values;
@@ -160,10 +160,10 @@ class EditProfile extends Component<RouteComponentProps<{ id: string }>, IEditPr
             // General error
         }
         this.setState({ requesting: false });
-    };
+    }
 
     private handleUpdate = (name: string, value: string) =>
-        this.setState((state) => ({ values: { ...state.values, [name]: value } }));
+        this.setState((state) => ({ values: { ...state.values, [name]: value } }))
 }
 
 export default EditProfile;

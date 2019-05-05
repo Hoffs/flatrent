@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "../../components/Button";
-import Card from "../../components/Card";
+import FlexColumn from "../../components/FlexColumn";
 import { InputForm } from "../../components/InputForm";
 import UserService from "../../services/UserService";
 import Styles from "./Login.module.css";
-import FlexColumn from "../../components/FlexColumn";
 
 interface ILoginState {
     values: { [key: string]: string };
@@ -59,7 +58,7 @@ class Login extends Component<RouteComponentProps, ILoginState> {
     }
 
     private handleChange = (name: string, value: string) =>
-        this.setState({ values: { ...this.state.values, [name]: value } });
+        this.setState({ values: { ...this.state.values, [name]: value } })
 
     private authenticate = async () => {
         this.setState({ requesting: true });
@@ -79,7 +78,7 @@ class Login extends Component<RouteComponentProps, ILoginState> {
         } catch {
             this.setState({ requesting: false });
         }
-    };
+    }
 }
 
 export default Login;

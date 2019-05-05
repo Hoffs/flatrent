@@ -6,18 +6,18 @@ import Styles from "./FlatDetails.module.css";
 
 import FlexColumn from "../../../../components/FlexColumn";
 import ImageCarousel from "../../../../components/ImageCarousel";
+import RoleRoute from "../../../../components/RoleRoute";
+import { Authentication } from "../../../../Routes";
 import FlatService from "../../../../services/FlatService";
 import { IApiResponse } from "../../../../services/interfaces/Common";
 import { IFlatDetails } from "../../../../services/interfaces/FlatServiceInterfaces";
 import UserService from "../../../../services/UserService";
-import { flatEditUrl, userProfileUrl, loginUrl, flatRentUrl } from "../../../../utilities/Utilities";
+import { flatEditUrl, flatRentUrl, loginUrl, userProfileUrl } from "../../../../utilities/Utilities";
 import FlatDescription from "./FlatDescription";
 import FlatShortInfo from "./FlatShortInfo";
 import RentModal from "./RentModal";
 import RentPanel from "./RentPanel";
 import UserBox from "./UserBox";
-import RoleRoute from "../../../../components/RoleRoute";
-import { Authentication } from "../../../../Routes";
 
 interface IFlatDetailsState {
     loading: boolean;
@@ -88,21 +88,21 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
         ) : (
             <></>
         );
-    };
+    }
 
     private getRentModal = (props: RouteComponentProps<any, any, any>) =>
-        this.state.flat !== undefined ? <RentModal flat={this.state.flat} {...props} /> : <></>;
+        this.state.flat !== undefined ? <RentModal flat={this.state.flat} {...props} /> : <></>
 
     private deleteFlat = async () => {
         await FlatService.deleteFlat(this.props.match.params.id);
         this.props.history.push(userProfileUrl(UserService.userId()));
-    };
+    }
 
     private fetchFlat = (id: string) => {
         FlatService.getFlat(id)
             .then(this.handleResult)
             .catch(this.handleFail);
-    };
+    }
 
     private handleResult = (result: IApiResponse<IFlatDetails>) => {
         if (result.errors !== undefined) {
@@ -111,7 +111,7 @@ class FlatDetails extends Component<RouteComponentProps<{ id: string }>, IFlatDe
         } else if (result.data !== undefined) {
             this.setState({ flat: result.data, loading: false });
         }
-    };
+    }
 
     private handleFail() {
         toast.error("Įvyko nežinoma klaida.");

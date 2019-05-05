@@ -20,3 +20,7 @@ export interface ICreatedMessageResponse {
     id: string;
     attachments: IFileResponse;
 }
+
+export interface ICreatedConversationResponse {
+    id: string;
+}

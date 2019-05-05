@@ -1,0 +1,48 @@
+.content {
+  min-height: 40px;
+  max-width: 180px;
+  flex-grow: 1;
+  overflow-y: auto;
+  width: 100%;
+  margin: 10px 10px 10px 20px;
+  justify-content: center;
+}
+
+.title {
+  font-family: var(--title-font-family);
+  font-size: 1.5em;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.itemTitle {
+  font-size: 1.1em;
+  font-family: var(--title-font-family);
+}
+
+.item {
+  text-align: center;
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  align-self: center;
+}
+
+.avatar {
+  border: 1px solid var(--split-color);
+  border-radius: 50px;
+  min-width: 100%;
+  width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background-color: #e2e2e0;
+}

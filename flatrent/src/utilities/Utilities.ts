@@ -7,7 +7,8 @@ export const roomOrRooms = (roomCount: number): string => (roomCount > 1 ? "kamb
 
 export const userProfileUrl = (id: string): string => `/user/${id}`;
 export const userProfileEditUrl = (id: string): string => `/user/${id}/edit`;
-export const conversationWithUserUrl = (id: string): string => `/conversation/new?recipientId=${id}`;
+export const conversationUrl = (id: string): string => `/conversations/${id}`;
+export const conversationWithUserUrl = (id: string): string => `/conversations/new?recipientId=${id}`;
 export const flatEditUrl = (id: string): string => `/flat/${id}/edit`;
 export const flatRentUrl = (id: string): string => `/flat/${id}/rent`;
 export const agreementUrl = (id: string): string => `/agreement/${id}`;

@@ -10,12 +10,12 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import Button from "../../../components/Button";
 import FlexColumn from "../../../components/FlexColumn";
 import FlexRow from "../../../components/FlexRow";
+import RoleRoute from "../../../components/RoleRoute";
+import { Authentication } from "../../../Routes";
 import { IAgreementDetails } from "../../../services/interfaces/AgreementInterfaces";
 import { IInvoiceDetails } from "../../../services/interfaces/InvoiceInterfaces";
 import InvoiceService from "../../../services/InvoiceService";
 import { invoiceUrl, joined } from "../../../utilities/Utilities";
-import RoleRoute from "../../../components/RoleRoute";
-import { Authentication } from "../../../Routes";
 import InvoiceModal from "./InvoiceModal";
 
 interface IInvoiceListProps {
@@ -67,7 +67,7 @@ class InvoiceList extends Component<IInvoiceListProps, IInvoiceListState> {
 
     private getInvoiceModal = (props: RouteComponentProps<any, any, any>) => (
         <InvoiceModal agreement={this.props.agreement} invoices={this.state.invoices} {...props} />
-    );
+    )
 
     private getItems = (invoices?: IInvoiceDetails[]): ReactNode[] => {
         if (invoices === undefined) {
@@ -91,16 +91,16 @@ class InvoiceList extends Component<IInvoiceListProps, IInvoiceListState> {
                 </Link>
             </FlexRow>
         ));
-    };
+    }
 
     private getIsPaid = (invoice: IInvoiceDetails) =>
-        invoice.isPaid ? "Sąskaita apmokėta" : invoice.isValid ? "Sąskaita neapmokėta" : "Sąskaita nebegalioja";
+        invoice.isPaid ? "Sąskaita apmokėta" : invoice.isValid ? "Sąskaita neapmokėta" : "Sąskaita nebegalioja"
 
     private fetchInvoices = async (_: number) => {
         try {
             const { errors, data } = await InvoiceService.getInvoices(
                 this.props.agreement.id,
-                this.state.invoices.length
+                this.state.invoices.length,
             );
             if (errors !== undefined) {
                 const error = Object.keys(errors).map((key) => errors![key].join("\n"));
@@ -113,7 +113,7 @@ class InvoiceList extends Component<IInvoiceListProps, IInvoiceListState> {
             console.log(error);
             toast.error("Įvyko nežinoma klaida.");
         }
-    };
+    }
 }
 
 export const InvoiceLoader = () => (

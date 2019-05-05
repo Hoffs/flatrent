@@ -1,0 +1,18 @@
+.content {
+  margin: 20px;
+  max-width: var(--wide-max-width);
+  width: var(--main-width);
+  text-align: left;
+  align-items: flex-start;
+  justify-content: center;
+  align-self: center;
+}
+
+.chatPlaceholder {
+  /* max-width: 800px; */
+  flex-grow: 1;
+  margin: 10px 10px 10px 20px;
+}
+
+.conversation {
+}

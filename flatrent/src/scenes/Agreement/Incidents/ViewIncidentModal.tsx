@@ -10,22 +10,20 @@ import "moment/locale/lt";
 import "react-dates/initialize";
 // tslint:disable-next-line: no-submodule-imports
 import "react-dates/lib/css/_datepicker.css";
+import { CompactAttachmentPreview } from "../../../components/AttachmentPreview";
 import Button from "../../../components/Button";
+import ConversationBox from "../../../components/ConversationBox";
 import Dimmer from "../../../components/Dimmer";
-import { ImageDropzone } from "../../../components/Dropzones";
-import { IPreviewFile } from "../../../components/Dropzones/ImageDropzone";
 import FlexColumn from "../../../components/FlexColumn";
 import FlexRow from "../../../components/FlexRow";
-import { InputAreaForm, InputForm, NumberInputForm } from "../../../components/InputForm";
+import { InputForm, NumberInputForm } from "../../../components/InputForm";
+import { TextRowLoader } from "../../../components/Loaders";
 import IncidentService from "../../../services/IncidentService";
 import { IAgreementDetails } from "../../../services/interfaces/AgreementInterfaces";
 import { IApiResponse, IErrorResponse, IInputValues } from "../../../services/interfaces/Common";
-import { IFaultCreateResponse, IShortFaultDetails, IFaultDetails } from "../../../services/interfaces/FaultInterfaces";
-import { agreementUrl, incidentUrl, stopPropogation } from "../../../utilities/Utilities";
-import { TextRowLoader } from "../../../components/Loaders";
-import { AttachmentPreview, CompactAttachmentPreview } from "../../../components/AttachmentPreview";
+import { IFaultCreateResponse, IFaultDetails, IShortFaultDetails } from "../../../services/interfaces/FaultInterfaces";
 import UserService from "../../../services/UserService";
-import ConversationBox from "../../../components/ConversationBox";
+import { agreementUrl, stopPropogation } from "../../../utilities/Utilities";
 
 Moment.locale("lt");
 
@@ -73,7 +71,7 @@ class ViewIncidentModal extends Component<
                 buttons.push(
                     <Button key={1} onClick={this.fixIncident} className={Styles.createButton}>
                         Pažymėti sutaisytu
-                    </Button>
+                    </Button>,
                 );
                 fixInput.push(
                     <InputForm className={Styles.errors} errorsOnly={true} errors={this.state.errors.general} />,
@@ -84,19 +82,19 @@ class ViewIncidentModal extends Component<
                         errors={this.state.errors.price}
                         setValue={this.handleUpdate}
                         minValue={0}
-                    />
+                    />,
                 );
             } else if (UserService.userId() === incident.tenant.id && !incident.repaired) {
                 buttons.push(
                     <Button key={1} onClick={this.deleteIncident} className={Styles.deleteButton}>
                         Ištrinti
-                    </Button>
+                    </Button>,
                 );
             }
             buttons.push(
                 <Button key={2} onClick={this.exitModal} className={Styles.closeButton}>
                     Uždaryti
-                </Button>
+                </Button>,
             );
             content = (
                 <>
@@ -135,7 +133,7 @@ class ViewIncidentModal extends Component<
     private getPrice = (incident: IShortFaultDetails) => (incident.price === 0 ? "Nenustatyta" : incident.price);
 
     private handleUpdate = (name: string, value: string) =>
-        this.setState((state) => ({ values: { ...state.values, [name]: value } }));
+        this.setState((state) => ({ values: { ...state.values, [name]: value } }))
 
     private fetchIncident = async (incidentId: string) => {
         this.setState({ requesting: true });
@@ -153,12 +151,12 @@ class ViewIncidentModal extends Component<
             console.log(error);
             this.exitModal();
         }
-    };
+    }
 
     private deleteIncident = async () => {
         const response = await IncidentService.deleteIncident(
             this.props.agreement.id,
-            this.props.match.params.incidentId
+            this.props.match.params.incidentId,
         );
         if (response.errors !== undefined) {
             this.setState({ errors: response.errors, requesting: false });
@@ -172,7 +170,7 @@ class ViewIncidentModal extends Component<
             }
             this.exitModal();
         }
-    };
+    }
 
     private fixIncident = () => {
         this.setState({ requesting: true });
@@ -180,11 +178,11 @@ class ViewIncidentModal extends Component<
         IncidentService.updateIncident(
             this.props.agreement.id,
             this.props.match.params.incidentId,
-            Number.parseFloat(price)
+            Number.parseFloat(price),
         )
             .then(this.handleResponse)
             .catch(this.handleError);
-    };
+    }
 
     private handleResponse = (response: IApiResponse<IFaultCreateResponse>) => {
         if (response.errors !== undefined) {
@@ -202,7 +200,7 @@ class ViewIncidentModal extends Component<
             }
             this.exitModal();
         }
-    };
+    }
 
     private handleError = (errors: any) => {
         console.log(errors);
@@ -210,11 +208,11 @@ class ViewIncidentModal extends Component<
             position: toast.POSITION.BOTTOM_CENTER,
         });
         this.setState({ requesting: false });
-    };
+    }
 
     private exitModal = () => {
         this.props.history.push(agreementUrl(this.props.agreement.id));
-    };
+    }
 }
 
 export default ViewIncidentModal;

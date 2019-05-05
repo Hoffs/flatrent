@@ -28,6 +28,7 @@ namespace FlatRent.Repositories
         {
             return Context.Conversations
                 .Where(c => c.RecipientId == userId || c.AuthorId == userId)
+                .Where(c => c.Fault == null && c.Agreement == null)
                 .OrderByDescending(c => c.CreatedDate)
                 .Paginate(offset);
         }
@@ -52,7 +53,7 @@ namespace FlatRent.Repositories
                 (c.AuthorId == userId || c.AuthorId == conversation.RecipientId) &&
                 (c.RecipientId == userId ||
                  c.RecipientId ==
-                 conversation.RecipientId));
+                 conversation.RecipientId) && c.Fault == null && c.Agreement == null);
 
             if (existingConversation != null)
             {

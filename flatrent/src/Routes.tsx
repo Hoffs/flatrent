@@ -11,6 +11,7 @@ import Register from "./scenes/Register";
 import UserService, { Policies, Roles } from "./services/UserService";
 import FlatEdit from "./scenes/Flats/scenes/FlatEdit";
 import EditProfile from "./scenes/Profile/EditProfile/EditProfile";
+import Conversations from "./scenes/Conversations";
 
 export enum Authentication {
     Anonymous = 0,
@@ -136,6 +137,19 @@ const AgreementRoutes: IRouteInfo[] = [
     },
 ];
 
+const ConversationRoutes: IRouteInfo[] = [
+    {
+        addToNav: true,
+        authentication: Authentication.Authenticated,
+        component: Conversations,
+        link: "/conversations",
+        order: 70,
+        redirect: "/",
+        roles: Policies.User,
+        text: "Susirašinėjimai",
+    },
+];
+
 // 90
 const UserRoutes: IRouteInfo[] = [
     {
@@ -188,6 +202,7 @@ export const Routes: IRouteInfo[] = [
     // },
     ...FlatRoutes,
     ...AgreementRoutes,
+    ...ConversationRoutes,
     ...UserRoutes,
 ].sort(sortByOrder);
 

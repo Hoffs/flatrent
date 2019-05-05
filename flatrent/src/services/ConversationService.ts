@@ -2,9 +2,44 @@ import { toast } from "react-toastify";
 import AttachmentService from "./AttachmentService";
 import { apiFetchTyped, getGeneralError, uploadEach } from "./Helpers";
 import { IApiResponse } from "./interfaces/Common";
-import { IConversationDetails, ICreatedMessageResponse, IMessageDetails } from "./interfaces/ConversationInterfaces";
+import { IConversationDetails, ICreatedMessageResponse, IMessageDetails, ICreatedConversationResponse } from "./interfaces/ConversationInterfaces";
 
 class ConversationService {
+    public static async getConversations(offset: number): Promise<IApiResponse<IConversationDetails[]>> {
+        try {
+            const [, parsed] = await apiFetchTyped<IConversationDetails[]>(
+                `/api/conversation?offset=${offset}`,
+                {
+                    method: "GET",
+                },
+                true,
+            );
+
+            return parsed;
+        } catch (e) {
+            console.log(e);
+            return getGeneralError<IConversationDetails[]>();
+        }
+    }
+
+    public static async newConversation(recipient: string): Promise<IApiResponse<ICreatedConversationResponse>> {
+        try {
+            const [, parsed] = await apiFetchTyped<ICreatedConversationResponse>(
+                `/api/conversation`,
+                {
+                    method: "POST",
+                    body: JSON.stringify({ recipientId: recipient })
+                },
+                true,
+            );
+
+            return parsed;
+        } catch (e) {
+            console.log(e);
+            return getGeneralError<ICreatedConversationResponse>();
+        }
+    }
+
     public static async getConversation(conversationId: string): Promise<IApiResponse<IConversationDetails>> {
         try {
             const [, parsed] = await apiFetchTyped<IConversationDetails>(
