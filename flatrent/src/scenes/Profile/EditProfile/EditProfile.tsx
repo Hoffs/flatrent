@@ -110,11 +110,13 @@ class EditProfile extends Component<RouteComponentProps<{ id: string }>, IEditPr
             });
             this.props.history.push(userProfileUrl(this.props.match.params.id));
         }
-    }
+    };
 
     private updateUser = async () => {
         const { password, passwordConfirm, email, emailConfirm } = this.state.values;
-        if (this.state.oldData === undefined) { return; }
+        if (this.state.oldData === undefined) {
+            return;
+        }
         const errors: { [key: string]: string[] } = {};
         // if (password !== passwordConfirm) {
         //     errors.password = ["Slaptažodžiai turi būti vienodi."];
@@ -140,9 +142,11 @@ class EditProfile extends Component<RouteComponentProps<{ id: string }>, IEditPr
             }
         }
 
-        if (this.state.oldData.about === this.state.values.about
-            && this.state.oldData.phoneNumber === this.state.values.phoneNumber
-            && this.state.oldData.bankAccount === this.state.values.bankAccount) {
+        if (
+            this.state.oldData.about === this.state.values.about &&
+            this.state.oldData.phoneNumber === this.state.values.phoneNumber &&
+            this.state.oldData.bankAccount === this.state.values.bankAccount
+        ) {
             this.props.history.push(userProfileUrl(this.props.match.params.id));
             return;
         }
@@ -160,10 +164,10 @@ class EditProfile extends Component<RouteComponentProps<{ id: string }>, IEditPr
             // General error
         }
         this.setState({ requesting: false });
-    }
+    };
 
     private handleUpdate = (name: string, value: string) =>
-        this.setState((state) => ({ values: { ...state.values, [name]: value } }))
+        this.setState((state) => ({ values: { ...state.values, [name]: value } }));
 }
 
 export default EditProfile;

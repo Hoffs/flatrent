@@ -129,7 +129,7 @@ class FlatService {
         id: string,
         requestData: { [key: string]: string | boolean },
         images: File[],
-        oldImages: IImageDetails[],
+        oldImages: IImageDetails[]
     ): Promise<IApiResponse<IFlatCreateResponse>> {
         const request = (requestData as unknown) as IFlatCreateRequest;
         const featuresString = requestData.features as string;

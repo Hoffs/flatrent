@@ -177,38 +177,39 @@ class CreateFlat extends Component<RouteComponentProps<{ id: string }>, ICreateF
                 lastModified: 1,
                 size: 1,
                 type: " ",
-                slice: (
-                    start?: number | undefined,
-                    end?: number | undefined,
-                    contentType?: string | undefined,
-                ) => new Blob(undefined),
+                slice: (start?: number | undefined, end?: number | undefined, contentType?: string | undefined) =>
+                    new Blob(undefined),
             }));
 
-            this.setState((state) => ({ values: {
-                ...state.values,
-                description: response.data!.description,
-                isFurnished: response.data!.isFurnished,
-                features: response.data!.features.join(", "),
-                name: response.data!.name,
-                price: response.data!.price.toString(),
-                minimumRentDays: response.data!.minimumRentDays.toString(),
-                tenantRequirements: response.data!.tenantRequirements,
-            }, images: files, requesting: false, oldImages: response.data!.images,
-        }));
+            this.setState((state) => ({
+                values: {
+                    ...state.values,
+                    description: response.data!.description,
+                    isFurnished: response.data!.isFurnished,
+                    features: response.data!.features.join(", "),
+                    name: response.data!.name,
+                    price: response.data!.price.toString(),
+                    minimumRentDays: response.data!.minimumRentDays.toString(),
+                    tenantRequirements: response.data!.tenantRequirements,
+                },
+                images: files,
+                requesting: false,
+                oldImages: response.data!.images,
+            }));
         }
-    }
+    };
 
     private updateFlat = async () => {
         try {
             this.setState({ requesting: true });
             const response = await FlatService.updateFlat(
                 this.props.match.params.id,
-                { ...this.state.values},
+                { ...this.state.values },
                 this.state.images,
-                this.state.oldImages,
+                this.state.oldImages
             );
 
-            console.log(response)
+            console.log(response);
             if (response.data !== undefined) {
                 toast.success("Sėkmingai atnaujintas įrašas!", {
                     position: toast.POSITION.BOTTOM_CENTER,

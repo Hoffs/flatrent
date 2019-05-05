@@ -2,7 +2,12 @@ import { toast } from "react-toastify";
 import AttachmentService from "./AttachmentService";
 import { apiFetchTyped, getGeneralError, uploadEach } from "./Helpers";
 import { IApiResponse } from "./interfaces/Common";
-import { IConversationDetails, ICreatedMessageResponse, IMessageDetails, ICreatedConversationResponse } from "./interfaces/ConversationInterfaces";
+import {
+    IConversationDetails,
+    ICreatedMessageResponse,
+    IMessageDetails,
+    ICreatedConversationResponse,
+} from "./interfaces/ConversationInterfaces";
 
 class ConversationService {
     public static async getConversations(offset: number): Promise<IApiResponse<IConversationDetails[]>> {
@@ -12,7 +17,7 @@ class ConversationService {
                 {
                     method: "GET",
                 },
-                true,
+                true
             );
 
             return parsed;
@@ -28,9 +33,9 @@ class ConversationService {
                 `/api/conversation`,
                 {
                     method: "POST",
-                    body: JSON.stringify({ recipientId: recipient })
+                    body: JSON.stringify({ recipientId: recipient }),
                 },
-                true,
+                true
             );
 
             return parsed;

@@ -55,7 +55,8 @@
   margin-right: 8px;
 }
 
-.deleteButton, .closeButton {
+.deleteButton,
+.closeButton {
   flex-grow: 1;
 }
 

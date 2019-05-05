@@ -26,14 +26,17 @@ class Conversations extends Component<RouteComponentProps<IConversationsRoutePro
     }
 
     public render() {
-        const box = this.state.conversation !== undefined
-            ? <ConversationBox className={Styles.conversation} conversation={this.state.conversation} />
-            : <></>;
+        const box =
+            this.state.conversation !== undefined ? (
+                <ConversationBox className={Styles.conversation} conversation={this.state.conversation} />
+            ) : (
+                <></>
+            );
 
         return (
             <FlexRow className={Styles.content}>
                 <ConversationList onSelected={this.onConversationSelected} />
-                <div className={Styles.chatPlaceholder} >
+                <div className={Styles.chatPlaceholder}>
                     {box}
                     <Switch>
                         <RoleRoute
@@ -57,20 +60,22 @@ class Conversations extends Component<RouteComponentProps<IConversationsRoutePro
     private getRouteComponent = (props: RouteComponentProps) => <NewConversation {...props} />;
     private updateBoxComponent = (props: RouteComponentProps<{ id: string }>) => {
         if (this.state.conversation === undefined || this.state.conversation.id !== props.match.params.id) {
-            ConversationService.getConversation(props.match.params.id).then((result) => {
-                if (result.data !== undefined) {
-                    this.setState({ conversation: result.data });
-                } else {
-                    props.history.push(conversationUrl(""));
-                }
-            }).catch(() => props.history.push(conversationUrl("")));
+            ConversationService.getConversation(props.match.params.id)
+                .then((result) => {
+                    if (result.data !== undefined) {
+                        this.setState({ conversation: result.data });
+                    } else {
+                        props.history.push(conversationUrl(""));
+                    }
+                })
+                .catch(() => props.history.push(conversationUrl("")));
         }
 
         return <></>;
-    }
+    };
 
-    private onConversationSelected = (conversation: IConversationDetails) => this.props.history.push(conversationUrl(conversation.id));
-
+    private onConversationSelected = (conversation: IConversationDetails) =>
+        this.props.history.push(conversationUrl(conversation.id));
 }
 
 export default Conversations;

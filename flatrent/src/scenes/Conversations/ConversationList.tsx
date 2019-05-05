@@ -73,13 +73,13 @@ class ConversationList extends Component<IConversationListProps, IConversationLi
                 </FlexColumn>
             );
         });
-    }
+    };
 
     private onConversationClickedFactory = (conversation: IConversationDetails) => (
-        _: React.MouseEvent<HTMLDivElement>,
+        _: React.MouseEvent<HTMLDivElement>
     ) => {
         this.props.onSelected(conversation);
-    }
+    };
 
     private fetchConversations = async (_: number) => {
         try {
@@ -97,15 +97,16 @@ class ConversationList extends Component<IConversationListProps, IConversationLi
                         }
                     });
                     return {
-                    conversations: uniqueConversations,
-                    hasMore: data.length === 16,
-                };});
+                        conversations: uniqueConversations,
+                        hasMore: data.length === 16,
+                    };
+                });
             }
         } catch (error) {
             console.log(error);
             toast.error("Įvyko nežinoma klaida.");
         }
-    }
+    };
 }
 
 export const InvoiceLoader = () => (

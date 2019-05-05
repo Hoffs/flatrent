@@ -49,6 +49,7 @@
   margin-right: 4px;
 }
 
-.button, .button > button {
+.button,
+.button > button {
   flex-grow: 1;
 }

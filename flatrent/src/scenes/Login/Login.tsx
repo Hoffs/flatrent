@@ -58,7 +58,7 @@ class Login extends Component<RouteComponentProps, ILoginState> {
     }
 
     private handleChange = (name: string, value: string) =>
-        this.setState({ values: { ...this.state.values, [name]: value } })
+        this.setState({ values: { ...this.state.values, [name]: value } });
 
     private authenticate = async () => {
         this.setState({ requesting: true });
@@ -78,7 +78,7 @@ class Login extends Component<RouteComponentProps, ILoginState> {
         } catch {
             this.setState({ requesting: false });
         }
-    }
+    };
 }
 
 export default Login;

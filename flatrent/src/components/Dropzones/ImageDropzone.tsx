@@ -11,14 +11,23 @@ export interface IImageDropzone {
     accept?: string | string[];
     text: string;
     className?: string;
-    initialFiles?: File[],
+    initialFiles?: File[];
 }
 
 export interface IPreviewFile extends File {
     preview: string;
 }
 
-function ImageDropzone({ text, className, onDrop, minSize, maxSize, maxFiles = 8, accept, initialFiles = [] }: IImageDropzone) {
+function ImageDropzone({
+    text,
+    className,
+    onDrop,
+    minSize,
+    maxSize,
+    maxFiles = 8,
+    accept,
+    initialFiles = [],
+}: IImageDropzone) {
     const mappedFiles = initialFiles.map((file) => Object.assign(file, { preview: URL.createObjectURL(file) }));
     const [files, setFiles] = useState<IPreviewFile[]>(mappedFiles);
 
