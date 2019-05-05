@@ -147,8 +147,7 @@ namespace FlatRent.Controllers
                 await stream.ReadAsync(user.Avatar.Bytes);
 
                 var errors = await _repository.UpdateAsync(user);
-                if (errors != null) return BadRequest(errors);
-                return Ok();
+                return OkOrBadRequest(errors, Ok(new { Id = id }));
             }
         }
 

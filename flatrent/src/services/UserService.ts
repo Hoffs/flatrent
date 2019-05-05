@@ -99,6 +99,32 @@ class UserService {
         }
     }
 
+    public static async updateAvatar(userId: string, file: File): Promise<IApiResponse<any>> {
+        const data: IBasicResponse = {};
+        try {
+            const formData = new FormData();
+            formData.append("image", file, file.name);
+
+            const result = await fetch(`/api/user/${userId}/avatar`, {
+                body: formData,
+                headers: UserService.authorizationHeaders(),
+                method: "PUT",
+            });
+
+            if (result.ok) {
+                console.log("uploaded image");
+            } else {
+                console.log("didnt upload image");
+                const response = (await result.json()) as IErrorResponse;
+                data.errors = response;
+            }
+        } catch (e) {
+            console.log(e);
+            return getGeneralError<any>();
+        }
+        return data;
+    }
+
     public static async authenticate(email: string, password: string): Promise<IApiResponse<ILoginResponse>> {
         try {
             const [, parsed] = await apiFetchTyped<ILoginResponse>("/api/user/login", {
