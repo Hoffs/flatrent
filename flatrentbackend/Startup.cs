@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using AutoMapper;
+using FlatRent.BackgroundServices;
 using FlatRent.Entities;
 using FlatRent.Extensions;
 using FlatRent.Repositories;
@@ -86,6 +87,8 @@ namespace FlatRent
 
             services.AddScoped<IUserService, UserService>();            
             services.AddScoped<IInvoiceService, InvoiceService>();
+
+            services.AddHostedService<AutoInvoicing>();
 
 
             services.AddSwaggerGen(c =>

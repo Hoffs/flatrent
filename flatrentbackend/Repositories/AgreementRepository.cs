@@ -40,6 +40,11 @@ namespace FlatRent.Repositories
             return (errors, agreement);
         }
 
+        public Task<IEnumerable<Agreement>> GetListAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public new Task<IEnumerable<FormError>> DeleteAsync(Guid id)
         {
             return base.DeleteAsync(id);

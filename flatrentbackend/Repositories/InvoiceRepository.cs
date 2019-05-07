@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FlatRent.Constants;
@@ -25,6 +26,15 @@ namespace FlatRent.Repositories
         public Task<IEnumerable<FormError>> UpdateInvoiceTask(Invoice invoice)
         {
             return base.UpdateAsync(invoice);
+        }
+
+        public IQueryable<Invoice> GetToBeInvoicedListAsync()
+        {
+            return Context.Invoices.Where(i => !i.Agreement.Deleted
+                                        && i.IsValid
+                                        && i.InvoicedPeriodTo < DateTime.Today // Valid but less than today
+                                        && i.Agreement.To != i.InvoicedPeriodTo // Last invoice
+            );
         }
 
         public async Task<IEnumerable<FormError>> AddAndUpdateTask(Invoice toAdd, Invoice toUpdate)
