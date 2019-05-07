@@ -8,10 +8,14 @@ using FlatRent.Controllers.Abstractions;
 using FlatRent.Controllers.Filters;
 using FlatRent.Entities;
 using FlatRent.Extensions;
+using FlatRent.Files;
 using FlatRent.Models;
 using FlatRent.Models.Dtos;
 using FlatRent.Repositories.Interfaces;
 using FlatRent.Services.Interfaces;
+using jsreport.Binary;
+using jsreport.Local;
+using jsreport.Types;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -67,9 +71,56 @@ namespace FlatRent.Controllers
         [HttpGet("{invoiceId}/pdf")]
         [Authorize]
         [EntityMustExist]
-        public async Task<IActionResult> GetInvoicePDFAsync([FromRoute] Guid id)
+        public async Task<IActionResult> GetInvoicePDFAsync([FromRoute] Guid id, [FromRoute] Guid invoiceId)
         {
-            throw new NotImplementedException();
+            var agreement = await _repository.GetAsync(id).ConfigureAwait(false);
+            var userId = User.GetUserId();
+
+            if (agreement.TenantId != userId && agreement.Flat.AuthorId != userId)
+            {
+                return Forbid();
+            }
+
+            var invoice = agreement.Invoices.FirstOrDefault(i => i.Id == invoiceId);
+            if (invoice == null) return NotFound();
+
+            var faultRows = invoice.Faults.Select(f => $@"
+            <tr>
+                <td>Incidentas: {f.Name}</td>
+                <td class=""right"">{f.Price}</td>            
+            </tr>
+            ");
+            var faultPrice = invoice.Faults.Sum(f => f.Price);
+            var patchData = new InvoicePatchData
+            {
+                Year = invoice.CreatedDate.Year,
+                Month = invoice.CreatedDate.Month,
+                Day = invoice.CreatedDate.Day,
+                Price = invoice.AmountToPay - faultPrice,
+                AgreementNo = id,
+                InvoiceFrom = invoice.InvoicedPeriodFrom.ToString("yyyy-MM-dd"),
+                InvoiceTo = invoice.InvoicedPeriodTo.ToString("yyyy-MM-dd"),
+                InvoiceDue = invoice.DueDate.ToString("yyyy-MM-dd"),
+                InvoiceNo = invoiceId,
+                TotalPrice = invoice.AmountToPay,
+                AdditionalRows = string.Join("", faultRows),
+            };
+
+            var html = await HtmlGenerator.GetInvoiceHtml(patchData).ConfigureAwait(false);
+
+            var rs = new LocalReporting().UseBinary(JsReportBinary.GetBinary()).AsUtility().Create();
+            var report = await rs.RenderAsync(new RenderRequest
+            {
+                Template = new Template
+                {
+                    Recipe = Recipe.ChromePdf,
+                    Engine = Engine.None,
+                    Content = html,
+                }
+            }).ConfigureAwait(false);
+
+            return File(report.Content, "application/pdf", "invoice.pdf");
+
         }
 
         [HttpPost("{invoiceId}/pay")]

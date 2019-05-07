@@ -58,12 +58,14 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
                 <Button className={Styles.accept} onClick={this.acceptAgreement}>
                     Patvirtinti
                 </Button>,
-                <Button onClick={this.rejectAgreement}>Atmesti</Button>
+                <Button onClick={this.getAgreementPdf}>Sutarties PDF</Button>,
+                <Button onClick={this.rejectAgreement}>Atmesti</Button>,
             );
         } else if (
             agreement.tenant.id === UserService.userId() &&
             agreement.status.id === AgreementStatuses.Requested
         ) {
+            actionButtons.push(<Button onClick={this.getAgreementPdf}>Sutarties PDF</Button>);
             actionButtons.push(<Button onClick={this.cancelAgreement}>Atšaukti</Button>);
         }
 
@@ -133,6 +135,7 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
                             <span className={Styles.detail}>{agreement.price} Eur</span>
                             <span className={Styles.detailHeader}>Statusas:</span>
                             <span className={Styles.detail}>{getAgreementStatusText(agreement.status.id)}</span>
+                            <button onClick={this.getAgreementPdf} className={Styles.pdf}>Sutarties PDF</button>
                         </FlexColumn>
                     </FlexRow>
                     <FlexColumn className={Styles.section}>
@@ -157,6 +160,10 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
                 </FlexColumn>
             </>
         );
+    }
+
+    private getAgreementPdf = () => {
+        AgreementsService.getPdf(this.props.match.params.id);
     }
 
     private fetchAgreement = async (id: string) => {

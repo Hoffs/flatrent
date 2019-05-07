@@ -201,3 +201,24 @@
   height: 140px;
   width: 100%;
 }
+
+
+/* pdf */
+
+.pdf {
+  background: none;
+  font-size: 0.9em;
+  /* background-color: var(--message-tooltip); */
+  border: 1px solid var(--message-tooltip);
+  width: fit-content;
+  border-radius: 4px;
+  transition: opacity 0.2s;
+  padding: 3px 10px;
+  margin: 3px 0;
+  align-self: flex-end;
+}
+
+.pdf:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}

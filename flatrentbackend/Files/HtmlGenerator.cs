@@ -12,6 +12,12 @@ namespace FlatRent.Files
             return PatchData(fs, patchData);
         }
 
+        public static async Task<string> GetInvoiceHtml(InvoicePatchData patchData)
+        {
+            var fs = await File.ReadAllTextAsync(Path.Join("Files", "InvoiceTemplate.html"), Encoding.UTF8).ConfigureAwait(false);
+            return PatchData(fs, patchData);
+        }
+
         private static string PatchData<T>(string fileString, T data)
         {
             foreach (var property in typeof(T).GetProperties())

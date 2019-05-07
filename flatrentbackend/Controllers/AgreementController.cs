@@ -146,6 +146,8 @@ namespace FlatRent.Controllers
 
             var agreementData = new AgreementPatchData
             {
+                AgreementFrom = agreement.From.Date.ToString("yyyy-MM-dd"),
+                AgreementTo = agreement.To.Date.ToString("yyyy-MM-dd"),
                 Year = agreement.CreatedDate.Year,
                 Month = agreement.CreatedDate.Month,
                 Day = agreement.CreatedDate.Day,
