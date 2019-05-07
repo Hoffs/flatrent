@@ -58,4 +58,8 @@
 
   /* --message-tooltip: #579290; */
   --message-tooltip: #d4a398;
+
+  --darker-border: rgba(0,0,0,0.2);
+
+  --modal-shadow: rgba(0, 0, 0, 0.15) 0px 14px 36px 2px;
 }

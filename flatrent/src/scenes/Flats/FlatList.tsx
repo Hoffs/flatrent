@@ -8,33 +8,38 @@ import { IApiResponse } from "../../services/interfaces/Common";
 import { IShortFlatDetails } from "../../services/interfaces/FlatServiceInterfaces";
 import FlatBox, { FlatBoxLoader } from "./FlatBox";
 import Styles from "./FlatList.module.css";
+import FilterList from "./components/FilterList";
+import FlexColumn from "../../components/FlexColumn";
 
 class FlatList extends Component<
     RouteComponentProps,
-    { pageSize: number; page: number; hasMore: boolean; flats: IShortFlatDetails[] }
+    { pageSize: number; page: number; hasMore: boolean; flats: IShortFlatDetails[], filters: string }
 > {
     constructor(props: Readonly<RouteComponentProps>) {
         super(props);
-        this.state = { pageSize: 20, page: 0, hasMore: true, flats: [] };
+        this.state = { pageSize: 20, page: 0, hasMore: true, flats: [], filters: props.location.search.replace("?", "") };
         this.loadFlats(this.state.page);
     }
 
     public render() {
         return (
-            <FlexRow className={Styles.flatBoxes}>
-                {/* <FlatFilters onPageCountChange={console.log} onShowRentedChange={this.handleShowRentedChange} /> */}
-                <InfiniteScroll
-                    className={Styles.scroller}
-                    pageStart={0}
-                    initialLoad={false}
-                    loadMore={this.loadFlats}
-                    hasMore={this.state.hasMore}
-                    loader={this.getLoaderItems(4)}
-                    useWindow={true}
-                >
-                    {this.getFlatItems()}
-                </InfiniteScroll>
-            </FlexRow>
+            <FlexColumn>
+                <FilterList className={Styles.filters} onFilterUpdate={this.updateFilters} {...this.props} />
+                <FlexRow className={Styles.flatBoxes}>
+                    <InfiniteScroll
+                        className={Styles.scroller}
+                        pageStart={0}
+                        initialLoad={false}
+                        loadMore={this.loadFlats}
+                        hasMore={this.state.hasMore}
+                        loader={this.getLoaderItems(0)}
+                        useWindow={true}
+                        key={0}
+                    >
+                        {this.getFlatItems()}
+                    </InfiniteScroll>
+                </FlexRow>
+            </FlexColumn>
         );
     }
 
@@ -54,12 +59,12 @@ class FlatList extends Component<
     private getLoaderItems(count: number) {
         const els = Array(count)
             .fill(0)
-            .map((_, idx) => <FlatBoxLoader key={idx} />);
+            .map((_, idx) => <FlatBoxLoader key={idx + 50} />);
         return <>{els}</>;
     }
 
-    private loadFlats = (pageNumber: number) => {
-        FlatService.getFlats(this.state.pageSize, this.state.pageSize * pageNumber)
+    private loadFlats = (_: number) => {
+        FlatService.getFlats(this.state.pageSize, this.state.filters, this.state.flats.length)
             .then(this.handleFlatResult)
             .catch(this.handleFail);
     };
@@ -74,6 +79,10 @@ class FlatList extends Component<
                 hasMore: result.data!.length !== 0,
             }));
         }
+    };
+
+    private updateFilters = (query: string) => {
+        this.setState({ flats: [], hasMore: true, filters: query }, () => this.loadFlats(0));
     };
 
     private handleFail() {

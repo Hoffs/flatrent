@@ -1,7 +1,7 @@
 .flatBoxes {
   flex-wrap: wrap;
   margin: 16px;
-  margin-top: 36px;
+  /* margin-top: 36px; */
   justify-content: flex-start;
 }
 

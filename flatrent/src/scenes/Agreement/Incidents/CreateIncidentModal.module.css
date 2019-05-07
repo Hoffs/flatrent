@@ -17,6 +17,7 @@
   padding: 20px;
   border-radius: 4px;
   margin: auto;
+  box-shadow: var(--modal-shadow);
 }
 
 .title {

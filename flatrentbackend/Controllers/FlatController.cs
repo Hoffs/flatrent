@@ -124,22 +124,22 @@ namespace FlatRent.Controllers
                 StatusCode(201, new CreatedAgreementResponse(agreement.Id, agreement.Attachments)));
         }
 
-        [AllowAnonymous]
-        [ExactQueryParam("count", "offset")]
-        [HttpGet]
-        public Task<IActionResult> GetFlats([Range(0, int.MaxValue, ErrorMessage = Errors.Range)] int offset = 0)
-        {
-            return GetFlats(false, offset);
-        }
+//        [AllowAnonymous]
+//        [ExactQueryParam("count", "offset")]
+//        [HttpGet]
+//        public Task<IActionResult> GetFlats([Range(0, int.MaxValue, ErrorMessage = Errors.Range)] int offset = 0, [FromQuery] FlatListFilters filters = null)
+//        {
+//            return GetFlats(false, offset);
+//        }
 
         [AllowAnonymous]
-        [ExactQueryParam("rented", "count", "offset")]
+//        [ExactQueryParam("rented", "count", "offset")]
         [HttpGet]
-        public async Task<IActionResult> GetFlats(bool rented = false, [Range(0, int.MaxValue)] int offset = 0)
+        public async Task<IActionResult> GetFlats([Range(0, int.MaxValue)] int offset = 0, [FromQuery] FlatListFilters filters = null)
         {
-            var flats = _flatRepository.GetListAsync(rented, 20, offset);
+            var flats = _flatRepository.GetListAsync(20, offset, filters);
             var mappedFlats = _mapper.ProjectTo<ShortFlatDetails>(flats);
-            Response.Headers.Add("X-Total-Count", (await _flatRepository.GetCountAsync(rented).ConfigureAwait(false)).ToString());
+//            Response.Headers.Add("X-Total-Count", (await _flatRepository.GetCountAsync().ConfigureAwait(false)).ToString());
             await Task.Delay(1500);
             return new OkObjectResult(mappedFlats);
         }

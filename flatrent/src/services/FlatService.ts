@@ -21,11 +21,12 @@ export const getAddressString = (address: IAddress) => {
 };
 
 class FlatService {
-    public static async getFlats(count: number, offset: number): Promise<IFlatListResponse> {
+    public static async getFlats(count: number, filters: string, offset: number): Promise<IFlatListResponse> {
         try {
             // const rentedQuery = rented ? "&rented=true" : "";
+            const formattedFilters = filters.startsWith("&") ? filters : `&${filters}`;
             const [, parsed] = await apiFetchTyped<IShortFlatDetails[]>(
-                `/api/flat?count=${count}&offset=${offset}`,
+                `/api/flat?count=${count}&offset=${offset}${formattedFilters}`,
                 undefined,
                 true
             );

@@ -115,5 +115,29 @@ namespace FlatRent.Repositories
 
             return (await UpdateAsync(flat), newImages);
         }
+
+        public IQueryable<Flat> GetListAsync(int count, int offset, FlatListFilters filters)
+        {
+            IQueryable<Flat> query = _context.Flats.Where(x => !x.Deleted).OrderByDescending(x => x.CreatedDate);
+
+            if (filters != null)
+            {
+                if (filters.AreaFrom != null) query = query.Where(f => f.Area >= filters.AreaFrom);
+
+                if (filters.City != null) query = query.Where(f => f.Address.City == filters.City);
+
+                if (filters.PriceFrom != null) query = query.Where(f => f.Price >= filters.PriceFrom);
+                if (filters.PriceTo != null) query = query.Where(f => f.Price <= filters.PriceTo);
+
+                if (filters.RoomCountFrom != null) query = query.Where(f => f.RoomCount >= filters.RoomCountFrom);
+
+                if (filters.FloorFrom != null) query = query.Where(f => f.Floor >= filters.FloorFrom);
+                if (filters.FloorTo != null) query = query.Where(f => f.Floor <= filters.FloorTo);
+            }
+
+            query = query.Skip(offset).Take(count).Include(x => x.Images);
+            query.Load();
+            return query;
+        }
     }
 }

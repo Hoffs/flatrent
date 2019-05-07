@@ -17,5 +17,6 @@ namespace FlatRent.Repositories.Interfaces
         IQueryable<Flat> GetListAsync(bool includeRented = false, int count = 20, int offset = 0);
         Task<int> GetCountAsync(bool includeRented = false);
         Task<(IEnumerable<FormError>, IEnumerable<Image>)> UpdateAsync(Guid flatId, FlatUpdateForm form);
+        IQueryable<Flat> GetListAsync(int count, int offset, FlatListFilters filters);
     }
 }

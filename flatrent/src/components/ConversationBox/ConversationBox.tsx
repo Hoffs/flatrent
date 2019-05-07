@@ -28,7 +28,6 @@ interface IConversationBoxState {
     messages: IMessageDetails[];
     hasMore: boolean;
     scrollRef: HTMLDivElement | null;
-    firstLoadFinished: boolean;
     files: File[];
 }
 
@@ -55,7 +54,6 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
             hasMore: true,
             messages: [],
             scrollRef: null,
-            firstLoadFinished: false,
             files: [],
         };
     }
@@ -69,6 +67,11 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
         this.shouldCheckForMessages = false;
     }
 
+    public componentWillReceiveProps(newProps: IConversationBoxProps) {
+        if (this.props.conversation.id !== newProps.conversation.id) {
+            this.setState({ messages: [], hasMore: true, });
+        }
+    }
     public render() {
         return (
             <FlexColumn className={joined(Styles.conversationBox, this.props.className)}>
