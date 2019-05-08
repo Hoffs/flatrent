@@ -209,7 +209,7 @@ class ConversationBox extends Component<IConversationBoxProps, IConversationBoxS
                 }));
             }
         }
-        setTimeout(() => this.loadNewMessages(), 5000);
+        setTimeout(() => this.loadNewMessages(), 2000);
     };
 
     private sendMessage = async () => {
