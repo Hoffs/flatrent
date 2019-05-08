@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FlatRent.Entities;
@@ -8,6 +9,7 @@ using FlatRent.Models;
 using FlatRent.Models.Requests;
 using FlatRent.Repositories.Abstractions;
 using FlatRent.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace FlatRent.Repositories
@@ -48,6 +50,15 @@ namespace FlatRent.Repositories
         public new Task<IEnumerable<FormError>> DeleteAsync(Guid id)
         {
             return base.DeleteAsync(id);
+        }
+
+        public Task<Agreement> GetLoadedAsync(Guid id)
+        {
+            return Context.Agreements
+                .Include(a => a.Tenant)
+                .Include(a => a.Flat)
+                .ThenInclude(f => f.Author)
+                .FirstOrDefaultAsync(a => a.Id == id);
         }
 
         public new Task<IEnumerable<FormError>> UpdateAsync(Agreement agreement)

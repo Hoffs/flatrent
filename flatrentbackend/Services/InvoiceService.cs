@@ -14,12 +14,14 @@ namespace FlatRent.Services
     {
         private readonly IAgreementRepository _agreementRepository;
         private readonly IInvoiceRepository _invoiceRepository;
+        private readonly IEmailService _emailService;
         private readonly ILogger _logger;
 
-        public InvoiceService(IAgreementRepository agreementRepository, IInvoiceRepository invoiceRepository, ILogger logger)
+        public InvoiceService(IAgreementRepository agreementRepository, IInvoiceRepository invoiceRepository, IEmailService emailService, ILogger logger)
         {
             _agreementRepository = agreementRepository;
             _invoiceRepository = invoiceRepository;
+            _emailService = emailService;
             _logger = logger;
         }
 
@@ -51,6 +53,8 @@ namespace FlatRent.Services
             {
                 _logger.Error($"Received errors when generating invoice for agreement {agreementId}: {errors.GetFormattedResponse()}");
             }
+
+            await SendInvoiceEmail(invoice);
         }
 
         /// <summary>
@@ -114,6 +118,17 @@ namespace FlatRent.Services
             {
                 _logger.Error($"Received errors when generating invoice for agreement {agreementId}: {errors.GetFormattedResponse()}");
             }
+
+            await SendInvoiceEmail(invoice);
+        }
+
+        private Task SendInvoiceEmail(Invoice invoice)
+        {
+            var body = $@"
+Jums buvo sugeneruota nauja sąskaita. Sutarties Nr. {invoice.AgreementId}.
+Ją galite peržiūrėti {MessageConstants.SiteUrl($"/agreement/{invoice.AgreementId}/invoice/{invoice.Id}")}.";
+
+            return _emailService.SendEmailToAsync(invoice.Agreement.Tenant.Email, MessageConstants.NewInvoiceSubject, body);
         }
     }
 }

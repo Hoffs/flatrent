@@ -28,17 +28,13 @@ namespace FlatRent.Controllers
     {
         private readonly IAgreementRepository _repository;
         private readonly IInvoiceRepository _invoiceRepository;
-        private readonly IInvoiceService _invoiceService;
         private readonly IMapper _mapper;
-        private readonly ILogger _logger;
 
         public InvoiceController(IAgreementRepository repository, IInvoiceRepository invoiceRepository, IInvoiceService invoiceService, IMapper mapper, ILogger logger) : base(repository)
         {
             _repository = repository;
             _invoiceRepository = invoiceRepository;
-            _invoiceService = invoiceService;
             _mapper = mapper;
-            _logger = logger;
         }
 
         [HttpGet]

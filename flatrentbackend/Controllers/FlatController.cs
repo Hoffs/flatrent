@@ -16,6 +16,8 @@ using FlatRent.Models.Requests;
 using FlatRent.Models.Requests.Flat;
 using FlatRent.Models.Responses;
 using FlatRent.Repositories.Interfaces;
+using FlatRent.Services;
+using FlatRent.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -28,13 +30,15 @@ namespace FlatRent.Controllers
     {
         private readonly IFlatRepository _flatRepository;
         private readonly IAgreementRepository _agreementRepository;
+        private readonly IAgreementService _agreementService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public FlatController(IFlatRepository flatRepository, IAgreementRepository agreementRepository, IMapper mapper, ILogger logger) : base(flatRepository)
+        public FlatController(IFlatRepository flatRepository, IAgreementRepository agreementRepository, IAgreementService agreementService, IMapper mapper, ILogger logger) : base(flatRepository)
         {
             _flatRepository = flatRepository;
             _agreementRepository = agreementRepository;
+            _agreementService = agreementService;
             _mapper = mapper;
             _logger = logger;
         }
@@ -120,6 +124,11 @@ namespace FlatRent.Controllers
             }
 
             var (operationErrors, agreement) = await _agreementRepository.AddAgreementAsync(id, HttpContext.User.GetUserId(), form).ConfigureAwait(false);
+            if (operationErrors == null)
+            {
+                var loadedAgreement = await _agreementRepository.GetLoadedAsync(agreement.Id);
+                await _agreementService.SendNewAgreementEmailAsync(loadedAgreement);
+            }
             return OkOrBadRequest(operationErrors,
                 StatusCode(201, new CreatedAgreementResponse(agreement.Id, agreement.Attachments)));
         }

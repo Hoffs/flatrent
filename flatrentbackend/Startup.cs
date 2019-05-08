@@ -5,6 +5,7 @@ using AutoMapper;
 using FlatRent.BackgroundServices;
 using FlatRent.Entities;
 using FlatRent.Extensions;
+using FlatRent.Profiles;
 using FlatRent.Repositories;
 using FlatRent.Repositories.Interfaces;
 using FlatRent.Services;
@@ -28,9 +29,20 @@ namespace FlatRent
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json",
+                    optional: false,
+                    reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json",
+                    optional: false,
+                    reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .AddUserSecrets<Startup>();
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -38,7 +50,7 @@ namespace FlatRent
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper();
+            services.AddAutoMapper(typeof(AgreementsMapperProfile), typeof(ConversationMapperProfile), typeof(FaultMapperProfile), typeof(FileMapperProfile), typeof(FlatMapperProfile), typeof(InvoiceMapperProfile), typeof(UserMapperProfile));
             services.AddSingleton(Log.Logger);
 //            services.AddDbContext<DataContext>(opts => opts.UseNpgsql(Configuration.GetConnectionString("DataContext")).UseLazyLoadingProxies());
             services.AddDbContext<DataContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("DataContext")).UseLazyLoadingProxies());
@@ -87,6 +99,8 @@ namespace FlatRent
 
             services.AddScoped<IUserService, UserService>();            
             services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IAgreementService, AgreementService>();
 
             services.AddHostedService<AutoInvoicing>();
 
@@ -150,7 +164,7 @@ namespace FlatRent
             });
 
             app.UseCors(x => x
-                .WithOrigins("http://localhost:5000", "https://localhost:5001", "http://localhost:3000")
+                .WithOrigins("http://localhost:5000", "https://localhost:5001", "http://localhost:3000", "http://192.168.1.204:3000")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials());

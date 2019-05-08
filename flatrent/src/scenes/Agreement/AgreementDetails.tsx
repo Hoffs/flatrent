@@ -58,15 +58,15 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
                 <Button className={Styles.accept} onClick={this.acceptAgreement}>
                     Patvirtinti
                 </Button>,
-                <Button onClick={this.getAgreementPdf}>Sutarties PDF</Button>,
-                <Button onClick={this.rejectAgreement}>Atmesti</Button>,
+                <Button className={Styles.buttons} onClick={this.getAgreementPdf}>Sutarties PDF</Button>,
+                <Button className={Styles.buttons} onClick={this.rejectAgreement}>Atmesti</Button>,
             );
         } else if (
             agreement.tenant.id === UserService.userId() &&
             agreement.status.id === AgreementStatuses.Requested
         ) {
-            actionButtons.push(<Button onClick={this.getAgreementPdf}>Sutarties PDF</Button>);
-            actionButtons.push(<Button onClick={this.cancelAgreement}>Atšaukti</Button>);
+            actionButtons.push(<Button className={Styles.buttons} onClick={this.getAgreementPdf}>Sutarties PDF</Button>);
+            actionButtons.push(<Button className={Styles.buttons} onClick={this.cancelAgreement}>Atšaukti</Button>);
         }
 
         const statusId = agreement.status.id;
