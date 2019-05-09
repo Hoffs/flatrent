@@ -30,7 +30,7 @@ class NumberInputForm extends Component<INumberInputFormProps, { focused: boolea
                 errorsOnly={errorsOnly}
                 title={title}
                 extraProps={extraProps}
-                type={"number"}
+                type={"text"}
                 value={this.props.value.toString()}
                 setValue={this.checkAndSet}
             />
@@ -39,6 +39,13 @@ class NumberInputForm extends Component<INumberInputFormProps, { focused: boolea
 
     private checkAndSet = (name: string, newValue: string) => {
         let newNumber = 0;
+
+        console.log(newValue);
+        console.log(newValue === "");
+        if (newValue === "") {
+            this.props.setValue(name, "");
+        }
+
         newNumber = Number.parseInt(newValue, 10);
         if (isNaN(newNumber)) {
             return;

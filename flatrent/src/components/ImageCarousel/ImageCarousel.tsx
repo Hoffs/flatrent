@@ -31,6 +31,7 @@ const ImageCarousel = (props: IImageCarousel) => {
             className={joined(getStyle(), className)}
             showStatus={false}
             showThumbs={false}
+
         >
             {props.imageIds === undefined ? (
                 <ImageLoader />

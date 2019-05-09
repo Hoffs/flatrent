@@ -25,16 +25,13 @@ class NavBar extends Component<RouteComponentProps> {
     public render() {
         return (
             <div className={Styles.navbar}>
-                <Link className={Styles.logoLink} to="/">
-                    <div className={Styles.logo}>
-                        <SVG className={Styles.svg} src={logo} />
-                    </div>
-                </Link>
-                {/* <nav className={Styles.nav}>
-          <ul className={Styles.ul}>
-            {this.getLinks()}
-          </ul>
-        </nav> */}
+                <div className={Styles.logoWrapper}>
+                    <Link className={Styles.logoLink} to="/">
+                        <div className={Styles.logo}>
+                            <SVG className={Styles.svg} src={logo} />
+                        </div>
+                    </Link>
+                </div>
                 <div className={Styles.nav}>{this.getNavigationButtons()}</div>
             </div>
         );

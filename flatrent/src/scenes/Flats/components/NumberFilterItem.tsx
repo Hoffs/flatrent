@@ -14,20 +14,21 @@ interface INumberFilterItemProps extends RouteComponentProps {
 }
 
 interface INumberFilterItemsState {
-    value: number;
+    value: string;
     isOpen: boolean;
     toRight: boolean;
 }
 
 class NumberFilterItem extends React.Component<INumberFilterItemProps, INumberFilterItemsState> {
-    public state = { value: 0, isOpen: false, toRight: false };
+    public state = { value: "", isOpen: false, toRight: false };
     constructor(props: INumberFilterItemProps) {
         super(props);
         const params = new URLSearchParams(props.location.search);
         const value = params.get(props.name);
         if (value !==  null) {
             try {
-                this.state.value = Number(value);
+                const parsed = Number(value);
+                this.state.value = isNaN(parsed) ? "" : parsed.toString();
             } catch { }
         }
     }
@@ -42,7 +43,7 @@ class NumberFilterItem extends React.Component<INumberFilterItemProps, INumberFi
             : (!this.state.toRight)
                 ? Styles.popupWrapper
                 : joined(Styles.popupWrapper, Styles.rightAlign);
-        const label = this.state.value === 0 ? props.title : `${props.title}, ${this.state.value}`;
+        const label = this.state.value === "0" || this.state.value === ""  ? props.title : `${props.title}, ${this.state.value}`;
         return (
             <div className={Styles.item}>
                 <button className={Styles.nameButton} onClick={this.toggle}>
@@ -72,7 +73,7 @@ class NumberFilterItem extends React.Component<INumberFilterItemProps, INumberFi
     };
     private confirm = () => this.setState({ isOpen: false });
     private setValue = (_: string, val: string) => {
-        this.setState({ value: Number(val) });
+        this.setState({ value: val });
         this.props.onQueryUpdate(`${this.props.name}=${val.toString()}`);
     }
 }

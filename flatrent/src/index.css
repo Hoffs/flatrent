@@ -57,3 +57,29 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
+
+
+/* Carousel arrows */
+
+.carousel .control-prev.control-arrow:before {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+  margin-left: 15px;
+}
+
+.carousel .control-next.control-arrow:before {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  margin-right: 15px;
+}
+
+.carousel.carousel-slider .control-arrow:before {
+  display: inline-block;
+  border-top: none;
+  border-right: 8px solid #fff;
+  border-bottom: 8px solid #fff;
+  border-radius: 4px;
+  border-left: none;
+  padding: 14px;
+  content: '';
+}

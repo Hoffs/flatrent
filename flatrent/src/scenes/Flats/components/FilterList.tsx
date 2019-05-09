@@ -67,8 +67,14 @@ const FilterList = (props: IFlatFilterProps) => {
                 title="Kaina iki"
                 {...props}
             />
+            <NumberFilterItem
+                onQueryUpdate={setQueriesFactory("7")}
+                name="rentDays"
+                title="Nuomos laikotarpis dienomis"
+                {...props}
+            />
 
-            <TextFilterItem onQueryUpdate={setQueriesFactory("7")} name="city" title="Miestas" {...props} />
+            <TextFilterItem onQueryUpdate={setQueriesFactory("8")} name="city" title="Miestas" {...props} />
             <Button className={Styles.searchButton} onClick={onSearch}>Ieškoti</Button>
         </FlexRow>
     );

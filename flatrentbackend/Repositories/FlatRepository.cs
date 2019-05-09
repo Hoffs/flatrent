@@ -133,6 +133,8 @@ namespace FlatRent.Repositories
 
                 if (filters.FloorFrom != null) query = query.Where(f => f.Floor >= filters.FloorFrom);
                 if (filters.FloorTo != null) query = query.Where(f => f.Floor <= filters.FloorTo);
+
+                if (filters.RentDays != null) query = query.Where(f => filters.RentDays >= f.MinimumRentDays);
             }
 
             query = query.Skip(offset).Take(count).Include(x => x.Images);

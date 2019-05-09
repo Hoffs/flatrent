@@ -11,6 +11,7 @@
         public float? AreaFrom { get; set; }
 
         public int? RoomCountFrom { get; set; }
+        public int? RentDays { get; set; }
 
         public string City { get; set; }
     }
