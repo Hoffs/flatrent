@@ -33,7 +33,7 @@
 }
 
 .thumb {
-  width: 100%;
+  position: relative;
   margin: 2px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -42,6 +42,28 @@
   white-space: nowrap;
   font-size: 0.9em;
   font-family: var(--title-font-family);
+}
+
+
+.thumb::after {
+  content: " ";
+  width: 15px;
+  border-bottom: 4px solid var(--red-color);
+  position: absolute;
+  top: 7px;
+  right: 5px;
+  transform: rotate(45deg);
+}
+
+.thumb::before {
+  content: " ";
+  width: 15px;
+  border-bottom: 4px solid var(--red-color);
+  position: absolute;
+  top: 7px;
+  right: 5px;
+  transform: rotate(135deg);
+  z-index: 1;
 }
 
 .thumb:hover {
