@@ -118,7 +118,7 @@ namespace FlatRent.Repositories
 
         public IQueryable<Flat> GetListAsync(int count, int offset, FlatListFilters filters)
         {
-            IQueryable<Flat> query = _context.Flats.Where(x => !x.Deleted).OrderByDescending(x => x.CreatedDate);
+            IQueryable<Flat> query = _context.Flats.Where(x => !x.Deleted).Where(Flat.HasNoActiveAgreement).OrderByDescending(x => x.CreatedDate);
 
             if (filters != null)
             {
