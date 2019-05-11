@@ -47,6 +47,11 @@ namespace FlatRent.Repositories
             throw new NotImplementedException();
         }
 
+        public IQueryable<Agreement> GetQueryable()
+        {
+            return Context.Agreements.AsQueryable();
+        }
+
         public new Task<IEnumerable<FormError>> DeleteAsync(Guid id)
         {
             return base.DeleteAsync(id);

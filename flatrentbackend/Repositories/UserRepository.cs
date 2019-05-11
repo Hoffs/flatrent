@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FlatRent.Constants;
 using FlatRent.Entities;
+using FlatRent.Extensions;
 using FlatRent.Models;
 using FlatRent.Models.Requests;
 using FlatRent.Repositories.Abstractions;
@@ -51,13 +52,8 @@ namespace FlatRent.Repositories
             IQueryable<Flat> flats = _context.Flats
                 .Where(f => f.AuthorId == id && !f.Deleted)
                 .OrderByDescending(f => f.CreatedDate);
-            if (!includeNonPublished)
-            {
-                flats = flats.Where(f => f.IsPublished);
-            }
-            return await flats.Skip(offset)
-                .Take(16)
-                .ToListAsync();
+
+            return await flats.Paginate(offset, 16).ToListAsync();
 //            var mappedFlats = Mapper.Map<IEnumerable<ShortFlatDetails>>(flats);
 //            return _context.Users
 //                .Include(u => u.Flats).ThenInclude(f => f.Images)
@@ -72,8 +68,7 @@ namespace FlatRent.Repositories
             return await _context.Agreements
                 .Where(f => f.Flat.AuthorId == id && !f.Deleted)
                 .OrderByDescending(f => f.CreatedDate)
-                .Skip(offset)
-                .Take(16)
+                .Paginate(offset, 16)
                 .ToListAsync();
         }
 
@@ -82,8 +77,7 @@ namespace FlatRent.Repositories
             return await _context.Agreements
                 .Where(f => f.TenantId == id && !f.Deleted)
                 .OrderByDescending(f => f.CreatedDate)
-                .Skip(offset)
-                .Take(16)
+                .Paginate(offset, 16)
                 .ToListAsync();
         }
 

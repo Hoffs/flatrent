@@ -46,8 +46,8 @@ namespace FlatRent.Entities
         public string TenantRequirements { get; set; }
 
         // Is ready to be shown/rented to public
-        [Required]
-        public bool IsPublished { get; set; }
+//        [Required]
+//        public bool IsPublished { get; set; }
 
 //        [NotMapped]
 //        public bool IsRented =>

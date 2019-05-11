@@ -23,7 +23,7 @@ namespace FlatRent.Services
 Buvo sukurtas naujas incidentas. Sutarties Nr. {incident.AgreementId}.
 Jį galite peržiūrėti {MessageConstants.SiteUrl($"/agreement/{incident.AgreementId}/incident/{incident.Id}")}.";
 
-            return _emailService.SendEmailToAsync(incident.Agreement.Flat.Author.Email, MessageConstants.NewAgreementSubject, body);
+            return _emailService.SendEmailToAsync(incident.Agreement.Flat.Author.Email, MessageConstants.NewIncidentSubject, body);
         }
     }
 }

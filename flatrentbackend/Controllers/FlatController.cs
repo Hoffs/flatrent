@@ -106,7 +106,7 @@ namespace FlatRent.Controllers
 
             // flat.IsRented ||
 
-            if (!flat.IsPublished || flat.ActiveAgreement != null)
+            if (flat.ActiveAgreement != null)
             {
                 return BadRequest(new FormError(Errors.FlatNotAvailableForRent));
             }
@@ -159,7 +159,7 @@ namespace FlatRent.Controllers
         public async Task<IActionResult> GetFlat([FromRoute] Guid id)
         {
             var flat = await _flatRepository.GetAsync(id).ConfigureAwait(false);
-            if (!flat.IsPublished && flat.AuthorId != HttpContext.User.GetUserId()) return NotFound(id); // Not published can be seen only by author
+            if (flat.AuthorId != HttpContext.User.GetUserId()) return NotFound(id); // Not published can be seen only by author
             await Task.Delay(750);
             return new OkObjectResult(_mapper.Map<FlatDetails>(flat));
         }

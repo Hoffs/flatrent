@@ -30,7 +30,6 @@ namespace FlatRent.Entities
         [MaxLength(1000)]
         public string About { get; set; }
 
-
         // TODO: Add payment information/bank account etc.
         public string BankAccount { get; set; }
 

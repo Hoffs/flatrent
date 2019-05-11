@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FlatRent.Entities;
 using FlatRent.Models;
@@ -14,5 +15,7 @@ namespace FlatRent.Repositories.Interfaces
         Task<IEnumerable<FormError>> DeleteAsync(Guid id);
         Task<(IEnumerable<FormError>, Agreement)> AddAgreementAsync(Guid id, Guid userId, AgreementForm form);
         Task<IEnumerable<Agreement>> GetListAsync();
+
+        IQueryable<Agreement> GetQueryable();
     }
 }
