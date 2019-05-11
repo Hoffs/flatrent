@@ -66,6 +66,10 @@ namespace FlatRent.Controllers
         [MustBeEntityAuthor]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
+            // TODO: Move to BR
+            var agreement = await _repository.GetAsync(id);
+            if (agreement.StatusId != AgreementStatus.Statuses.Requested) return BadRequest();
+
             var errors = await _repository.DeleteAsync(id).ConfigureAwait(false);
             if (errors != null)
             {
@@ -82,6 +86,9 @@ namespace FlatRent.Controllers
         {
             var agreement = await _repository.GetAsync(id);
             if (agreement.Flat.AuthorId != User.GetUserId()) return Forbid();
+
+            // TODO: Move to BR
+            if (agreement.StatusId != AgreementStatus.Statuses.Requested) return BadRequest();
 
             agreement.StatusId = AgreementStatus.Statuses.Accepted;
             var errors = await _repository.UpdateAsync(agreement);
@@ -119,6 +126,9 @@ namespace FlatRent.Controllers
         {
             var agreement = await _repository.GetAsync(id);
             if (agreement.Flat.AuthorId != User.GetUserId()) return Forbid();
+
+            // TODO: Move to BR
+            if (agreement.StatusId != AgreementStatus.Statuses.Requested) return BadRequest();
 
             agreement.StatusId = AgreementStatus.Statuses.Rejected;
             var errors = await _repository.UpdateAsync(agreement);
