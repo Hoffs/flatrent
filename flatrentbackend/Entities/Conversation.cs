@@ -19,7 +19,7 @@ namespace FlatRent.Entities
         public virtual Agreement Agreement { get; set; }
 
         [InverseProperty("Conversation")]
-        public virtual Fault Fault { get; set; }
+        public virtual Incident Incident { get; set; }
 
         public bool IsAuthorOrRecipient(Guid id)
         {

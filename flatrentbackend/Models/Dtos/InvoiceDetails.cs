@@ -14,6 +14,6 @@ namespace FlatRent.Models.Dtos
         public bool IsPaid { get; set; }
         public bool IsValid { get; set; }
         public bool IsOverdue { get; set; }
-        public IEnumerable<ShortFaultDetails> Faults { get; set; }
+        public IEnumerable<ShortIncidentDetails> Incidents { get; set; }
     }
 }

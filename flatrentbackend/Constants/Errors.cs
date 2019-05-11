@@ -3,7 +3,7 @@
     public static class Errors
     {
         public const string RecipientDoesNotExist = "Toks naudotojas neegzistuoja.";
-        public const string MessageFaultDeletedOrRepaired = "Negalima siųsti žinutės jeigu incidentas neaktyvus.";
+        public const string MessageIncidentDeletedOrRepaired = "Negalima siųsti žinutės jeigu incidentas neaktyvus.";
         public const string InvoiceAlreadyPaid = "Sąskaita jau apmokėta.";
         public const string MessageAgreementDeletedOrRejected = "Negalima siųsti žinutės jeigu sutartis neaktyvi.";
         public const string CantCreateNonActive = "Negalima registruoti naujo gedimo neaktyviai nuomos sutarčiai.";

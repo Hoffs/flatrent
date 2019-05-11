@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FlatRent.Models.Dtos
 {
-    public class FaultDetails
+    public class IncidentDetails
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -14,15 +14,15 @@ namespace FlatRent.Models.Dtos
 
         public ShortFlatDetails Flat { get; set; }
 
-        public ShortFaultUserInfo Tenant { get; set; }
-        public ShortFaultUserInfo Owner { get; set; }
+        public ShortIncidentUserInfo Tenant { get; set; }
+        public ShortIncidentUserInfo Owner { get; set; }
 
         public ConversationDetails Conversation { get; set; }
 
         public IEnumerable<FileInfo> Attachments { get; set; }
     }
 
-    public class ShortFaultUserInfo : ShortUserInfo
+    public class ShortIncidentUserInfo : ShortUserInfo
     {
         public string Email { get; set; }
         public string PhoneNumber { get; set; }

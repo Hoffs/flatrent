@@ -50,7 +50,7 @@ namespace FlatRent.Entities
 
         [JsonIgnore]
         [InverseProperty("Agreement")]
-        public virtual ICollection<Fault> Faults { get; set; }
+        public virtual ICollection<Incident> Incidents { get; set; }
 
         [ForeignKey("Conversation")]
         public Guid ConversationId { get; set; }

@@ -35,6 +35,6 @@ namespace FlatRent.Entities
         public virtual Agreement Agreement { get; set; }
 
         [InverseProperty("Invoice")]
-        public virtual ICollection<Fault> Faults { get; set; }
+        public virtual ICollection<Incident> Incidents { get; set; }
     }
 }

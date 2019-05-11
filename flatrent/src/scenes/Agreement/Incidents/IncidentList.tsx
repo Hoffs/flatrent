@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from "react";
 import ContentLoader from "react-content-loader";
-import { Link, RouteComponentProps, Switch } from "react-router-dom";
+import { RouteComponentProps, Switch } from "react-router-dom";
 import { toast } from "react-toastify";
 import Styles from "./IncidentList.module.css";
 
@@ -10,15 +10,13 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import Button from "../../../components/Button";
 import FlexColumn from "../../../components/FlexColumn";
 import FlexRow from "../../../components/FlexRow";
-import { IAgreementDetails, AgreementStatuses } from "../../../services/interfaces/AgreementInterfaces";
-import { IInvoiceDetails } from "../../../services/interfaces/InvoiceInterfaces";
-import InvoiceService from "../../../services/InvoiceService";
-import { invoiceUrl, incidentUrl, agreementUrl, incidentCreateUrl, joined } from "../../../utilities/Utilities";
 import RoleRoute from "../../../components/RoleRoute";
 import { Authentication } from "../../../Routes";
-import { IShortFaultDetails } from "../../../services/interfaces/FaultInterfaces";
 import IncidentService from "../../../services/IncidentService";
+import { AgreementStatuses, IAgreementDetails } from "../../../services/interfaces/AgreementInterfaces";
+import { IShortIncidentDetails } from "../../../services/interfaces/IncidentInterfaces";
 import UserService from "../../../services/UserService";
+import { incidentCreateUrl, incidentUrl, joined } from "../../../utilities/Utilities";
 import CreateIncidentModal from "./CreateIncidentModal";
 import ViewIncidentModal from "./ViewIncidentModal";
 
@@ -29,7 +27,7 @@ interface IIncidentListProps {
 }
 
 interface IIncidentListState {
-    incidents: IShortFaultDetails[];
+    incidents: IShortIncidentDetails[];
     hasMore: boolean;
 }
 
@@ -88,13 +86,13 @@ class IncidentList extends Component<IIncidentListProps, IIncidentListState> {
 
     private getCreateIncidentModal = (props: RouteComponentProps<any, any, any>) => (
         <CreateIncidentModal agreement={this.props.agreement} {...props} />
-    );
+    )
 
     private getViewIncidentModal = (props: RouteComponentProps<any, any, any>) => (
         <ViewIncidentModal incidents={this.state.incidents} agreement={this.props.agreement} {...props} />
-    );
+    )
 
-    private getItems = (incidents?: IShortFaultDetails[]): ReactNode[] => {
+    private getItems = (incidents?: IShortIncidentDetails[]): ReactNode[] => {
         if (incidents === undefined) {
             return Array(3)
                 .fill(0)
@@ -113,16 +111,16 @@ class IncidentList extends Component<IIncidentListProps, IIncidentListState> {
                 </Button>
             </FlexRow>
         ));
-    };
+    }
 
-    private getIsRepaired = (incident: IShortFaultDetails) => (incident.repaired ? "Sutaisytas" : "Nesutaisytas");
-    private getPrice = (incident: IShortFaultDetails) => (incident.price === 0 ? "Nenustatyta" : incident.price);
+    private getIsRepaired = (incident: IShortIncidentDetails) => (incident.repaired ? "Sutaisytas" : "Nesutaisytas");
+    private getPrice = (incident: IShortIncidentDetails) => (incident.price === 0 ? "Nenustatyta" : incident.price);
 
     private fetchIncidents = async (_: number) => {
         try {
             const { errors, data } = await IncidentService.getIncidents(
                 this.props.agreement.id,
-                this.state.incidents.length
+                this.state.incidents.length,
             );
             if (errors !== undefined) {
                 const error = Object.keys(errors).map((key) => errors![key].join("\n"));
@@ -135,7 +133,7 @@ class IncidentList extends Component<IIncidentListProps, IIncidentListState> {
             console.log(error);
             toast.error("Įvyko nežinoma klaida.");
         }
-    };
+    }
 }
 
 export const ItemLoader = () => (

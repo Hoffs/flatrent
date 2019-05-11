@@ -5,12 +5,12 @@ using FlatRent.Entities;
 
 namespace FlatRent.Models.Responses
 {
-    public class CreatedFaultResponse
+    public class CreatedIncidentResponse
     {
         public Guid Id { get; set; }
         public Dictionary<Guid, string> Attachments { get; set; }
 
-        public CreatedFaultResponse(Guid id, IEnumerable<Attachment> attachments)
+        public CreatedIncidentResponse(Guid id, IEnumerable<Attachment> attachments)
         {
             Id = id;
             var attachmentArray = attachments == null ? new Attachment[0] : attachments.ToArray();

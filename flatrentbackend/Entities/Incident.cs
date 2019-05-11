@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace FlatRent.Entities
 {
-    public class Fault : AuthoredBaseEntity
+    public class Incident : AuthoredBaseEntity
     {
         [Required]
         public string Name { get; set; }
@@ -24,12 +24,12 @@ namespace FlatRent.Entities
         public virtual Agreement Agreement { get; set; }
 
         [JsonIgnore]
-        [InverseProperty("Fault")]
+        [InverseProperty("Incident")]
         public virtual ICollection<Attachment> Attachments { get; set; }
 
         [NotMapped]
-        public static Func<Fault, bool> NotInvoicedFaultsFunc =>
-            (fault) => fault.Repaired && fault.InvoiceId == null;
+        public static Func<Incident, bool> NotInvoicedIncidentsFunc =>
+            (incident) => incident.Repaired && incident.InvoiceId == null;
 
         [ForeignKey("Conversation")]
         public Guid ConversationId { get; set; }

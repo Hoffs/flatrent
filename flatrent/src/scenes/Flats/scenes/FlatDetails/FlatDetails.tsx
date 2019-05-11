@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, Route, RouteComponentProps, withRouter } from "react-router-dom";
+import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import FlexRow from "../../../../components/FlexRow";
 import Styles from "./FlatDetails.module.css";

@@ -5,14 +5,14 @@ using FlatRent.Models.Requests;
 
 namespace FlatRent.Profiles
 {
-    public class FaultMapperProfile : Profile
+    public class IncidentMapperProfile : Profile
     {
-        public FaultMapperProfile()
+        public IncidentMapperProfile()
         {
-            CreateMap<FaultForm, Fault>();
+            CreateMap<IncidentForm, Incident>();
 
-            CreateMap<Fault, ShortFaultDetails>();
-            CreateMap<Fault, FaultDetails>()
+            CreateMap<Incident, ShortIncidentDetails>();
+            CreateMap<Incident, IncidentDetails>()
                 .ForMember(f => f.Tenant, opt => opt.MapFrom(o => o.Author))
                 .ForMember(f => f.Owner, opt => opt.MapFrom(o => o.Agreement.Flat.Author))
                 .ForMember(f => f.Flat, opt => opt.MapFrom(o => o.Agreement.Flat));

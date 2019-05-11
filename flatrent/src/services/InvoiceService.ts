@@ -1,6 +1,6 @@
 import { saveAs } from "file-saver";
 import { apiFetch, apiFetchTyped, getGeneralError } from "./Helpers";
-import { IApiResponse, IBasicResponse, IErrorResponse } from "./interfaces/Common";
+import { IApiResponse, IBasicResponse } from "./interfaces/Common";
 import { IInvoiceDetails } from "./interfaces/InvoiceInterfaces";
 import UserService from "./UserService";
 

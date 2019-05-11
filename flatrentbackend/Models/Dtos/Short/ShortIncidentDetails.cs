@@ -2,7 +2,7 @@
 
 namespace FlatRent.Models.Dtos
 {
-    public class ShortFaultDetails
+    public class ShortIncidentDetails
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

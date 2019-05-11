@@ -15,7 +15,7 @@ namespace FlatRent.Profiles
                 .IncludeAllDerived();
 
             CreateMap<User, ShortAgreementUserInfo>();
-            CreateMap<User, ShortFaultUserInfo>();
+            CreateMap<User, ShortIncidentUserInfo>();
 
             CreateMap<User, UserProfile>()
                 .IncludeAllDerived()

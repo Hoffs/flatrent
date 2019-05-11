@@ -50,7 +50,7 @@ namespace FlatRent
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(AgreementsMapperProfile), typeof(ConversationMapperProfile), typeof(FaultMapperProfile), typeof(FileMapperProfile), typeof(FlatMapperProfile), typeof(InvoiceMapperProfile), typeof(UserMapperProfile));
+            services.AddAutoMapper(typeof(AgreementsMapperProfile), typeof(ConversationMapperProfile), typeof(IncidentMapperProfile), typeof(FileMapperProfile), typeof(FlatMapperProfile), typeof(InvoiceMapperProfile), typeof(UserMapperProfile));
             services.AddSingleton(Log.Logger);
 //            services.AddDbContext<DataContext>(opts => opts.UseNpgsql(Configuration.GetConnectionString("DataContext")).UseLazyLoadingProxies());
             services.AddDbContext<DataContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("DataContext")).UseLazyLoadingProxies());
@@ -91,7 +91,7 @@ namespace FlatRent
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IFlatRepository, FlatRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
-            services.AddScoped<IFaultRepository, FaultRepository>();
+            services.AddScoped<IIncidentRepository, IncidentRepository>();
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<IAgreementRepository, AgreementRepository>();
             services.AddScoped<IAttachmentRepository, AttachmentRepository>();

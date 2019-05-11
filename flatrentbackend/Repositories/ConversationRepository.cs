@@ -28,7 +28,7 @@ namespace FlatRent.Repositories
         {
             return Context.Conversations
                 .Where(c => c.RecipientId == userId || c.AuthorId == userId)
-                .Where(c => c.Fault == null && c.Agreement == null)
+                .Where(c => c.Incident == null && c.Agreement == null)
                 .OrderByDescending(c => c.CreatedDate)
                 .Paginate(offset);
         }
@@ -53,7 +53,7 @@ namespace FlatRent.Repositories
                 (c.AuthorId == userId || c.AuthorId == conversation.RecipientId) &&
                 (c.RecipientId == userId ||
                  c.RecipientId ==
-                 conversation.RecipientId) && c.Fault == null && c.Agreement == null);
+                 conversation.RecipientId) && c.Incident == null && c.Agreement == null);
 
             if (existingConversation != null)
             {
@@ -76,10 +76,10 @@ namespace FlatRent.Repositories
                 return (new[] { new FormError(Errors.MessageAgreementDeletedOrRejected) }, null);
             }
 
-            var fault = await Context.Faults.FirstOrDefaultAsync(a => a.ConversationId == conversationId);
-            if (fault != null && (fault.Deleted || fault.Repaired))
+            var incident = await Context.Incidents.FirstOrDefaultAsync(a => a.ConversationId == conversationId);
+            if (incident != null && (incident.Deleted || incident.Repaired))
             {
-                return (new[] { new FormError(Errors.MessageFaultDeletedOrRepaired) }, null);
+                return (new[] { new FormError(Errors.MessageIncidentDeletedOrRepaired) }, null);
             }
 
             var mapped = Mapper.Map<Message>(message);

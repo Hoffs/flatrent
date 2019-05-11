@@ -1,17 +1,17 @@
 import React, { ComponentClass, FunctionComponent } from "react";
 import RoleRoute from "./components/RoleRoute";
 import AgreementDetails from "./scenes/Agreement";
+import Conversations from "./scenes/Conversations";
 import FlatList from "./scenes/Flats";
 import CreateFlat from "./scenes/Flats/scenes/FlatCreate";
 import FlatDetails from "./scenes/Flats/scenes/FlatDetails";
+import FlatEdit from "./scenes/Flats/scenes/FlatEdit";
 import Login from "./scenes/Login";
 import Logout from "./scenes/Logout";
 import Profile from "./scenes/Profile";
-import Register from "./scenes/Register";
-import UserService, { Policies, Roles } from "./services/UserService";
-import FlatEdit from "./scenes/Flats/scenes/FlatEdit";
 import EditProfile from "./scenes/Profile/EditProfile/EditProfile";
-import Conversations from "./scenes/Conversations";
+import Register from "./scenes/Register";
+import UserService, { Policies } from "./services/UserService";
 
 export enum Authentication {
     Anonymous = 0,

@@ -12,7 +12,7 @@ namespace FlatRent.Repositories
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Address> Addresses { get; set; }
-        public DbSet<Fault> Faults { get; set; }
+        public DbSet<Incident> Incidents { get; set; }
         public DbSet<Flat> Flats { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Image> Images { get; set; }
@@ -47,8 +47,8 @@ namespace FlatRent.Repositories
             modelBuilder.Entity<Agreement>().HasOne(e => e.Tenant).WithMany(e => e.TenantAgreements).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Agreement>().HasOne(e => e.Conversation).WithOne(c => c.Agreement).OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Fault>().HasOne(e => e.Author).WithMany(e => e.RegisteredFaults).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Fault>().HasOne(e => e.Conversation).WithOne(c => c.Fault).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Incident>().HasOne(e => e.Author).WithMany(e => e.RegisteredIncidents).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Incident>().HasOne(e => e.Conversation).WithOne(c => c.Incident).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Conversation>().HasOne(e => e.Author).WithMany(e => e.StartedConversations).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Conversation>().HasOne(e => e.Recipient).WithMany(e => e.RecipientConversations).OnDelete(DeleteBehavior.Restrict);
@@ -63,7 +63,7 @@ namespace FlatRent.Repositories
 
 //            modelBuilder.Entity<User>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
 //            modelBuilder.Entity<FlatDetailsAddress>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
-//            modelBuilder.Entity<Fault>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
+//            modelBuilder.Entity<Incident>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
 //            modelBuilder.Entity<Flat>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
 //            modelBuilder.Entity<Invoice>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
 //            modelBuilder.Entity<Image>().Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");

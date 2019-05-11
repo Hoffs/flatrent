@@ -2,15 +2,13 @@ import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "../../../../components/Button";
-import { ImageDropzone, CompactDropzone } from "../../../../components/Dropzones";
-import { IPreviewFile } from "../../../../components/Dropzones/ImageDropzone";
+import { CompactDropzone } from "../../../../components/Dropzones";
 import FlexColumn from "../../../../components/FlexColumn";
 import FlexRow from "../../../../components/FlexRow";
 import { InputAreaForm, InputForm, NumberInputForm } from "../../../../components/InputForm";
 import SimpleCheckbox from "../../../../components/SimpleCheckbox";
 import FlatService from "../../../../services/FlatService";
-import { IBasicResponse } from "../../../../services/interfaces/Common";
-import { IFlatCreateResponse, IImageDetails } from "../../../../services/interfaces/FlatServiceInterfaces";
+import { IImageDetails } from "../../../../services/interfaces/FlatServiceInterfaces";
 import { flatUrl, joined } from "../../../../utilities/Utilities";
 import Styles from "./FlatEdit.module.css";
 
@@ -177,7 +175,7 @@ class CreateFlat extends Component<RouteComponentProps<{ id: string }>, ICreateF
                 lastModified: 1,
                 size: 1,
                 type: " ",
-                slice: (start?: number | undefined, end?: number | undefined, contentType?: string | undefined) =>
+                slice: () =>
                     new Blob(undefined),
             }));
 

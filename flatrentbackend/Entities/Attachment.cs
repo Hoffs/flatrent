@@ -16,9 +16,9 @@ namespace FlatRent.Entities
         [JsonIgnore]
         public virtual Agreement Agreement { get; set; }
 
-        [ForeignKey("Fault")]
-        public Guid? FaultId { get; set; }
+        [ForeignKey("Incident")]
+        public Guid? IncidentId { get; set; }
         [JsonIgnore]
-        public virtual Fault Fault { get; set; }
+        public virtual Incident Incident { get; set; }
     }
 }

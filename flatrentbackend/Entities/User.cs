@@ -70,6 +70,6 @@ namespace FlatRent.Entities
 
         [JsonIgnore]
         [InverseProperty("Author")]
-        public virtual ICollection<Fault> RegisteredFaults { get; set; }
+        public virtual ICollection<Incident> RegisteredIncidents { get; set; }
     }
 }

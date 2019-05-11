@@ -3,14 +3,14 @@ import { IShortUserDetails } from "./UserInterfaces";
 import { IConversationDetails } from "./ConversationInterfaces";
 import { IAttachment, IFileMetadata, IFileResponse } from "./Common";
 
-export interface IShortFaultDetails {
+export interface IShortIncidentDetails {
     id: string;
     name: string;
     repaired: boolean;
     price: number;
 }
 
-export interface IFaultDetails {
+export interface IIncidentDetails {
     id: string;
     name: string;
     description: string;
@@ -24,13 +24,13 @@ export interface IFaultDetails {
     attachments: IAttachment[];
 }
 
-export interface ICreateFaultForm {
+export interface ICreateIncidentForm {
     name: string;
     description: string;
     attachments: IFileMetadata[];
 }
 
-export interface IFaultCreateResponse {
+export interface IIncidentCreateResponse {
     id: string;
     attachments: IFileResponse;
 }

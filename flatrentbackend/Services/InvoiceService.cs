@@ -92,8 +92,8 @@ namespace FlatRent.Services
             }
 
             // Calculate and add faults to invoice
-            var notInvoicedFaults = agreement.Faults.Where(Fault.NotInvoicedFaultsFunc).ToList();
-            var faultPrice = notInvoicedFaults.Sum(f => f.Price);
+            var notInvoicedIncidents = agreement.Incidents.Where(Incident.NotInvoicedIncidentsFunc).ToList();
+            var faultPrice = notInvoicedIncidents.Sum(f => f.Price);
 
             // Add last invoice if it wasn't paid.
             if (!lastInvoice.IsPaid)
@@ -106,7 +106,7 @@ namespace FlatRent.Services
             {
                 AgreementId = agreementId,
                 AmountToPay = faultPrice + amountToPay,
-                Faults = notInvoicedFaults,
+                Incidents = notInvoicedIncidents,
                 DueDate = dueDate,
                 InvoicedPeriodFrom = invoicedPeriodStart,
                 InvoicedPeriodTo = invoicedPeriodEnd,

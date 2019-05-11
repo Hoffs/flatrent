@@ -2,18 +2,17 @@ import AttachmentService from "./AttachmentService";
 import { apiFetchTyped, getGeneralError, uploadEach } from "./Helpers";
 import { IApiResponse } from "./interfaces/Common";
 import {
-    ICreateFaultForm,
-    IFaultCreateResponse,
-    IFaultDetails,
-    IShortFaultDetails,
-} from "./interfaces/FaultInterfaces";
-import { IInvoiceDetails } from "./interfaces/InvoiceInterfaces";
+    ICreateIncidentForm,
+    IIncidentCreateResponse,
+    IIncidentDetails,
+    IShortIncidentDetails,
+} from "./interfaces/IncidentInterfaces";
 
 class IncidentService {
-    public static async getIncident(agreementId: string, incidentId: string): Promise<IApiResponse<IFaultDetails>> {
+    public static async getIncident(agreementId: string, incidentId: string): Promise<IApiResponse<IIncidentDetails>> {
         try {
-            const [, parsed] = await apiFetchTyped<IFaultDetails>(
-                `/api/agreement/${agreementId}/fault/${incidentId}`,
+            const [, parsed] = await apiFetchTyped<IIncidentDetails>(
+                `/api/agreement/${agreementId}/incident/${incidentId}`,
                 {
                     method: "GET",
                 },
@@ -23,14 +22,14 @@ class IncidentService {
             return parsed;
         } catch (e) {
             console.log(e);
-            return getGeneralError<IFaultDetails>();
+            return getGeneralError<IIncidentDetails>();
         }
     }
 
-    public static async getIncidents(agreementId: string, offset: number): Promise<IApiResponse<IShortFaultDetails[]>> {
+    public static async getIncidents(agreementId: string, offset: number): Promise<IApiResponse<IShortIncidentDetails[]>> {
         try {
-            const [, parsed] = await apiFetchTyped<IShortFaultDetails[]>(
-                `/api/agreement/${agreementId}/fault?offset=${offset}`,
+            const [, parsed] = await apiFetchTyped<IShortIncidentDetails[]>(
+                `/api/agreement/${agreementId}/incident?offset=${offset}`,
                 {
                     method: "GET",
                 },
@@ -40,7 +39,7 @@ class IncidentService {
             return parsed;
         } catch (e) {
             console.log(e);
-            return getGeneralError<IShortFaultDetails[]>();
+            return getGeneralError<IShortIncidentDetails[]>();
         }
     }
 
@@ -51,7 +50,7 @@ class IncidentService {
     ): Promise<IApiResponse<any>> {
         try {
             const [, parsed] = await apiFetchTyped<any>(
-                `/api/agreement/${agreementId}/fault/${incidentId}/fixed`,
+                `/api/agreement/${agreementId}/incident/${incidentId}/fixed`,
                 {
                     body: JSON.stringify({ price }),
                     method: "POST",
@@ -69,7 +68,7 @@ class IncidentService {
     public static async deleteIncident(agreementId: string, incidentId: string): Promise<IApiResponse<any>> {
         try {
             const [, parsed] = await apiFetchTyped<any>(
-                `/api/agreement/${agreementId}/fault/${incidentId}`,
+                `/api/agreement/${agreementId}/incident/${incidentId}`,
                 {
                     method: "DELETE",
                 },
@@ -85,13 +84,13 @@ class IncidentService {
 
     public static async createIncident(
         agreementId: string,
-        incident: ICreateFaultForm,
+        incident: ICreateIncidentForm,
         files: File[]
-    ): Promise<IApiResponse<IFaultCreateResponse>> {
+    ): Promise<IApiResponse<IIncidentCreateResponse>> {
         try {
             incident.attachments = files.map((f) => ({ name: f.name }));
-            const [, parsed] = await apiFetchTyped<IFaultCreateResponse>(
-                `/api/agreement/${agreementId}/fault`,
+            const [, parsed] = await apiFetchTyped<IIncidentCreateResponse>(
+                `/api/agreement/${agreementId}/incident`,
                 { method: "POST", body: JSON.stringify(incident) },
                 true
             );
@@ -104,7 +103,7 @@ class IncidentService {
             return parsed;
         } catch (e) {
             console.log(e);
-            return getGeneralError<IFaultCreateResponse>();
+            return getGeneralError<IIncidentCreateResponse>();
         }
     }
 }

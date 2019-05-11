@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ContentLoader from "react-content-loader";
-import { Link, RouteComponentProps, Route } from "react-router-dom";
+import { Link, RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import { CompactAttachmentPreview } from "../../components/AttachmentPreview";
 import Button from "../../components/Button";
@@ -19,11 +19,8 @@ import { IBasicResponse } from "../../services/interfaces/Common";
 import UserService from "../../services/UserService";
 import { flatUrl, userProfileUrl } from "../../utilities/Utilities";
 import Styles from "./AgreementDetails.module.css";
-import InvoiceList from "./Invoice/InvoiceList";
-import RoleRoute from "../../components/RoleRoute";
-import { Authentication } from "../../Routes";
-import InvoiceModal from "./Invoice/InvoiceModal";
 import IncidentList from "./Incidents/IncidentList";
+import InvoiceList from "./Invoice/InvoiceList";
 
 interface IAgreementDetailsRouteProps {
     id: string;
@@ -179,28 +176,28 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
             console.log(error);
             toast.error("Įvyko nežinoma klaida.");
         }
-    };
+    }
 
     private cancelAgreement = async () => {
         this.updateAgreement(AgreementsService.cancelAgreement, () => {
             toast.success("Sutartis atšaukta!");
             this.props.history.push(userProfileUrl(UserService.userId()));
         });
-    };
+    }
 
     private acceptAgreement = async () => {
         this.updateAgreement(AgreementsService.acceptAgreement, () => {
             toast.success("Sutartis patvirtinta!");
             this.fetchAgreement(this.props.match.params.id);
         });
-    };
+    }
 
     private rejectAgreement = async () => {
         this.updateAgreement(AgreementsService.rejectAgreement, () => {
             toast.success("Sutartis atšaukta!");
             this.fetchAgreement(this.props.match.params.id);
         });
-    };
+    }
 
     private updateAgreement = async (func: (id: string) => Promise<IBasicResponse>, onSuccess: () => void) => {
         try {
@@ -218,7 +215,7 @@ class AgreementDetails extends Component<RouteComponentProps<IAgreementDetailsRo
             console.log(error);
             toast.error("Įvyko nežinoma klaida.");
         }
-    };
+    }
 }
 
 export default AgreementDetails;

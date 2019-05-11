@@ -80,26 +80,26 @@ namespace FlatRent.Controllers
             var invoice = agreement.Invoices.FirstOrDefault(i => i.Id == invoiceId);
             if (invoice == null) return NotFound();
 
-            var faultRows = invoice.Faults.Select(f => $@"
+            var rows = invoice.Incidents.Select(f => $@"
             <tr>
                 <td>Incidentas: {f.Name}</td>
                 <td class=""right"">{f.Price}</td>            
             </tr>
             ");
-            var faultPrice = invoice.Faults.Sum(f => f.Price);
+            var incidentPrice = invoice.Incidents.Sum(f => f.Price);
             var patchData = new InvoicePatchData
             {
                 Year = invoice.CreatedDate.Year,
                 Month = invoice.CreatedDate.Month,
                 Day = invoice.CreatedDate.Day,
-                Price = invoice.AmountToPay - faultPrice,
+                Price = invoice.AmountToPay - incidentPrice,
                 AgreementNo = id,
                 InvoiceFrom = invoice.InvoicedPeriodFrom.ToString("yyyy-MM-dd"),
                 InvoiceTo = invoice.InvoicedPeriodTo.ToString("yyyy-MM-dd"),
                 InvoiceDue = invoice.DueDate.ToString("yyyy-MM-dd"),
                 InvoiceNo = invoiceId,
                 TotalPrice = invoice.AmountToPay,
-                AdditionalRows = string.Join("", faultRows),
+                AdditionalRows = string.Join("", rows),
             };
 
             var html = await HtmlGenerator.GetInvoiceHtml(patchData).ConfigureAwait(false);

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlatRent.Models.Requests
 {
-    public class FaultFixForm
+    public class IncidentFixForm
     {
         [Required]
         [Range(0, double.MaxValue)]

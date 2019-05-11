@@ -20,7 +20,7 @@ import { InputAreaForm, InputForm } from "../../../components/InputForm";
 import IncidentService from "../../../services/IncidentService";
 import { IAgreementDetails } from "../../../services/interfaces/AgreementInterfaces";
 import { IApiResponse, IErrorResponse, IInputValues } from "../../../services/interfaces/Common";
-import { IFaultCreateResponse } from "../../../services/interfaces/FaultInterfaces";
+import { IIncidentCreateResponse } from "../../../services/interfaces/IncidentInterfaces";
 import { agreementUrl, incidentUrl, stopPropogation } from "../../../utilities/Utilities";
 
 Moment.locale("lt");
@@ -121,7 +121,7 @@ class CreateIncidentModal extends Component<
             .catch(this.handleError);
     };
 
-    private handleResponse = (response: IApiResponse<IFaultCreateResponse>) => {
+    private handleResponse = (response: IApiResponse<IIncidentCreateResponse>) => {
         if (response.errors !== undefined) {
             this.setState({ errors: response.errors, requesting: false });
         } else if (response.data !== undefined) {

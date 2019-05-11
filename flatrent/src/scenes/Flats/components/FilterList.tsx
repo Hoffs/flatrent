@@ -1,14 +1,12 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
+import "react-perfect-scrollbar/dist/css/styles.css";
 import { RouteComponentProps } from "react-router-dom";
+import Button from "../../../components/Button";
 import FlexRow from "../../../components/FlexRow";
 import { joined } from "../../../utilities/Utilities";
 import Styles from "./FilterList.module.css";
 import NumberFilterItem from "./NumberFilterItem";
 import TextFilterItem from "./TextFilterItem";
-import Button from "../../../components/Button";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
-
 
 interface IFlatFilterProps extends RouteComponentProps {
     onFilterUpdate: (filterString: string) => void;

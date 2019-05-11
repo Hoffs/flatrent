@@ -1,4 +1,4 @@
-import { IShortFaultDetails } from "./FaultInterfaces";
+import { IShortIncidentDetails } from "./IncidentInterfaces";
 
 export interface IInvoiceDetails {
     id: string;
@@ -10,5 +10,5 @@ export interface IInvoiceDetails {
     isPaid: boolean;
     isValid: boolean;
     isOverdue: boolean;
-    faults: IShortFaultDetails[];
+    incidents: IShortIncidentDetails[];
 }

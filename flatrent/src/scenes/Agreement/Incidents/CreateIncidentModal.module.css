@@ -48,6 +48,7 @@
 
 .createButton {
   background-color: var(--green-color);
+  flex-grow: 1;
 }
 
 .createButton:hover {
@@ -56,6 +57,10 @@
 
 .createButton {
   margin-right: 8px;
+}
+
+.closeButton {
+  flex-grow: 1;
 }
 
 .dropzone {

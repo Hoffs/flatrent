@@ -17,7 +17,7 @@ import FlexRow from "../../../components/FlexRow";
 import { InputForm } from "../../../components/InputForm";
 import { IAgreementDetails } from "../../../services/interfaces/AgreementInterfaces";
 import { IErrorResponse } from "../../../services/interfaces/Common";
-import { IShortFaultDetails } from "../../../services/interfaces/FaultInterfaces";
+import { IShortIncidentDetails } from "../../../services/interfaces/IncidentInterfaces";
 import { IInvoiceDetails } from "../../../services/interfaces/InvoiceInterfaces";
 import InvoiceService from "../../../services/InvoiceService";
 import UserService from "../../../services/UserService";
@@ -109,7 +109,7 @@ class InvoiceModal extends Component<
                         </span>
                         {payUntilOrPaid}
                         <span className={Styles.incidentTitle}>Įskaičiuoti incidentai:</span>
-                        {this.getInvoiceIncidents(invoice.faults)}
+                        {this.getInvoiceIncidents(invoice.incidents)}
                         <span className={Styles.price}>Suma: {invoice.amountToPay} Eur</span>
                         <InputForm className={Styles.errors} errorsOnly={true} errors={this.state.errors.general} />
                         <FlexRow>{buttons}</FlexRow>
@@ -158,7 +158,7 @@ class InvoiceModal extends Component<
         };
     };
 
-    private getInvoiceIncidents = (faults: IShortFaultDetails[]) => {
+    private getInvoiceIncidents = (faults: IShortIncidentDetails[]) => {
         if (faults.length === 0) {
             return (
                 <FlexRow key={0} className={Styles.incidentItem}>

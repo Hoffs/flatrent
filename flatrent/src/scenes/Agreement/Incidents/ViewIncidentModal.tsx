@@ -21,7 +21,7 @@ import { TextRowLoader } from "../../../components/Loaders";
 import IncidentService from "../../../services/IncidentService";
 import { IAgreementDetails } from "../../../services/interfaces/AgreementInterfaces";
 import { IApiResponse, IErrorResponse, IInputValues } from "../../../services/interfaces/Common";
-import { IFaultCreateResponse, IFaultDetails, IShortFaultDetails } from "../../../services/interfaces/FaultInterfaces";
+import { IIncidentCreateResponse, IIncidentDetails, IShortIncidentDetails } from "../../../services/interfaces/IncidentInterfaces";
 import UserService from "../../../services/UserService";
 import { agreementUrl, stopPropogation } from "../../../utilities/Utilities";
 
@@ -29,11 +29,11 @@ Moment.locale("lt");
 
 export interface IViewIncidentModalProps {
     agreement: IAgreementDetails;
-    incidents: IShortFaultDetails[];
+    incidents: IShortIncidentDetails[];
 }
 
 interface IViewIncidentModalState {
-    incident?: IFaultDetails;
+    incident?: IIncidentDetails;
     requesting: boolean;
     values: IInputValues;
     errors: IErrorResponse;
@@ -69,7 +69,7 @@ class ViewIncidentModal extends Component<
             const fixInput = [];
             if (UserService.userId() === incident.owner.id && !incident.repaired) {
                 buttons.push(
-                    <Button key={1} onClick={this.fixIncident} className={Styles.createButton}>
+                    <Button key={1} onClick={this.fixIncident} className={Styles.fixButton}>
                         Pažymėti sutaisytu
                     </Button>
                 );
@@ -129,8 +129,8 @@ class ViewIncidentModal extends Component<
         );
     }
 
-    private getIsRepaired = (incident: IShortFaultDetails) => (incident.repaired ? "Sutaisytas" : "Nesutaisytas");
-    private getPrice = (incident: IShortFaultDetails) => (incident.price === 0 ? "Nenustatyta" : incident.price);
+    private getIsRepaired = (incident: IShortIncidentDetails) => (incident.repaired ? "Sutaisytas" : "Nesutaisytas");
+    private getPrice = (incident: IShortIncidentDetails) => (incident.price === 0 ? "Nenustatyta" : incident.price);
 
     private handleUpdate = (name: string, value: string) =>
         this.setState((state) => ({ values: { ...state.values, [name]: value } }));
@@ -184,7 +184,7 @@ class ViewIncidentModal extends Component<
             .catch(this.handleError);
     };
 
-    private handleResponse = (response: IApiResponse<IFaultCreateResponse>) => {
+    private handleResponse = (response: IApiResponse<IIncidentCreateResponse>) => {
         if (response.errors !== undefined) {
             this.setState({ errors: response.errors, requesting: false });
         } else if (response.data !== undefined) {
