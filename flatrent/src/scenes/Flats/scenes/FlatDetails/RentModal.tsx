@@ -180,7 +180,7 @@ class RentModal extends Component<RouteComponentProps<{ id: string }> & IRentMod
 
     private isDayBlocked = (day: Moment.Moment): boolean => {
         if (this.state.focusedInput === "startDate") {
-            return day.isBefore(Moment().add(14, "days"));
+            return day.isBefore(Moment().add(3, "days"));
         }
         if (this.state.focusedInput === "endDate" && this.state.startDate !== null) {
             return day.isBefore(this.state.startDate);
@@ -196,7 +196,7 @@ class RentModal extends Component<RouteComponentProps<{ id: string }> & IRentMod
 
     private getInfo = () => (
         <>
-            <div className={Styles.infoInPicker}>Nuoma gali prasidėti už 14 d.</div>
+            <div className={Styles.infoInPicker}>Nuoma gali prasidėti už 3 d.</div>
             <div className={Styles.infoInPicker}>
                 Trumpiausias nuomos laikotarpis: {this.props.flat.minimumRentDays} d.
             </div>

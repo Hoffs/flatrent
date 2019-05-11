@@ -47,6 +47,8 @@ namespace FlatRent.Controllers
         {
             var agreement = await _repository.GetAsync(id);
             if (User.GetUserId() != agreement.TenantId) return Forbid();
+
+            // TODO: Move to BR
             if (agreement.Status.Id != AgreementStatus.Statuses.Accepted) return BadRequest();
 
             var (errors, incident) = await _incidentRepository.CreateAsync(id, form, User.GetUserId());

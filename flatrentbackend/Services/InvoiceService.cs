@@ -75,6 +75,8 @@ namespace FlatRent.Services
             // Check if last invoice was last absolute last, if yes, don't generate another one.
             var notInvoicedIncidents = agreement.Incidents.Where(Incident.NotInvoicedIncidentsFunc).ToList();
 
+            // TODO: Move to BR
+
             if (lastInvoice.InvoicedPeriodTo.Date == agreement.To.Date)
             {
                 if (notInvoicedIncidents.Count > 0)
@@ -89,6 +91,8 @@ namespace FlatRent.Services
             var dueDate = invoicedPeriodStart.AddDays(BusinessConstants.PaymentDueInDays).Date;
             var amountToPay = agreement.Price;
 
+            // TODO: Move to BR
+
             if (invoicedPeriodEnd > agreement.To.Date)
             {
                 invoicedPeriodEnd = agreement.To.Date;
@@ -97,6 +101,8 @@ namespace FlatRent.Services
                 var daysLeft = invoicedPeriodEnd.Subtract(invoicedPeriodStart.Date).Days;
                 amountToPay = (float) Math.Round(agreement.Price * ((float) daysLeft / BusinessConstants.RentMonthInDays), 2, MidpointRounding.AwayFromZero);
             }
+
+            // TODO: Move to BR
 
             // Calculate and add faults to invoice
             var faultPrice = notInvoicedIncidents.Sum(f => f.Price);
@@ -107,6 +113,8 @@ namespace FlatRent.Services
                 amountToPay += lastInvoice.AmountToPay;
             }
             lastInvoice.IsValid = false;
+
+            // TODO: Move to BR
 
             var invoice = new Invoice
             {

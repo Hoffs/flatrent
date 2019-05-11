@@ -97,14 +97,14 @@ namespace FlatRent.Controllers
                 return BadRequest(new FormError("To", string.Format(Errors.FlatRentPeriodGreater, BusinessConstants.MinRentPeriodDays)));
             }
 
+            // TODO: Move to Business Rule
+
             if (rentPeriod > BusinessConstants.MaxRentPeriodDays)
             {
                 return BadRequest(new FormError("To", string.Format(Errors.FlatRentPeriodLess, BusinessConstants.MaxRentPeriodDays)));
             }
 
             // TODO: Move to BR
-
-            // flat.IsRented ||
 
             if (flat.ActiveAgreement != null)
             {
@@ -117,6 +117,8 @@ namespace FlatRent.Controllers
             {
                 return BadRequest(new FormError(Errors.TenantCantBeOwner));
             }
+
+            // TODO: Move to BR
 
             if (flat.Agreements.Any(Agreement.RequestedAgreementByUserFunc(User.GetUserId())))
             {
@@ -133,22 +135,12 @@ namespace FlatRent.Controllers
                 StatusCode(201, new CreatedAgreementResponse(agreement.Id, agreement.Attachments)));
         }
 
-//        [AllowAnonymous]
-//        [ExactQueryParam("count", "offset")]
-//        [HttpGet]
-//        public Task<IActionResult> GetFlats([Range(0, int.MaxValue, ErrorMessage = Errors.Range)] int offset = 0, [FromQuery] FlatListFilters filters = null)
-//        {
-//            return GetFlats(false, offset);
-//        }
-
         [AllowAnonymous]
-//        [ExactQueryParam("rented", "count", "offset")]
         [HttpGet]
         public async Task<IActionResult> GetFlats([Range(0, int.MaxValue)] int offset = 0, [FromQuery] FlatListFilters filters = null)
         {
             var flats = _flatRepository.GetListAsync(20, offset, filters);
             var mappedFlats = _mapper.ProjectTo<ShortFlatDetails>(flats);
-//            Response.Headers.Add("X-Total-Count", (await _flatRepository.GetCountAsync().ConfigureAwait(false)).ToString());
             await Task.Delay(1500);
             return new OkObjectResult(mappedFlats);
         }
@@ -159,8 +151,6 @@ namespace FlatRent.Controllers
         public async Task<IActionResult> GetFlat([FromRoute] Guid id)
         {
             var flat = await _flatRepository.GetAsync(id).ConfigureAwait(false);
-            if (flat.AuthorId != HttpContext.User.GetUserId()) return NotFound(id); // Not published can be seen only by author
-            await Task.Delay(750);
             return new OkObjectResult(_mapper.Map<FlatDetails>(flat));
         }
     }

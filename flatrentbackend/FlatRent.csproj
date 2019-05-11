@@ -8,6 +8,7 @@
   <ItemGroup>
     <Folder Include="Entities\Interfaces\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="BusinessRules\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
