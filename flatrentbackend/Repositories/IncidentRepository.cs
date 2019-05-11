@@ -45,5 +45,10 @@ namespace FlatRent.Repositories
         {
             return base.DeleteAsync(entity);
         }
+
+        public Task<Incident> GetLoadedAsync(Guid incidentId)
+        {
+            return GetAsync(incidentId);
+        }
     }
 }

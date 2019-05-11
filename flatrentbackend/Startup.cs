@@ -101,6 +101,7 @@ namespace FlatRent
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IAgreementService, AgreementService>();
+            services.AddScoped<IIncidentService, IncidentService>();
 
             services.AddHostedService<AutoInvoicing>();
 

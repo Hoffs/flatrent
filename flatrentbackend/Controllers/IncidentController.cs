@@ -14,6 +14,7 @@ using FlatRent.Models.Dtos;
 using FlatRent.Models.Requests;
 using FlatRent.Models.Responses;
 using FlatRent.Repositories.Interfaces;
+using FlatRent.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -26,13 +27,15 @@ namespace FlatRent.Controllers
     {
         private readonly IAgreementRepository _repository;
         private readonly IIncidentRepository _incidentRepository;
+        private readonly IIncidentService _incidentService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public IncidentController(IAgreementRepository repository, IIncidentRepository incidentRepository, IMapper mapper, ILogger logger) : base(repository)
+        public IncidentController(IAgreementRepository repository, IIncidentRepository incidentRepository, IIncidentService incidentService, IMapper mapper, ILogger logger) : base(repository)
         {
             _repository = repository;
             _incidentRepository = incidentRepository;
+            _incidentService = incidentService;
             _mapper = mapper;
             _logger = logger;
         }
@@ -47,6 +50,11 @@ namespace FlatRent.Controllers
             if (agreement.Status.Id != AgreementStatus.Statuses.Accepted) return BadRequest();
 
             var (errors, incident) = await _incidentRepository.CreateAsync(id, form, User.GetUserId());
+            if (errors == null)
+            {
+                var loadedIncident = await _incidentRepository.GetLoadedAsync(incident.Id);
+                await _incidentService.SendIncidentEmail(loadedIncident);
+            }
             return OkOrBadRequest(errors, Ok(new CreatedIncidentResponse(incident.Id, incident.Attachments)));
         }
 

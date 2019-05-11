@@ -133,7 +133,6 @@
 
 .buttons {
   width: 100%;
-  flex-grow: 1;
 }
 
 .buttons:not(:last-of-type) {
@@ -143,7 +142,7 @@
 .accept {
   background-color: var(--green-color);
   margin-right: 8px;
-  flex-grow: 1;
+  width: 100%;
 }
 
 .accept:hover {

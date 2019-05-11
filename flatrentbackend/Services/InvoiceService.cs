@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FlatRent.Constants;
@@ -72,8 +73,14 @@ namespace FlatRent.Services
 
             var lastInvoice = agreement.Invoices.OrderByDescending(i => i.CreatedDate).First();
             // Check if last invoice was last absolute last, if yes, don't generate another one.
+            var notInvoicedIncidents = agreement.Incidents.Where(Incident.NotInvoicedIncidentsFunc).ToList();
+
             if (lastInvoice.InvoicedPeriodTo.Date == agreement.To.Date)
             {
+                if (notInvoicedIncidents.Count > 0)
+                {
+                    await GenerateOnlyIncidentInvoiceAsync(agreement, notInvoicedIncidents);
+                }
                 return;
             }
 
@@ -92,7 +99,6 @@ namespace FlatRent.Services
             }
 
             // Calculate and add faults to invoice
-            var notInvoicedIncidents = agreement.Incidents.Where(Incident.NotInvoicedIncidentsFunc).ToList();
             var faultPrice = notInvoicedIncidents.Sum(f => f.Price);
 
             // Add last invoice if it wasn't paid.
@@ -117,6 +123,31 @@ namespace FlatRent.Services
             if (errors != null)
             {
                 _logger.Error($"Received errors when generating invoice for agreement {agreementId}: {errors.GetFormattedResponse()}");
+            }
+
+            await SendInvoiceEmail(invoice);
+        }
+
+        private async Task GenerateOnlyIncidentInvoiceAsync(Agreement agreement, List<Incident> notInvoicedIncidents)
+        {
+            // Calculate and add faults to invoice
+            var faultPrice = notInvoicedIncidents.Sum(f => f.Price);
+
+            var invoice = new Invoice
+            {
+                AgreementId = agreement.Id,
+                AmountToPay = faultPrice,
+                Incidents = notInvoicedIncidents,
+                DueDate = DateTime.Today.AddDays(BusinessConstants.PaymentDueInDays),
+                InvoicedPeriodFrom = DateTime.Today,
+                InvoicedPeriodTo = DateTime.Today,
+                IsValid = true,
+            };
+
+            var errors = await _invoiceRepository.AddInvoiceTask(invoice);
+            if (errors != null)
+            {
+                _logger.Error($"Received errors when generating invoice for agreement {agreement.Id}: {errors.GetFormattedResponse()}");
             }
 
             await SendInvoiceEmail(invoice);
