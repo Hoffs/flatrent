@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FlatRent.BusinessRules;
 using FlatRent.Constants;
 using FlatRent.Controllers.Abstractions;
 using FlatRent.Controllers.Filters;
@@ -48,8 +49,8 @@ namespace FlatRent.Controllers
             var agreement = await _repository.GetAsync(id);
             if (User.GetUserId() != agreement.TenantId) return Forbid();
 
-            // TODO: Move to BR
-            if (agreement.Status.Id != AgreementStatus.Statuses.Accepted) return BadRequest();
+            var (passed, error) = IncidentRules.AgreementMustBeActive(agreement);
+            if (!passed) return BadRequest(error);
 
             var (errors, incident) = await _incidentRepository.CreateAsync(id, form, User.GetUserId());
             if (errors == null)

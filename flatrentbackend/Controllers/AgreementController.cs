@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FlatRent.BusinessRules;
 using FlatRent.Controllers.Abstractions;
 using FlatRent.Controllers.Filters;
 using FlatRent.Entities;
@@ -50,7 +51,7 @@ namespace FlatRent.Controllers
             var mapped = _mapper.Map<AgreementDetails>(agreement);
 
             // Don't show email and phone if agreement wasn't accepted.
-            // POSSIBLE BUSINESS RULE
+            // TODO: Move to BR
             if (mapped.Status.Id != AgreementStatus.Statuses.Accepted)
             {
                 mapped.Owner.Email = "";
@@ -66,9 +67,9 @@ namespace FlatRent.Controllers
         [MustBeEntityAuthor]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            // TODO: Move to BR
             var agreement = await _repository.GetAsync(id);
-            if (agreement.StatusId != AgreementStatus.Statuses.Requested) return BadRequest();
+            var (passed, error) = AgreementLifetimeRules.CanDeleteOnlyWhenRequested(agreement);
+            if (!passed) return BadRequest(error);
 
             var errors = await _repository.DeleteAsync(id).ConfigureAwait(false);
             if (errors != null)
@@ -87,8 +88,8 @@ namespace FlatRent.Controllers
             var agreement = await _repository.GetAsync(id);
             if (agreement.Flat.AuthorId != User.GetUserId()) return Forbid();
 
-            // TODO: Move to BR
-            if (agreement.StatusId != AgreementStatus.Statuses.Requested) return BadRequest();
+            var (passed, error) = AgreementLifetimeRules.CanAcceptOnlyWhenRequested(agreement);
+            if (!passed) return BadRequest(error);
 
             agreement.StatusId = AgreementStatus.Statuses.Accepted;
             var errors = await _repository.UpdateAsync(agreement);
@@ -96,7 +97,6 @@ namespace FlatRent.Controllers
             {
                 return BadRequest(errors);
             }
-
 
             // Update other agreement to rejected.
             try
@@ -128,7 +128,8 @@ namespace FlatRent.Controllers
             if (agreement.Flat.AuthorId != User.GetUserId()) return Forbid();
 
             // TODO: Move to BR
-            if (agreement.StatusId != AgreementStatus.Statuses.Requested) return BadRequest();
+            var (passed, error) = AgreementLifetimeRules.CanRejectOnlyWhenRequested(agreement);
+            if (!passed) return BadRequest(error);
 
             agreement.StatusId = AgreementStatus.Statuses.Rejected;
             var errors = await _repository.UpdateAsync(agreement);

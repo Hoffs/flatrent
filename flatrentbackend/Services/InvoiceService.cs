@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FlatRent.BusinessRules;
 using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Extensions;
@@ -72,13 +73,12 @@ namespace FlatRent.Services
             }
 
             var lastInvoice = agreement.Invoices.OrderByDescending(i => i.CreatedDate).First();
-            // Check if last invoice was last absolute last, if yes, don't generate another one.
             var notInvoicedIncidents = agreement.Incidents.Where(Incident.NotInvoicedIncidentsFunc).ToList();
 
-            // TODO: Move to BR
-
+            // Check if last invoice was last absolute last, if yes, don't generate another one.
             if (lastInvoice.InvoicedPeriodTo.Date == agreement.To.Date)
             {
+                // TODO: Move to BR
                 if (notInvoicedIncidents.Count > 0)
                 {
                     await GenerateOnlyIncidentInvoiceAsync(agreement, notInvoicedIncidents);
@@ -86,46 +86,24 @@ namespace FlatRent.Services
                 return;
             }
 
-            var invoicedPeriodStart = lastInvoice.InvoicedPeriodTo.Date.AddDays(1).Date;
-            var invoicedPeriodEnd = invoicedPeriodStart.AddDays(BusinessConstants.RentMonthInDays).Date;
-            var dueDate = invoicedPeriodStart.AddDays(BusinessConstants.PaymentDueInDays).Date;
-            var amountToPay = agreement.Price;
-
-            // TODO: Move to BR
-
-            if (invoicedPeriodEnd > agreement.To.Date)
-            {
-                invoicedPeriodEnd = agreement.To.Date;
-                dueDate = agreement.To.Date;
-
-                var daysLeft = invoicedPeriodEnd.Subtract(invoicedPeriodStart.Date).Days;
-                amountToPay = (float) Math.Round(agreement.Price * ((float) daysLeft / BusinessConstants.RentMonthInDays), 2, MidpointRounding.AwayFromZero);
-            }
-
-            // TODO: Move to BR
-
-            // Calculate and add faults to invoice
-            var faultPrice = notInvoicedIncidents.Sum(f => f.Price);
-
-            // Add last invoice if it wasn't paid.
-            if (!lastInvoice.IsPaid)
-            {
-                amountToPay += lastInvoice.AmountToPay;
-            }
-            lastInvoice.IsValid = false;
-
-            // TODO: Move to BR
-
             var invoice = new Invoice
             {
                 AgreementId = agreementId,
-                AmountToPay = faultPrice + amountToPay,
                 Incidents = notInvoicedIncidents,
-                DueDate = dueDate,
-                InvoicedPeriodFrom = invoicedPeriodStart,
-                InvoicedPeriodTo = invoicedPeriodEnd,
+                DueDate = lastInvoice.InvoicedPeriodTo.Date.AddDays(1).AddDays(BusinessConstants.PaymentDueInDays).Date,
+                InvoicedPeriodFrom = lastInvoice.InvoicedPeriodTo.Date.AddDays(1).Date,
+                InvoicedPeriodTo = lastInvoice.InvoicedPeriodTo.Date.AddDays(1).AddDays(BusinessConstants.RentMonthInDays).Date,
                 IsValid = true,
+                AmountToPay = 0,
             };
+
+
+            InvoiceRules.AddPreviousInvoiceIfNotPaid(invoice, lastInvoice, agreement);
+
+            InvoiceRules.CalculatePriceForPeriodIfShorterThan30(invoice, agreement);
+
+            InvoiceRules.AddEachNotInvoicedRepairedIncident(invoice, agreement);
+
 
             var errors = await _invoiceRepository.AddAndUpdateTask(invoice, lastInvoice);
             if (errors != null)

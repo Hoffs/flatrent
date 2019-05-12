@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FlatRent.BusinessRules;
 using FlatRent.Entities;
 using FlatRent.Repositories.Interfaces;
 using FlatRent.Services.Interfaces;
@@ -27,10 +28,15 @@ namespace FlatRent.BackgroundServices
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                await CheckEndedAgreements();
-                await CheckExpiredAgreements();
+                await CheckAgreements();
                 await Task.Delay(TimeSpan.FromHours(6), cancellationToken);
             }
+        }
+
+        private async Task CheckAgreements()
+        {
+            await CheckEndedAgreements();
+            await CheckExpiredAgreements();
         }
 
         private async Task CheckEndedAgreements()
@@ -39,14 +45,10 @@ namespace FlatRent.BackgroundServices
             {
                 _logger.Information($"Checking ended agreements");
                 var repository = scope.ServiceProvider.GetService<IAgreementRepository>();
-                var queryable = repository.GetQueryable();
-                var ended = queryable.Where(a =>
-                    a.To < DateTime.Today && a.StatusId == AgreementStatus.Statuses.Accepted && !a.Deleted).ToList();
-                foreach (var agreement in ended)
+                var (passed, error) = await AgreementLifetimeRules.DayAfterAgreementEndShouldBeSetToEnded(repository);
+                if (!passed)
                 {
-                    agreement.StatusId = AgreementStatus.Statuses.Ended;
-                    await repository.UpdateAsync(agreement);
-                    _logger.Information($"Ended agreement {agreement.Id}");
+                    _logger.Error($"Error occured while ending agreements, {error}");
                 }
             }
         }
@@ -57,14 +59,10 @@ namespace FlatRent.BackgroundServices
             {
                 _logger.Information($"Checking expired agreements");
                 var repository = scope.ServiceProvider.GetService<IAgreementRepository>();
-                var queryable = repository.GetQueryable();
-                var expired = queryable.Where(a =>
-                    a.From < DateTime.Today && a.StatusId == AgreementStatus.Statuses.Requested && !a.Deleted).ToList();
-                foreach (var agreement in expired)
+                var (passed, error) = await AgreementLifetimeRules.DayAfterAgreementStartShouldBeSetToExpired(repository);
+                if (!passed)
                 {
-                    agreement.StatusId = AgreementStatus.Statuses.Expired;
-                    await repository.UpdateAsync(agreement);
-                    _logger.Information($"Expired agreement {agreement.Id}");
+                    _logger.Error($"Error occured while expiring agreements, {error}");
                 }
             }
         }

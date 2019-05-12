@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FlatRent.BusinessRules;
 using FlatRent.Constants;
 using FlatRent.Controllers.Abstractions;
 using FlatRent.Controllers.Attributes;
@@ -89,37 +90,19 @@ namespace FlatRent.Controllers
         {
             var flat = await _flatRepository.GetAsync(id);
 
-            // TODO: Move to Business Rule
+            var (passed, error) = RuleChecker.Check(
+                () => AgreementRequestRules.PeriodMustBeLongerOrEqualToSpecified(flat, form),
+                () => AgreementRequestRules.PeriodMustBeShorterOrEqualToMaximum(flat, form),
+                () => AgreementRequestRules.FlatMustHaveAtMostOneActiveAgreement(flat),
+                () => AgreementRequestRules.TenantCantBeOwner(flat, User.GetUserId())
+            );
 
-            var rentPeriod = TimeSpan.FromTicks(form.To.Date.Ticks - form.From.Date.Ticks).Days;
-            if (rentPeriod < flat.MinimumRentDays)
+            if (!passed)
             {
-                return BadRequest(new FormError("To", string.Format(Errors.FlatRentPeriodGreater, BusinessConstants.MinRentPeriodDays)));
-            }
-
-            // TODO: Move to Business Rule
-
-            if (rentPeriod > BusinessConstants.MaxRentPeriodDays)
-            {
-                return BadRequest(new FormError("To", string.Format(Errors.FlatRentPeriodLess, BusinessConstants.MaxRentPeriodDays)));
+                return BadRequest(error);
             }
 
             // TODO: Move to BR
-
-            if (flat.ActiveAgreement != null)
-            {
-                return BadRequest(new FormError(Errors.FlatNotAvailableForRent));
-            }
-
-            // TODO: Move to BR
-
-            if (User.GetUserId() == flat.AuthorId)
-            {
-                return BadRequest(new FormError(Errors.TenantCantBeOwner));
-            }
-
-            // TODO: Move to BR
-
             if (flat.Agreements.Any(Agreement.RequestedAgreementByUserFunc(User.GetUserId())))
             {
                 return BadRequest(new FormError(Errors.AlreadyRequested));

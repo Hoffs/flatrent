@@ -29,7 +29,7 @@ namespace FlatRent.Entities
 
         [NotMapped]
         public static Func<Incident, bool> NotInvoicedIncidentsFunc =>
-            (incident) => incident.Repaired && incident.InvoiceId == null;
+            (incident) => incident.Repaired && incident.InvoiceId == null && !incident.Deleted;
 
         [ForeignKey("Conversation")]
         public Guid ConversationId { get; set; }
