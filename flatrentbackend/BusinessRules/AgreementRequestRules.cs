@@ -12,7 +12,7 @@ namespace FlatRent.BusinessRules
         public static (bool, FormError) PeriodMustBeLongerOrEqualToSpecified(Flat flat, AgreementForm form)
         {
             var rentPeriod = TimeSpan.FromTicks(form.To.Date.Ticks - form.From.Date.Ticks).Days;
-            if (rentPeriod < flat.MinimumRentDays)
+            if (rentPeriod >= flat.MinimumRentDays)
             {
                 return (true, null);
             }

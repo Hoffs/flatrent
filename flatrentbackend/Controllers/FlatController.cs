@@ -124,7 +124,6 @@ namespace FlatRent.Controllers
         {
             var flats = _flatRepository.GetListAsync(20, offset, filters);
             var mappedFlats = _mapper.ProjectTo<ShortFlatDetails>(flats);
-            await Task.Delay(1500);
             return new OkObjectResult(mappedFlats);
         }
 

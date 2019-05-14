@@ -23,12 +23,12 @@ namespace FlatRent.Profiles
 //                .ForMember(x => x.Flats, opt => opt.MapFrom(o => o.Flats.Where(f => !f.Deleted).OrderByDescending(f => f.CreatedDate)))
                 .ForMember(x => x.TenantAgreementCount,
                     opt => opt.MapFrom(
-                        o => o.TenantAgreements.Where(
+                        o => o.TenantAgreements.Count(
                             a => a.StatusId == AgreementStatus.Statuses.Accepted ||
                                  a.StatusId == AgreementStatus.Statuses.Ended)))
                 .ForMember(x => x.OwnerAgreementCount,
                     opt => opt.MapFrom(
-                        o => o.OwnerAgreements.Where(
+                        o => o.OwnerAgreements.Count(
                             a => a.StatusId == AgreementStatus.Statuses.Accepted ||
                                  a.StatusId == AgreementStatus.Statuses.Ended)));
 

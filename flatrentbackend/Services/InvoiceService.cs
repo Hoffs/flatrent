@@ -72,10 +72,9 @@ namespace FlatRent.Services
                 throw new ArgumentException("Agreement doesn't exist or is not accepted.", nameof(agreementId));
             }
 
-            var lastInvoice = agreement.Invoices.OrderByDescending(i => i.CreatedDate).First();
+            var lastInvoice = agreement.Invoices.Where(i => !i.Deleted).OrderByDescending(i => i.InvoicedPeriodTo).First();
             var notInvoicedIncidents = agreement.Incidents.Where(Incident.NotInvoicedIncidentsFunc).ToList();
 
-            // Check if last invoice was last absolute last, if yes, don't generate another one.
             if (lastInvoice.InvoicedPeriodTo.Date == agreement.To.Date)
             {
                 // TODO: Move to BR
@@ -97,20 +96,14 @@ namespace FlatRent.Services
                 AmountToPay = 0,
             };
 
-
             InvoiceRules.AddPreviousInvoiceIfNotPaid(invoice, lastInvoice, agreement);
-
             InvoiceRules.CalculatePriceForPeriodIfShorterThan30(invoice, agreement);
-
             InvoiceRules.AddEachNotInvoicedRepairedIncident(invoice, agreement);
-
-
             var errors = await _invoiceRepository.AddAndUpdateTask(invoice, lastInvoice);
             if (errors != null)
             {
                 _logger.Error($"Received errors when generating invoice for agreement {agreementId}: {errors.GetFormattedResponse()}");
             }
-
             await SendInvoiceEmail(invoice);
         }
 
@@ -124,9 +117,9 @@ namespace FlatRent.Services
                 AgreementId = agreement.Id,
                 AmountToPay = faultPrice,
                 Incidents = notInvoicedIncidents,
-                DueDate = DateTime.Today.AddDays(BusinessConstants.PaymentDueInDays),
-                InvoicedPeriodFrom = DateTime.Today,
-                InvoicedPeriodTo = DateTime.Today,
+                DueDate = agreement.To.AddDays(BusinessConstants.PaymentDueInDays),
+                InvoicedPeriodFrom = agreement.To,
+                InvoicedPeriodTo = agreement.To,
                 IsValid = true,
             };
 
