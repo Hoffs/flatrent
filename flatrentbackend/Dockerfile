@@ -10,5 +10,4 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS runtime
 COPY --from=build /opt/app/build/published /opt/app
 WORKDIR /opt/app
 EXPOSE 5000/tcp
-EXPOSE 5001/tcp
 ENTRYPOINT ["dotnet", "FlatRent.dll"]

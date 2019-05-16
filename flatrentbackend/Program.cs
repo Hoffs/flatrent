@@ -15,7 +15,6 @@ namespace FlatRent
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("https://0.0.0.0:5001;http://0.0.0.0:5000")
                 .UseStartup<Startup>()
                 .ConfigureKestrel(opts => opts.ConfigureEndpointDefaults(op => op.Protocols = HttpProtocols.Http1AndHttp2))
                 .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration.ReadFrom
