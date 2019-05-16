@@ -6,9 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Interfaces\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="wwwroot\" />
+    <Content Include="Files\*.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
+    </Content>
+    <Content Include="Files\*.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

@@ -55,7 +55,7 @@ class CreateFlat extends Component<RouteComponentProps<{ id: string }>, ICreateF
         const { errors } = this.state;
         return (
             <FlexColumn className={Styles.content}>
-                <span className={Styles.title}>Sukurti naują buto įrašą</span>
+                <span className={Styles.title}>Redaguoti buto įrašą</span>
                 <InputForm
                     value={""}
                     errors={errors.general}

@@ -1,0 +1,23 @@
+version: '3.1'
+
+services:
+  web:
+    build: .
+    ports:
+      - "0.0.0.0:5000:80/tcp"
+      - "0.0.0.0:5001:443/tcp"
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__DataContext=Host=db;Port=5432;Database=flatrent;User Id=postgres;Password=cosytest;
+      - Mailgun__APIKey=${MAILGUN_KEY}
+      - VIRTUAL_HOST=cosy.maslinskas.lt
+      - LETSENCRYPT_HOST=cosy.maslinskas.lt
+      - LETSENCRYPT_EMAIL=ignasmaslinskas@gmail.com
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: cosytest

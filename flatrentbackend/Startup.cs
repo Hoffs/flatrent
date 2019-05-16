@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -52,8 +53,11 @@ namespace FlatRent
         {
             services.AddAutoMapper(typeof(AgreementsMapperProfile), typeof(ConversationMapperProfile), typeof(IncidentMapperProfile), typeof(FileMapperProfile), typeof(FlatMapperProfile), typeof(InvoiceMapperProfile), typeof(UserMapperProfile));
             services.AddSingleton(Log.Logger);
-//            services.AddDbContext<DataContext>(opts => opts.UseNpgsql(Configuration.GetConnectionString("DataContext")).UseLazyLoadingProxies());
-            services.AddDbContext<DataContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("DataContext")).UseLazyLoadingProxies());
+            if (Configuration["IsPgsql"] == "y") {
+                services.AddDbContext<DataContext>(opts => opts.UseNpgsql(Configuration.GetConnectionString("DataContext")).UseLazyLoadingProxies());
+            } else {
+                services.AddDbContext<DataContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("DataContext")).UseLazyLoadingProxies());
+            }
 
             services.AddAuthorization(options =>
             {
@@ -66,6 +70,8 @@ namespace FlatRent
                         new RolesAuthorizationRequirement(new[] { UserType.Administrator.Role, UserType.User.Role }))
                 );
             });
+
+            
 
             services.AddAuthentication(x =>
             {
@@ -163,9 +169,14 @@ namespace FlatRent
                 c.DisplayOperationId();
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "FlatRent API V1");
             });
-
+            
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+            
             app.UseCors(x => x
-                .WithOrigins("http://localhost:5000", "https://localhost:5001", "http://localhost:3000", "http://192.168.1.204:3000")
+                .AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials());
