@@ -11,35 +11,59 @@ namespace FlatRent.BusinessRules.Builder
     {
         public static void Test()
         {
-            var rule = new IfThenElseRule(RuleCondition.FromFunc(_ => 4 == 4),
-                new IfThenElseRule(RuleCondition.FromFunc(
-                    (o => ((string) o) == "asdf")), 
-                    RuleAction.FromAct(o => Log.Information((string)o)), 
-                    RuleAction.FromAct(_ => Log.Information("elsedeep"))),
-                RuleAction.FromFunc(o =>
-                {
-                    Log.Information((string) o);
-                    return "b";
-                }));
+//            var rule = new IfThenElseRule(RuleCondition.FromFunc(_ => 4 == 4),
+//                new IfThenElseRule(RuleCondition.FromFunc(
+//                    (o => ((string) o) == "asdf")), 
+//                    RuleAction.FromAct(o => Log.Information((string)o)), 
+//                    RuleAction.FromAct(_ => Log.Information("elsedeep"))),
+//                RuleAction.FromFunc(o =>
+//                {
+//                    Log.Information((string) o);
+//                    return "b";
+//                }));
 
             var rule2 = RuleBuilder
-                .If(ob => ((Flat) ob).Price > 400)
-                    .ThenIf(ob => ((Flat) ob).Price > 600)
-                        .Then(ob => ((Flat) ob).Area = 100)
-                    .ElseIf(ob => ((Flat) ob).Price < 550)
-                        .Then(ob => ((Flat) ob).Area = 80)
+                .If<Flat, RuleResult>(ob => ob.Price > 400)
+                    .Do(ob => ob.Price = 900)
+                    .ThenIf(ob => ob.Price > 600)
+                        .Then(ob => ob.Area = 100)
+                    .ElseIf(ob => ob.Price < 550)
+                        .Then(ob => ob.Area = 80)
                         .EndIf()
                     .EndIf()
-                .Else(ob => ((Flat) ob).Area = 40)
+                .Else(ob => ob.Area = 40)
             .Build();
 
-            var usingOtherRule = RuleBuilder.If(ob => ((Flat) ob).Price > 300)
+            var usingOtherRule = RuleBuilder.If<Flat, RuleResult>(ob => ob.Price > 300)
                 .Then(rule2).Build();
 
             var fl = new Flat();
             fl.Price = 500;
-            usingOtherRule.Execute(fl);
+            var rr = usingOtherRule.Execute(fl);
             Log.Information(fl.Area.ToString());
+        }
+
+        public static void DoStuff(Flat ob)
+        {
+            if (ob.Price > 300)
+            {
+                if (ob.Price > 400)
+                {
+                    ob.Price = 900;
+                    if (ob.Price > 600)
+                    {
+                        ob.Area = 100;
+                    }
+                    else if (ob.Price < 550)
+                    {
+                        ob.Area = 80;
+                    }
+                } 
+                else
+                {
+                    ob.Area = 40;
+                }
+            }
         }
     }
 }

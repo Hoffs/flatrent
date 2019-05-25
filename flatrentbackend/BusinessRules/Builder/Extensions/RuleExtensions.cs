@@ -7,22 +7,22 @@ namespace FlatRent.BusinessRules.Builder.Extensions
     {
         #region If
 
-        public static IRule If(this IRule rule, IRuleCondition condition)
+        public static IRule<TIn, TOut> If<TIn, TOut>(this IRule<TIn, TOut> rule, IRuleCondition<TIn> condition) where TIn : class where TOut : class
         {
             if (rule.If != null) throw new InvalidOperationException("If was already set");
             rule.If = condition;
             return rule;
         }
 
-        public static IRule If(this IRule rule, Func<object, bool> condition)
+        public static IRule<TIn, TOut> If<TIn, TOut>(this IRule<TIn, TOut> rule, Func<TIn, bool>  condition) where TIn : class where TOut : class
         {
             rule.If(RuleCondition.FromFunc(condition));
             return rule;
         }
 
-        public static IRule EndIf(this IRule rule)
+        public static IRule<TIn, TOut> EndIf<TIn, TOut>(this IRule<TIn, TOut> rule) where TIn : class where TOut : class
         {
-            if (rule.Else == null) rule.Else = RuleAction.DoNothing;
+            if (rule.Else == null) rule.Else = RuleAction.DoNothing<TIn, TOut>();
             return rule.Parent;
         }
 
@@ -32,7 +32,7 @@ namespace FlatRent.BusinessRules.Builder.Extensions
 
         #region Then
 
-        public static IRule Then(this IRule rule, IRuleAction thenAction)
+        public static IRule<TIn, TOut> Then<TIn, TOut>(this IRule<TIn, TOut> rule, IRuleAction<TIn, TOut> thenAction) where TIn : class where TOut : class
         {
             if (rule.If == null) throw new InvalidOperationException("If was not set when calling Then");
             if (rule.Then != null) throw new InvalidOperationException("Then was already set");
@@ -40,16 +40,16 @@ namespace FlatRent.BusinessRules.Builder.Extensions
             return rule;
         }
 
-        public static IRule Then(this IRule rule)
+        public static IRule<TIn, TOut> Then<TIn, TOut>(this IRule<TIn, TOut> rule) where TIn : class where TOut : class
         {
-            var newRule = new IfThenElseRule(rule);
+            var newRule = new IfThenElseRule<TIn, TOut>(rule);
             rule.Then(newRule);
             return newRule;
         }
 
-        public static IRule ThenIf(this IRule rule, Func<object, bool> condition)
+        public static IRule<TIn, TOut> ThenIf<TIn, TOut>(this IRule<TIn, TOut> rule, Func<TIn, bool>  condition) where TIn : class where TOut : class
         {
-            var newRule = new IfThenElseRule(rule);
+            var newRule = new IfThenElseRule<TIn, TOut>(rule);
             newRule.If(condition);
 
             rule.Then(newRule);
@@ -57,14 +57,14 @@ namespace FlatRent.BusinessRules.Builder.Extensions
             return newRule;
         }
 
-        public static IRule Then(this IRule rule, Func<object, object> action)
+        public static IRule<TIn, TOut> Then<TIn, TOut>(this IRule<TIn, TOut> rule, Func<TIn, TOut> action) where TIn : class where TOut : class
         {
             return rule.Then(RuleAction.FromFunc(action));
         }
 
-        public static IRule Then(this IRule rule, Action<object> action)
+        public static IRule<TIn, TOut> Then<TIn, TOut>(this IRule<TIn, TOut> rule, Action<TIn> action) where TIn : class where TOut : class
         {
-            return rule.Then(RuleAction.FromAct(action));
+            return rule.Then(RuleAction.FromAct<TIn, TOut>(action));
         }
 
         #endregion
@@ -73,7 +73,7 @@ namespace FlatRent.BusinessRules.Builder.Extensions
 
         #region Else
 
-        public static IRule Else(this IRule rule, IRuleAction action)
+        public static IRule<TIn, TOut> Else<TIn, TOut>(this IRule<TIn, TOut> rule, IRuleAction<TIn, TOut> action) where TIn : class where TOut : class
         {
             if (rule.Then == null) throw new InvalidOperationException("Then was not set when calling Else");
             if (rule.Else != null) throw new InvalidOperationException("Else was already set");
@@ -81,26 +81,26 @@ namespace FlatRent.BusinessRules.Builder.Extensions
             return rule;
         }
 
-        public static IRule Else(this IRule rule, Func<object, object> action)
+        public static IRule<TIn, TOut> Else<TIn, TOut>(this IRule<TIn, TOut> rule, Func<TIn, TOut> action) where TIn : class where TOut : class
         {
             return rule.Else(RuleAction.FromFunc(action));
         }
 
-        public static IRule Else(this IRule rule, Action<object> action)
+        public static IRule<TIn, TOut> Else<TIn, TOut>(this IRule<TIn, TOut> rule, Action<TIn> action) where TIn : class where TOut : class
         {
-            return rule.Else(RuleAction.FromAct(action));
+            return rule.Else(RuleAction.FromAct<TIn, TOut>(action));
         }
 
-        public static IRule Else(this IRule rule)
+        public static IRule<TIn, TOut> Else<TIn, TOut>(this IRule<TIn, TOut> rule) where TIn : class where TOut : class
         {
-            var newRule = new IfThenElseRule(rule);
+            var newRule = new IfThenElseRule<TIn, TOut>(rule);
             rule.Else(newRule);
             return newRule;
         }
 
-        public static IRule ElseIf(this IRule rule, Func<object, bool> condition)
+        public static IRule<TIn, TOut> ElseIf<TIn, TOut>(this IRule<TIn, TOut> rule, Func<TIn, bool>  condition) where TIn : class where TOut : class
         {
-            var newRule = new IfThenElseRule(rule);
+            var newRule = new IfThenElseRule<TIn, TOut>(rule);
             newRule.If(condition);
             
             rule.Else(newRule);
@@ -110,9 +110,19 @@ namespace FlatRent.BusinessRules.Builder.Extensions
 
         #endregion
 
+        #region DoAction
+
+        public static IRule<TIn, TOut> Do<TIn, TOut>(this IRule<TIn, TOut> rule, Action<TIn> action) where TIn : class where TOut : class
+        {
+            if (rule.DoAction != null) throw new InvalidOperationException("DoAction was already set");
+            rule.DoAction = action;
+            return rule;
+        }
+
+        #endregion
 
 
-        public static IRuleAction Build(this IRule rule)
+        public static IRuleAction<TIn, TOut> Build<TIn, TOut>(this IRule<TIn, TOut> rule) where TIn : class where TOut : class
         {
             var rootRule = rule;
             while (rootRule.Parent != null)

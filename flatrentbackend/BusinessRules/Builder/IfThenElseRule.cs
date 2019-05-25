@@ -3,14 +3,15 @@ using FlatRent.BusinessRules.Builder.Interfaces;
 
 namespace FlatRent.BusinessRules.Builder
 {
-    public class IfThenElseRule : IRule
+    public class IfThenElseRule<TIn, TOut> : IRule<TIn, TOut> where TIn : class where TOut : class
     {
-        public IRule Parent { get; }
-        public IRuleCondition If { get; set; }
-        public IRuleAction Then { get; set; }
-        public IRuleAction Else { get; set; }
+        public IRule<TIn, TOut> Parent { get; }
+        public IRuleCondition<TIn> If { get; set; }
+        public Action<TIn> DoAction { get; set; }
+        public IRuleAction<TIn, TOut> Then { get; set; }
+        public IRuleAction<TIn, TOut> Else { get; set; }
 
-        public IfThenElseRule(IRule parent, IRuleCondition @if, IRuleAction then, IRuleAction @else)
+        public IfThenElseRule(IRule<TIn, TOut> parent, IRuleCondition<TIn> @if, IRuleAction<TIn, TOut> then, IRuleAction<TIn, TOut> @else)
         {
             Parent = parent;
             If = @if;
@@ -18,20 +19,22 @@ namespace FlatRent.BusinessRules.Builder
             Else = @else;
         }
 
-        public IfThenElseRule(IRuleCondition @if, IRuleAction then, IRuleAction @else)
+        public IfThenElseRule(IRuleCondition<TIn> @if, IRuleAction<TIn, TOut> then, IRuleAction<TIn, TOut> @else)
         {
             If = @if;
             Then = then;
             Else = @else;
         }
 
-        public IfThenElseRule(IRule parent)
+        public IfThenElseRule(IRule<TIn, TOut> parent)
         {
             Parent = parent;
         }
 
-        public object Execute(object o)
+        public TOut Execute(TIn o)
         {
+            DoAction?.Invoke(o);
+
             if (If == null) throw new InvalidOperationException("If was not set when executing Rule");
             if (If.IsTrue(o))
             {

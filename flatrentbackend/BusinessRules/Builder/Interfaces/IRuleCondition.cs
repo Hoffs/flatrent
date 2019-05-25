@@ -1,7 +1,7 @@
 ﻿namespace FlatRent.BusinessRules.Builder.Interfaces
 {
-    public interface IRuleCondition
+    public interface IRuleCondition<in TIn>
     {
-        bool IsTrue(object ob);
+        bool IsTrue(TIn ob);
     }
 }
