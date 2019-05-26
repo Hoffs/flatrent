@@ -7,7 +7,7 @@ namespace FlatRent.BusinessRules
         public static readonly RuleResult Success = new RuleResult(true);
         public static RuleResult Failed(FormError f) => new RuleResult(false, f);
 
-        private RuleResult(bool passed, FormError error = null)
+        public RuleResult(bool passed, FormError error = null)
         {
             Passed = passed;
             Error = error;

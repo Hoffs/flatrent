@@ -1,4 +1,7 @@
 ﻿using System;
+using FlatRent.BusinessRules.Builder;
+using FlatRent.BusinessRules.Builder.Extensions;
+using FlatRent.BusinessRules.Builder.Interfaces;
 using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Models;
@@ -45,6 +48,12 @@ namespace FlatRent.BusinessRules
             return (false, new FormError(Errors.FlatNotAvailableForRent));
         }
 
+        public static IRule<Agreement, RuleResult> FlatOneActiveAgreementRule =
+            RuleBuilder
+                .If<Agreement, RuleResult>(agreement => agreement.Flat.ActiveAgreement != null)
+                    .ReturnThen(true)
+                    .ReturnElse(false, new FormError(Errors.FlatNotAvailableForRent));
+
         /// Business Rule: DP.1.1.
         public static (bool, FormError) TenantCantBeOwner(Flat flat, Guid tenantId)
         {
@@ -55,5 +64,13 @@ namespace FlatRent.BusinessRules
 
             return (false, new FormError(Errors.TenantCantBeOwner));
         }
+
+        public static IRule<Agreement, RuleResult> TenantCantBeOwnerRule =
+            RuleBuilder
+                .If<Agreement, RuleResult>(agreement => agreement.AuthorId != agreement.Flat.AuthorId)
+                    .ReturnThen(true)
+                    .ReturnElse(false, new FormError(Errors.TenantCantBeOwner));
+
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using FlatRent.BusinessRules.Builder.Interfaces;
+using FlatRent.Models;
 
 namespace FlatRent.BusinessRules.Builder.Extensions
 {
@@ -35,7 +36,6 @@ namespace FlatRent.BusinessRules.Builder.Extensions
         public static IRule<TIn, TOut> Then<TIn, TOut>(this IRule<TIn, TOut> rule, IRuleAction<TIn, TOut> thenAction) where TIn : class where TOut : class
         {
             if (rule.If == null) throw new InvalidOperationException("If was not set when calling Then");
-            if (rule.Then != null) throw new InvalidOperationException("Then was already set");
             rule.Then = thenAction;
             return rule;
         }
@@ -76,7 +76,6 @@ namespace FlatRent.BusinessRules.Builder.Extensions
         public static IRule<TIn, TOut> Else<TIn, TOut>(this IRule<TIn, TOut> rule, IRuleAction<TIn, TOut> action) where TIn : class where TOut : class
         {
             if (rule.Then == null) throw new InvalidOperationException("Then was not set when calling Else");
-            if (rule.Else != null) throw new InvalidOperationException("Else was already set");
             rule.Else = action;
             return rule;
         }
@@ -114,8 +113,23 @@ namespace FlatRent.BusinessRules.Builder.Extensions
 
         public static IRule<TIn, TOut> Do<TIn, TOut>(this IRule<TIn, TOut> rule, Action<TIn> action) where TIn : class where TOut : class
         {
-            if (rule.DoAction != null) throw new InvalidOperationException("DoAction was already set");
             rule.DoAction = action;
+            return rule;
+        }
+
+        #endregion
+
+        #region StopAction
+
+        public static IRule<TIn, RuleResult> ReturnThen<TIn>(this IRule<TIn, RuleResult> rule, bool result, FormError error = null) where TIn : class 
+        {
+            rule.Then = RuleAction.FromFunc<TIn, RuleResult>((_) => new RuleResult(result, error));
+            return rule;
+        }
+
+        public static IRule<TIn, RuleResult> ReturnElse<TIn>(this IRule<TIn, RuleResult> rule, bool result, FormError error = null) where TIn : class
+        {
+            rule.Else = RuleAction.FromFunc<TIn, RuleResult>((_) => new RuleResult(result, error));
             return rule;
         }
 

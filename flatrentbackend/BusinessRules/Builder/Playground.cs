@@ -1,6 +1,7 @@
 ﻿using System;
 using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using FlatRent.BusinessRules.Builder.Extensions;
+using FlatRent.BusinessRules.Inference.Terms;
 using FlatRent.Entities;
 using Serilog;
 using Serilog.Core;
@@ -26,7 +27,11 @@ namespace FlatRent.BusinessRules.Builder
                 .If<Flat, RuleResult>(ob => ob.Price > 400)
                     .Do(ob => ob.Price = 900)
                     .ThenIf(ob => ob.Price > 600)
-                        .Then(ob => ob.Area = 100)
+                        .Then(ob =>
+                        {
+                            ob.Area = 100;
+                            return RuleResult.Success;
+                        })
                     .ElseIf(ob => ob.Price < 550)
                         .Then(ob => ob.Area = 80)
                         .EndIf()
@@ -41,6 +46,11 @@ namespace FlatRent.BusinessRules.Builder
             fl.Price = 500;
             var rr = usingOtherRule.Execute(fl);
             Log.Information(fl.Area.ToString());
+
+            
+
+//            Rule.ItIsMandatoryThat<Flat>().Has(flat => flat.AuthorId != )
+//            Rule.ItIsMandatoryThat<Flat>().Property(f => f.ActiveAgreement).Is<Flat, Agreement>(null);
         }
 
         public static void DoStuff(Flat ob)
