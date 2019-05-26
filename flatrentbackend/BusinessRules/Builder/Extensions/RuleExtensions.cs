@@ -130,7 +130,7 @@ namespace FlatRent.BusinessRules.Builder.Extensions
         public static IRule<TIn, RuleResult> ReturnElse<TIn>(this IRule<TIn, RuleResult> rule, bool result, FormError error = null) where TIn : class
         {
             rule.Else = RuleAction.FromFunc<TIn, RuleResult>((_) => new RuleResult(result, error));
-            return rule;
+            return rule.Parent ?? rule;
         }
 
         #endregion

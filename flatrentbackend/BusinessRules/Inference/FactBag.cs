@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices.WindowsRuntime;
-using FlatRent.BusinessRules.Inference.Terms;
+using FlatRent.BusinessRules.Inference.Facts;
 
 namespace FlatRent.BusinessRules.Inference
 {

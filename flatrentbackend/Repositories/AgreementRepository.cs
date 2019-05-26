@@ -7,7 +7,7 @@ using FlatRent.BusinessRules;
 using FlatRent.BusinessRules.Builder;
 using FlatRent.BusinessRules.Builder.Extensions;
 using FlatRent.BusinessRules.Inference;
-using FlatRent.BusinessRules.Inference.Terms;
+using FlatRent.BusinessRules.Inference.Facts;
 using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Extensions;
@@ -71,8 +71,22 @@ namespace FlatRent.Repositories
 //                .Build();
 
             var rules2 = RuleBuilder
-                .IfInferHas<Agreement, RuleResult>(AgreementFacts.TenantIsOwner)
+                .IfInferHas<Agreement, RuleResult>(AgreementFacts.TenantIsNotOwner)
                     .Then(AgreementRequestRules.FlatOneActiveAgreementRule)
+                        .ThenIfInferHas(AgreementFacts.ExceedsMaxPeriod)
+                            .ThenIf(_agreement => _agreement.RentPeriodDays >= _agreement.Flat.MinimumRentDays)
+                                .ReturnThen(true)
+                                .ReturnElse(false, new FormError("To", string.Format(Errors.FlatRentPeriodGreater, BusinessConstants.MinRentPeriodDays)))
+                            .ReturnElse(false, new FormError("To", string.Format(Errors.FlatRentPeriodLess, BusinessConstants.MaxRentPeriodDays)))
+                        .ReturnElse(false, new FormError(Errors.FlatNotAvailableForRent))
+                    .ReturnElse(false, new FormError(Errors.TenantCantBeOwner))
+                .Build();
+
+
+            var rules3 = RuleBuilder
+                .IfInferHas<Agreement, RuleResult>(AgreementFacts.TenantIsOwner)
+                    .ReturnThen(false, new FormError(Errors.TenantCantBeOwner))
+                    .Else(AgreementRequestRules.FlatOneActiveAgreementRule)
                         .ThenIfInferHas(AgreementFacts.ExceedsMaxPeriod)
                             .ThenIf(_agreement => _agreement.RentPeriodDays >= _agreement.Flat.MinimumRentDays)
                                 .ReturnThen(true)
@@ -83,7 +97,7 @@ namespace FlatRent.Repositories
 
 
 
-            var result = rules2.Execute(agreement);
+            var result = rules3.Execute(agreement);
             if (!result.Passed) return (new[] { result.Error }, null);
 
             var errors = await AddAsync(agreement, userId);

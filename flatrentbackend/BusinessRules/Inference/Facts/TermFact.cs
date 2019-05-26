@@ -1,4 +1,4 @@
-﻿namespace FlatRent.BusinessRules.Inference.Terms
+﻿namespace FlatRent.BusinessRules.Inference.Facts
 {
     public class TermFact<TTerm>
     {

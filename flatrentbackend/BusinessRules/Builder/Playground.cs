@@ -1,7 +1,7 @@
 ﻿using System;
 using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using FlatRent.BusinessRules.Builder.Extensions;
-using FlatRent.BusinessRules.Inference.Terms;
+using FlatRent.BusinessRules.Inference.Facts;
 using FlatRent.Entities;
 using Serilog;
 using Serilog.Core;
@@ -46,8 +46,6 @@ namespace FlatRent.BusinessRules.Builder
             fl.Price = 500;
             var rr = usingOtherRule.Execute(fl);
             Log.Information(fl.Area.ToString());
-
-            
 
 //            Rule.ItIsMandatoryThat<Flat>().Has(flat => flat.AuthorId != )
 //            Rule.ItIsMandatoryThat<Flat>().Property(f => f.ActiveAgreement).Is<Flat, Agreement>(null);

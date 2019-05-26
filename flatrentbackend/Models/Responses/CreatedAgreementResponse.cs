@@ -13,13 +13,19 @@ namespace FlatRent.Models.Responses
         public CreatedAgreementResponse(Guid id, IEnumerable<KeyValuePair<Guid, string>> files)
         {
             Id = id;
-            Attachments = new Dictionary<Guid, string>(files);
+            if (files != null)
+            {
+                Attachments = new Dictionary<Guid, string>(files);
+            }
         }
 
         public CreatedAgreementResponse(Guid id, IEnumerable<Attachment> files)
         {
             Id = id;
-            Attachments = new Dictionary<Guid, string>(files.Select(i => new KeyValuePair<Guid, string>(i.Id, i.Name)));
+            if (files != null)
+            {
+                Attachments = new Dictionary<Guid, string>(files.Select(i => new KeyValuePair<Guid, string>(i.Id, i.Name)));
+            }
         }
     }
 }

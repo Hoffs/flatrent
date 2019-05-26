@@ -2,7 +2,7 @@
 using System.Linq;
 using FlatRent.BusinessRules.Builder.Interfaces;
 using FlatRent.BusinessRules.Inference;
-using FlatRent.BusinessRules.Inference.Terms;
+using FlatRent.BusinessRules.Inference.Facts;
 
 namespace FlatRent.BusinessRules.Builder
 {

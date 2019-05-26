@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FlatRent.BusinessRules.Builder;
 using FlatRent.BusinessRules.Builder.Extensions;
 using FlatRent.BusinessRules.Builder.Interfaces;
 using FlatRent.BusinessRules.Inference.Interfaces;
-using FlatRent.BusinessRules.Inference.Terms;
+using FlatRent.BusinessRules.Inference.Facts;
 
 namespace FlatRent.BusinessRules.Inference
 {
@@ -19,6 +20,21 @@ namespace FlatRent.BusinessRules.Inference
                 .FirstOrDefault(p => type.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract);
             if (inferer == null) throw new InvalidOperationException($"No IInferer<{typeof(TTerm)}> found");
             return (IInferer<TTerm>) Activator.CreateInstance(inferer);
+        }
+
+
+        public static void InferAll<TTerm>(FactBag<TTerm> factBag, TTerm fact,
+            params Func<TTerm, TermFact<TTerm>>[] infereceRules)
+        {
+            var inferResults = new List<bool>();
+            do
+            {
+                inferResults.Clear();
+                foreach (var rule in infereceRules)
+                {
+                    inferResults.Add(factBag.AddFact(rule?.Invoke(fact)));
+                }
+            } while (inferResults.Any(i => i));
         }
 
         public static IRule<TIn, TOut> IfInferHas<TIn, TOut>(params TermFact<TIn>[] facts) where TIn : class where TOut : class

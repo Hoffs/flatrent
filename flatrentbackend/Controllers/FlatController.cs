@@ -117,7 +117,7 @@ namespace FlatRent.Controllers
                 await _agreementService.SendNewAgreementEmailAsync(loadedAgreement);
             }
             return OkOrBadRequest(operationErrors,
-                StatusCode(201, new CreatedAgreementResponse(agreement.Id, agreement.Attachments)));
+                StatusCode(201, new CreatedAgreementResponse(agreement?.Id ?? Guid.Empty, agreement?.Attachments)));
         }
 
         [AllowAnonymous]
