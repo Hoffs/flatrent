@@ -36,4 +36,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="4.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="BusinessRules\Inference\Facts\" />
+  </ItemGroup>
+
 </Project>

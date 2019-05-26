@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FlatRent.BusinessRules;
+using FlatRent.BusinessRules.Builder;
+using FlatRent.BusinessRules.Builder.Extensions;
 using FlatRent.Constants;
 using FlatRent.Controllers.Abstractions;
 using FlatRent.Controllers.Attributes;
@@ -90,17 +92,17 @@ namespace FlatRent.Controllers
         {
             var flat = await _flatRepository.GetAsync(id);
 
-            var (passed, error) = RuleChecker.Check(
-                () => AgreementRequestRules.PeriodMustBeLongerOrEqualToSpecified(flat, form),
-                () => AgreementRequestRules.PeriodMustBeShorterOrEqualToMaximum(flat, form),
-                () => AgreementRequestRules.FlatMustHaveAtMostOneActiveAgreement(flat),
-                () => AgreementRequestRules.TenantCantBeOwner(flat, User.GetUserId())
-            );
-
-            if (!passed)
-            {
-                return BadRequest(error);
-            }
+//            var (passed, error) = RuleChecker.Check(
+//                () => AgreementRequestRules.PeriodMustBeLongerOrEqualToSpecified(flat, form),
+//                () => AgreementRequestRules.PeriodMustBeShorterOrEqualToMaximum(flat, form),
+//                () => AgreementRequestRules.FlatMustHaveAtMostOneActiveAgreement(flat),
+//                () => AgreementRequestRules.TenantCantBeOwner(flat, User.GetUserId())
+//            );
+//
+//            if (!passed)
+//            {
+//                return BadRequest(error);
+//            }
 
             // TODO: Move to BR
             if (flat.Agreements.Any(Agreement.RequestedAgreementByUserFunc(User.GetUserId())))

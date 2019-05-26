@@ -43,7 +43,7 @@ namespace FlatRent.Controllers
         public async Task<IActionResult> GetAgreementAsync([FromRoute] Guid id)
         {
             var agreement = await _repository.GetAsync(id);
-            if (agreement.TenantId != User.GetUserId() && agreement.Flat.AuthorId != User.GetUserId())
+            if (agreement.AuthorId != User.GetUserId() && agreement.Flat.AuthorId != User.GetUserId())
             {
                 return Forbid();
             }
@@ -150,7 +150,7 @@ namespace FlatRent.Controllers
             var agreement = await _repository.GetAsync(id).ConfigureAwait(false);
             var userId = User.GetUserId();
 
-            if (agreement.TenantId != userId && agreement.Flat.AuthorId != userId)
+            if (agreement.AuthorId != userId && agreement.Flat.AuthorId != userId)
             {
                 return Forbid();
             }
@@ -167,7 +167,7 @@ namespace FlatRent.Controllers
                 Area = agreement.Flat.Area,
                 Price = agreement.Flat.Price,
                 AgreementNo = agreement.Id,
-                Client = agreement.Tenant.GetFullName(),
+                Client = agreement.Author.GetFullName(),
             };
 
             var agreementHtml = await HtmlGenerator.GetAgreementHtml(agreementData).ConfigureAwait(false);

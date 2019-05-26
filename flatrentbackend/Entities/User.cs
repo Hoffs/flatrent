@@ -49,7 +49,7 @@ namespace FlatRent.Entities
         }
 
         [JsonIgnore]
-        [InverseProperty("Tenant")]
+        [InverseProperty("Author")]
         public virtual ICollection<Agreement> TenantAgreements { get; set; }
 
         [JsonIgnore]

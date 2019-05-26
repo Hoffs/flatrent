@@ -23,7 +23,7 @@ namespace FlatRent.Services
 Buvo sukurta nauja nuomos užklausa. Sutarties Nr. {agreement.Id}.
 Ją galite peržiūrėti {MessageConstants.SiteUrl($"/agreement/{agreement.Id}")}.";
 
-            await _emailService.SendEmailToAsync(agreement.Tenant.Email, MessageConstants.NewAgreementSubject, body);
+            await _emailService.SendEmailToAsync(agreement.Author.Email, MessageConstants.NewAgreementSubject, body);
             await _emailService.SendEmailToAsync(agreement.Flat.Author.Email, MessageConstants.NewAgreementSubject, body);
         }
     }

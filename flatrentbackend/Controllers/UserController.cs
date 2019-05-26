@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using FlatRent.BusinessRules.Builder;
 using FlatRent.Constants;
 using FlatRent.Controllers.Abstractions;
 using FlatRent.Controllers.Filters;
@@ -66,6 +67,13 @@ namespace FlatRent.Controllers
         {
             var errors = await _userService.RegisterAsync(form).ConfigureAwait(false);
             if (errors != null) return BadRequest(errors);
+            return StatusCode(201);
+        }
+
+        [HttpPost("test")]
+        public async Task<IActionResult> Test()
+        {
+            Playground.Test();
             return StatusCode(201);
         }
 

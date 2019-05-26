@@ -25,11 +25,6 @@ namespace FlatRent.Entities
         [Required]
         public virtual AgreementStatus Status { get; set; }
 
-        [Required]
-        [ForeignKey("Tenant")]
-        public Guid TenantId { get; set; }
-        public virtual User Tenant { get; set; }
-
         [Required] 
         public Guid FlatId { get; set; }
         public virtual Flat Flat { get; set; }
@@ -58,7 +53,10 @@ namespace FlatRent.Entities
 
         public bool IsRenterOrTenant(Guid id)
         {
-            return Flat.AuthorId == id || TenantId == id;
+            return Flat.AuthorId == id || AuthorId == id;
         }
+
+        [NotMapped]
+        public int RentPeriodDays => TimeSpan.FromTicks(To.Date.Ticks - From.Date.Ticks).Days;
     }
 }

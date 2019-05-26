@@ -176,7 +176,7 @@ namespace FlatRent
             });
             
             app.UseCors(x => x
-                .AllowAnyOrigin()
+                .WithOrigins("http://localhost:3000", "http://192.168.1.204:3000", "http://192.168.1.204:5001/", "http://192.168.1.204:5000/", "https://localhost:5001/", "https://localhost:5000/")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials());

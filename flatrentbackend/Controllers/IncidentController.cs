@@ -47,7 +47,7 @@ namespace FlatRent.Controllers
         public async Task<IActionResult> CreateIncidentAsync([FromRoute] Guid id, [FromBody] IncidentForm form)
         {
             var agreement = await _repository.GetAsync(id);
-            if (User.GetUserId() != agreement.TenantId) return Forbid();
+            if (User.GetUserId() != agreement.AuthorId) return Forbid();
 
             var (passed, error) = IncidentRules.AgreementMustBeActive(agreement);
             if (!passed) return BadRequest(error);
@@ -68,7 +68,7 @@ namespace FlatRent.Controllers
         {
             var agreement = await _repository.GetAsync(id);
             var userId = User.GetUserId();
-            if (userId != agreement.TenantId && userId != agreement.Flat.AuthorId) return Forbid();
+            if (userId != agreement.AuthorId && userId != agreement.Flat.AuthorId) return Forbid();
 
             var mapped = _mapper.Map<IEnumerable<ShortIncidentDetails>>(agreement.Incidents.Where(f => !f.Deleted).Paginate(offset));
             return Ok(mapped);
@@ -81,7 +81,7 @@ namespace FlatRent.Controllers
         {
             var agreement = await _repository.GetAsync(id);
             var userId = User.GetUserId();
-            if (userId != agreement.TenantId && userId != agreement.Flat.AuthorId) return Forbid();
+            if (userId != agreement.AuthorId && userId != agreement.Flat.AuthorId) return Forbid();
 
             var incident = agreement.Incidents.FirstOrDefault(f => f.Id == incidentId);
             if (incident == null) return NotFound();

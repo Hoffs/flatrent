@@ -75,7 +75,7 @@ namespace FlatRent.Repositories
         public async Task<IEnumerable<Agreement>> GetUserAgreementsTenant(Guid id, int offset = 0)
         {
             return await _context.Agreements
-                .Where(f => f.TenantId == id && !f.Deleted)
+                .Where(f => f.AuthorId == id && !f.Deleted)
                 .OrderByDescending(f => f.CreatedDate)
                 .Paginate(offset, 16)
                 .ToListAsync();

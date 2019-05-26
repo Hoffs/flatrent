@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using FlatRent.BusinessRules.Builder.Interfaces;
+using FlatRent.BusinessRules.Inference.Interfaces;
 using FlatRent.Entities;
 
 namespace FlatRent.BusinessRules.Inference.Terms
 {
-    public static class FlatFacts
+    public class FlatFacts : IInferer<Flat>
     {
-        public static bool InferHas(this Flat flat, TermFact<Flat> fact)
-        {
-            var bag = Infer(flat);
-            return bag.Facts.Contains(fact);
-        }
-
-        public static FactBag<Flat> Infer(Flat flat)
+        public FactBag<Flat> Infer(Flat flat)
         {
             var bag = new FactBag<Flat>();
             InferAll(bag, flat);

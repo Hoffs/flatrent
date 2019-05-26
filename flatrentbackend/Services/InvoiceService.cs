@@ -138,7 +138,7 @@ namespace FlatRent.Services
 Jums buvo sugeneruota nauja sąskaita. Sutarties Nr. {invoice.AgreementId}.
 Ją galite peržiūrėti {MessageConstants.SiteUrl($"/agreement/{invoice.AgreementId}/invoice/{invoice.Id}")}.";
 
-            return _emailService.SendEmailToAsync(invoice.Agreement.Tenant.Email, MessageConstants.NewInvoiceSubject, body);
+            return _emailService.SendEmailToAsync(invoice.Agreement.Author.Email, MessageConstants.NewInvoiceSubject, body);
         }
     }
 }

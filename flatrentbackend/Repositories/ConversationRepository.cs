@@ -50,10 +50,9 @@ namespace FlatRent.Repositories
             }
 
             var existingConversation = await Context.Conversations.FirstOrDefaultAsync(c =>
-                (c.AuthorId == userId || c.AuthorId == conversation.RecipientId) &&
-                (c.RecipientId == userId ||
-                 c.RecipientId ==
-                 conversation.RecipientId) && c.Incident == null && c.Agreement == null);
+                ((c.AuthorId == userId && c.RecipientId == conversation.RecipientId) 
+                || (c.AuthorId == conversation.RecipientId && c.RecipientId == userId)) 
+                && c.Incident == null && c.Agreement == null);
 
             if (existingConversation != null)
             {
@@ -71,7 +70,7 @@ namespace FlatRent.Repositories
         {
             // 2 checks for message sending is expensive
             var agreement = await Context.Agreements.FirstOrDefaultAsync(a => a.ConversationId == conversationId);
-            if (agreement != null && (!agreement.Deleted && agreement.StatusId != AgreementStatus.Statuses.Rejected))
+            if (agreement != null && (!agreement.Deleted && agreement.StatusId != AgreementStatus.Statuses.Accepted))
             {
                 return (new[] { new FormError(Errors.MessageAgreementDeletedOrRejected) }, null);
             }

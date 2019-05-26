@@ -44,7 +44,7 @@ namespace FlatRent.Controllers
         {
             var agreement = await _repository.GetAsync(id);
             var userId = User.GetUserId();
-            if (userId != agreement.TenantId && userId != agreement.Flat.AuthorId) return Forbid();
+            if (userId != agreement.AuthorId && userId != agreement.Flat.AuthorId) return Forbid();
 
             var mapped = _mapper.Map<IEnumerable<InvoiceDetails>>(agreement.Invoices.Paginate(offset));
             return Ok(mapped);
@@ -72,7 +72,7 @@ namespace FlatRent.Controllers
             var agreement = await _repository.GetAsync(id).ConfigureAwait(false);
             var userId = User.GetUserId();
 
-            if (agreement.TenantId != userId && agreement.Flat.AuthorId != userId)
+            if (agreement.AuthorId != userId && agreement.Flat.AuthorId != userId)
             {
                 return Forbid();
             }
@@ -125,7 +125,7 @@ namespace FlatRent.Controllers
         public async Task<IActionResult> PayInvoiceAsync([FromRoute] Guid id, [FromRoute] Guid invoiceId)
         {
             var agreement = await _repository.GetAsync(id);
-            if (User.GetUserId() != agreement.TenantId) return Forbid();
+            if (User.GetUserId() != agreement.AuthorId) return Forbid();
             var invoice = agreement.Invoices.FirstOrDefault(inv => inv.Id == invoiceId);
             if (invoice == null) return NotFound();
             if (!invoice.IsValid) return BadRequest(new FormError(Errors.InvoiceNotValid));
