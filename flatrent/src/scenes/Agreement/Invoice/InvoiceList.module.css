@@ -53,6 +53,10 @@
   width: auto;
 }
 
+.moreButton > button {
+  margin: 0;
+}
+
 .moreLink {
   margin-left: 8px;
   display: flex;

@@ -27,6 +27,11 @@
   width: auto;
 }
 
+
+.moreButton > button {
+  margin: 0;
+}
+
 /* Invoice list item */
 
 .item {
