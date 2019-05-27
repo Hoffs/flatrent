@@ -47,6 +47,14 @@ namespace FlatRent.BusinessRules.Builder.Extensions
             return newRule;
         }
 
+        public static IRule<TIn, TOut> Then<TIn, TOut>(this IRule<TIn, TOut> rule, IRule<TIn, TOut> thenRule) where TIn : class where TOut : class
+        {
+            if (rule.If == null) throw new InvalidOperationException("If was not set when calling Then");
+            rule.Then = thenRule;
+            thenRule.Parent = rule;
+            return thenRule;
+        }
+
         public static IRule<TIn, TOut> ThenIf<TIn, TOut>(this IRule<TIn, TOut> rule, Func<TIn, bool>  condition) where TIn : class where TOut : class
         {
             var newRule = new IfThenElseRule<TIn, TOut>(rule);
@@ -97,6 +105,14 @@ namespace FlatRent.BusinessRules.Builder.Extensions
             return newRule;
         }
 
+        public static IRule<TIn, TOut> Else<TIn, TOut>(this IRule<TIn, TOut> rule, IRule<TIn, TOut> elseRule) where TIn : class where TOut : class
+        {
+            if (rule.Then == null) throw new InvalidOperationException("Then was not set when calling Else");
+            rule.Else = elseRule;
+            elseRule.Parent = rule;
+            return elseRule;
+        }
+
         public static IRule<TIn, TOut> ElseIf<TIn, TOut>(this IRule<TIn, TOut> rule, Func<TIn, bool>  condition) where TIn : class where TOut : class
         {
             var newRule = new IfThenElseRule<TIn, TOut>(rule);
@@ -137,6 +153,17 @@ namespace FlatRent.BusinessRules.Builder.Extensions
 
 
         public static IRuleAction<TIn, TOut> Build<TIn, TOut>(this IRule<TIn, TOut> rule) where TIn : class where TOut : class
+        {
+            var rootRule = rule;
+            while (rootRule.Parent != null)
+            {
+                rootRule = rootRule.Parent;
+            }
+
+            return rootRule;
+        }
+
+        public static IRule<TIn, TOut> BuildRule<TIn, TOut>(this IRule<TIn, TOut> rule) where TIn : class where TOut : class
         {
             var rootRule = rule;
             while (rootRule.Parent != null)

@@ -83,21 +83,25 @@ namespace FlatRent.Repositories
                 .Build();
 
 
+            var rules34 = RuleBuilder
+                .IfInferHas<Agreement, RuleResult>(AgreementFacts.TenantIsOwner)
+                    .ReturnThen(false, new FormError(Errors.TenantCantBeOwner))
+                    .ReturnElse(true);
+
             var rules3 = RuleBuilder
                 .IfInferHas<Agreement, RuleResult>(AgreementFacts.TenantIsOwner)
                     .ReturnThen(false, new FormError(Errors.TenantCantBeOwner))
                     .Else(AgreementRequestRules.FlatOneActiveAgreementRule)
                         .ThenIfInferHas(AgreementFacts.ExceedsMaxPeriod)
-                            .ThenIf(_agreement => _agreement.RentPeriodDays >= _agreement.Flat.MinimumRentDays)
+                            .ReturnThen(false, new FormError("To", string.Format(Errors.FlatRentPeriodLess, BusinessConstants.MaxRentPeriodDays)))
+                            .ElseIf(_agreement => _agreement.RentPeriodDays >= _agreement.Flat.MinimumRentDays)
                                 .ReturnThen(true)
                                 .ReturnElse(false, new FormError("To", string.Format(Errors.FlatRentPeriodGreater, BusinessConstants.MinRentPeriodDays)))
-                            .ReturnElse(false, new FormError("To", string.Format(Errors.FlatRentPeriodLess, BusinessConstants.MaxRentPeriodDays)))
-                        .ReturnElse(false, new FormError(Errors.FlatNotAvailableForRent))
                 .Build();
 
 
-
-            var result = rules3.Execute(agreement);
+            var rulesFinal = AgreementRequestRules.FlatRequestRule.Build();
+            var result = rulesFinal.Execute(agreement);
             if (!result.Passed) return (new[] { result.Error }, null);
 
             var errors = await AddAsync(agreement, userId);

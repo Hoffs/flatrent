@@ -5,7 +5,7 @@ namespace FlatRent.BusinessRules.Builder
 {
     public class IfThenElseRule<TIn, TOut> : IRule<TIn, TOut> where TIn : class where TOut : class
     {
-        public IRule<TIn, TOut> Parent { get; }
+        public IRule<TIn, TOut> Parent { get; set; }
         public IRuleCondition<TIn> If { get; set; }
         public Action<TIn> DoAction { get; set; }
         public IRuleAction<TIn, TOut> Then { get; set; }

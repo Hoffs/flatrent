@@ -17,13 +17,13 @@ namespace FlatRent.BusinessRules.Inference.Facts
             return bag;
         }
 
-        private static TermFact<Agreement> InferExceedsMaxPeriod(Agreement agreement) 
+        private static TermFact<Agreement> InferExceedsMaxPeriod(FactBag<Agreement> facts, Agreement agreement) 
             => agreement.RentPeriodDays > BusinessConstants.MaxRentPeriodDays ? new TermFact<Agreement>("LONGER THAN MAX PERIOD") : null;
-        private static TermFact<Agreement> InferTooShortPeriod(Agreement agreement) 
+        private static TermFact<Agreement> InferTooShortPeriod(FactBag<Agreement> facts, Agreement agreement) 
             => agreement.RentPeriodDays < agreement.Flat.MinimumRentDays ? new TermFact<Agreement>("SHORTER THAN MIN PERIOD") : null;
-        private static TermFact<Agreement> InferOwner(Agreement agreement) 
+        private static TermFact<Agreement> InferOwner(FactBag<Agreement> facts, Agreement agreement) 
             => agreement.AuthorId == agreement.Flat.AuthorId ? new TermFact<Agreement>($"TENANT IS OWNER") : null;
-        private static TermFact<Agreement> InferNotOwner(Agreement agreement) 
+        private static TermFact<Agreement> InferNotOwner(FactBag<Agreement> facts, Agreement agreement) 
             => agreement.AuthorId != agreement.Flat.AuthorId ? new TermFact<Agreement>($"TENANT IS NOT OWNER") : null;
         
         public static TermFact<Agreement> TenantIsOwner => new TermFact<Agreement>($"TENANT IS OWNER");

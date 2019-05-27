@@ -24,7 +24,7 @@ namespace FlatRent.BusinessRules.Inference
 
 
         public static void InferAll<TTerm>(FactBag<TTerm> factBag, TTerm fact,
-            params Func<TTerm, TermFact<TTerm>>[] infereceRules)
+            params Func<FactBag<TTerm>, TTerm, TermFact<TTerm>>[] infereceRules)
         {
             var inferResults = new List<bool>();
             do
@@ -32,7 +32,7 @@ namespace FlatRent.BusinessRules.Inference
                 inferResults.Clear();
                 foreach (var rule in infereceRules)
                 {
-                    inferResults.Add(factBag.AddFact(rule?.Invoke(fact)));
+                    inferResults.Add(factBag.AddFact(rule?.Invoke(factBag, fact)));
                 }
             } while (inferResults.Any(i => i));
         }

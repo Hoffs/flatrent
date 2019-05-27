@@ -2,6 +2,8 @@
 using FlatRent.BusinessRules.Builder;
 using FlatRent.BusinessRules.Builder.Extensions;
 using FlatRent.BusinessRules.Builder.Interfaces;
+using FlatRent.BusinessRules.Inference;
+using FlatRent.BusinessRules.Inference.Facts;
 using FlatRent.Constants;
 using FlatRent.Entities;
 using FlatRent.Models;
@@ -50,9 +52,20 @@ namespace FlatRent.BusinessRules
 
         public static IRule<Agreement, RuleResult> FlatOneActiveAgreementRule =
             RuleBuilder
-                .If<Agreement, RuleResult>(agreement => agreement.Flat.ActiveAgreement != null)
+                .If<Agreement, RuleResult>(agreement => agreement.Flat.ActiveAgreement == null)
                     .ReturnThen(true)
                     .ReturnElse(false, new FormError(Errors.FlatNotAvailableForRent));
+
+        public static IRule<Agreement, RuleResult> FlatRequestRule =
+            RuleBuilder
+                .IfInferHas<Agreement, RuleResult>(AgreementFacts.TenantIsOwner)
+                    .ReturnThen(false, new FormError(Errors.TenantCantBeOwner))
+                    .Else(AgreementRequestRules.FlatOneActiveAgreementRule)
+                        .ThenIfInferHas(AgreementFacts.ExceedsMaxPeriod)
+                            .ReturnThen(false, new FormError("To", string.Format(Errors.FlatRentPeriodLess, BusinessConstants.MaxRentPeriodDays)))
+                            .ElseIf(_agreement => _agreement.RentPeriodDays >= _agreement.Flat.MinimumRentDays)
+                                .ReturnThen(true)
+                                .ReturnElse(false, new FormError("To", string.Format(Errors.FlatRentPeriodGreater, BusinessConstants.MinRentPeriodDays)));
 
         /// Business Rule: DP.1.1.
         public static (bool, FormError) TenantCantBeOwner(Flat flat, Guid tenantId)

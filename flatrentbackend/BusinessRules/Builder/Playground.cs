@@ -39,12 +39,24 @@ namespace FlatRent.BusinessRules.Builder
                 .Else(ob => ob.Area = 40)
             .Build();
 
-            var usingOtherRule = RuleBuilder.If<Flat, RuleResult>(ob => ob.Price > 300)
-                .Then(rule2).Build();
+            var rule = RuleBuilder
+                .If<Flat, RuleResult>(ob => ob.Area > 100)
+                    .Then(ob => ob.Price = 1500)
+                    .ElseIf(ob => ob.Area > 75)
+                        .Then(ob => ob.Price = 1000)
+                        .Else(ob => ob.Price = 500)
+               .Build();
+
+            var usingRule = RuleBuilder
+                .If<Flat, RuleResult>(ob => ob.Area > 50)
+                    .Then(rule)
+                    .Else(ob => ob.Price = 250)
+                .Build();
 
             var fl = new Flat();
             fl.Price = 500;
-            var rr = usingOtherRule.Execute(fl);
+            fl.Area = 71;
+            var rr = usingRule.Execute(fl);
             Log.Information(fl.Area.ToString());
 
 //            Rule.ItIsMandatoryThat<Flat>().Has(flat => flat.AuthorId != )
